@@ -17,7 +17,6 @@
         --border: #2a2820;
         --gold: #c9a84c;
         --gold-light: #e8c97a;
-        --cream: #f5efe0;
         --text: #e8dcc8;
         --text-muted: #7a7060;
         --user-bubble: #1e1a10;
@@ -25,6 +24,8 @@
         --shadow: rgba(0, 0, 0, 0.6);
         --glow: rgba(201, 168, 76, 0.15);
         --error: #c94c4c;
+        --sidebar-bg: #0d0d0b;
+        --sidebar-hover: #1a1a16;
       }
       :root[data-theme="light"] {
         --bg: #faf6ee;
@@ -33,7 +34,6 @@
         --border: #e8dcc8;
         --gold: #9a7230;
         --gold-light: #c49a3c;
-        --cream: #2a2010;
         --text: #2a2010;
         --text-muted: #9a8a6a;
         --user-bubble: #2a2010;
@@ -41,6 +41,8 @@
         --shadow: rgba(100, 80, 40, 0.15);
         --glow: rgba(154, 114, 48, 0.1);
         --error: #c94c4c;
+        --sidebar-bg: #f0e8d8;
+        --sidebar-hover: #e8dcc8;
       }
 
       * {
@@ -62,7 +64,14 @@
           radial-gradient(ellipse at 80% 20%, var(--glow) 0%, transparent 50%);
       }
 
-      /* ── LOGIN SCREEN ── */
+      @keyframes riseUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ── LOGIN ── */
       .login-screen {
         width: 100%;
         max-width: 420px;
@@ -179,34 +188,194 @@
         color: var(--text-muted);
       }
 
-      /* ── CHAT SCREEN ── */
-      .chat-screen {
+      /* ── APP LAYOUT ── */
+      .app-screen {
         display: none;
         width: 100%;
-        max-width: 560px;
-        height: 92vh;
-        flex-direction: column;
+        height: 100vh;
+        max-width: 1000px;
+        position: relative;
       }
 
-      .chat-container {
+      /* ── SIDEBAR ── */
+      .sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100%;
+        background: var(--sidebar-bg);
+        border-right: 1px solid var(--border);
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 4px 0 24px var(--shadow);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-header {
+        padding: 24px 20px 16px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+      }
+
+      .sidebar-header::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 20px;
+        right: 20px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+      }
+
+      .sidebar-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 0.9rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 12px;
+      }
+
+      .new-chat-btn {
+        width: 100%;
+        padding: 10px;
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .new-chat-btn:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+        background: var(--glow);
+      }
+
+      .sidebar-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px 8px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) transparent;
+      }
+
+      .sidebar-empty {
+        text-align: center;
+        padding: 40px 20px;
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        font-style: italic;
+        font-family: "Cormorant Garamond", serif;
+      }
+
+      .chat-history-item {
+        padding: 12px 14px;
+        border-radius: 2px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s ease;
+        margin-bottom: 4px;
+        position: relative;
+      }
+
+      .chat-history-item:hover {
+        background: var(--sidebar-hover);
+        border-color: var(--border);
+      }
+
+      .chat-history-item.active {
+        background: var(--glow);
+        border-color: var(--gold);
+      }
+
+      .chat-history-item .item-title {
+        font-size: 0.8rem;
+        color: var(--text);
+        font-weight: 400;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 4px;
+      }
+
+      .chat-history-item .item-meta {
+        font-size: 0.62rem;
+        color: var(--text-muted);
+        letter-spacing: 0.08em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .item-mode-badge {
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+        color: var(--gold);
+        text-transform: uppercase;
+      }
+
+      .item-delete {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 0.75rem;
+        opacity: 0;
+        transition: opacity 0.2s;
+        padding: 2px 4px;
+      }
+
+      .chat-history-item:hover .item-delete {
+        opacity: 1;
+      }
+      .item-delete:hover {
+        color: var(--error);
+      }
+
+      .sidebar-footer {
+        padding: 16px 20px;
+        border-top: 1px solid var(--border);
+        font-size: 0.6rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-align: center;
+      }
+
+      /* ── CHAT CONTAINER ── */
+      .chat-wrap {
         width: 100%;
         height: 100%;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
-        border: 1px solid var(--border);
         background: var(--surface);
+        border: 1px solid var(--border);
         box-shadow: 0 32px 80px var(--shadow);
         animation: riseUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         opacity: 0;
         transform: translateY(30px);
-      }
-
-      @keyframes riseUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
       }
 
       .chat-header {
@@ -214,6 +383,7 @@
         border-bottom: 1px solid var(--border);
         background: var(--surface);
         position: relative;
+        flex-shrink: 0;
       }
 
       .chat-header::after {
@@ -238,6 +408,12 @@
         margin-bottom: 16px;
       }
 
+      .header-left-group {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
       .brand-name {
         font-family: "Cormorant Garamond", serif;
         font-size: 1.6rem;
@@ -250,7 +426,7 @@
       .header-controls {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
       }
 
       .status-dot {
@@ -292,7 +468,6 @@
         color: var(--gold);
       }
 
-      /* ── MODE SWITCHER ── */
       .mode-switcher {
         display: flex;
         gap: 4px;
@@ -309,15 +484,12 @@
         border-radius: 2px;
         border: 1px solid transparent;
         transition: all 0.25s ease;
-        position: relative;
-        letter-spacing: 0.05em;
       }
 
       .mode-letter:hover {
         color: var(--gold);
         border-color: var(--border);
       }
-
       .mode-letter.active {
         color: var(--gold);
         border-color: var(--gold);
@@ -334,13 +506,14 @@
         border-left: 1px solid var(--border);
       }
 
-      /* ── SOVEREIGN PANEL ── */
+      /* ── SOVEREIGN ── */
       .sovereign-panel {
         display: none;
         padding: 16px 28px;
         border-bottom: 1px solid var(--border);
         background: var(--bg-secondary);
         animation: slideDown 0.3s ease forwards;
+        flex-shrink: 0;
       }
 
       @keyframes slideDown {
@@ -567,6 +740,7 @@
         border-top: 1px solid var(--border);
         background: var(--surface);
         position: relative;
+        flex-shrink: 0;
       }
 
       .chat-input::before {
@@ -649,10 +823,26 @@
         text-transform: uppercase;
         color: var(--text-muted);
       }
+
+      /* ── OVERLAY ── */
+      .sidebar-overlay {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 99;
+      }
+
+      .sidebar-overlay.visible {
+        display: block;
+      }
     </style>
   </head>
   <body>
-    <!-- LOGIN SCREEN -->
+    <!-- LOGIN -->
     <div class="login-screen" id="loginScreen">
       <div class="login-brand">Verithos</div>
       <div class="login-tagline">Intelligent Discourse</div>
@@ -670,15 +860,51 @@
       <div class="login-footer">Verithos · Private Access</div>
     </div>
 
-    <!-- CHAT SCREEN -->
-    <div class="chat-screen" id="chatScreen">
-      <div class="chat-container">
+    <!-- APP -->
+    <div class="app-screen" id="appScreen">
+      <!-- SIDEBAR -->
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">Conversations</div>
+          <button class="new-chat-btn" onclick="newChat()">
+            + New Conversation
+          </button>
+        </div>
+        <div class="sidebar-list" id="sidebarList">
+          <div class="sidebar-empty" id="sidebarEmpty">
+            No conversations yet.<br />Begin your first discourse.
+          </div>
+        </div>
+        <div class="sidebar-footer">Verithos · History</div>
+      </div>
+
+      <!-- OVERLAY -->
+      <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+        onclick="closeSidebar()"
+      ></div>
+
+      <!-- CHAT -->
+      <div class="chat-wrap">
         <div class="chat-header">
           <div class="header-top">
-            <div class="brand-name">Verithos</div>
+            <div class="header-left-group">
+              <button
+                class="icon-btn"
+                onclick="toggleSidebar()"
+                title="History"
+              >
+                ☰
+              </button>
+              <div class="brand-name">Verithos</div>
+            </div>
             <div class="header-controls">
               <div class="status-dot"></div>
               <button class="icon-btn" onclick="toggleTheme()">☀️</button>
+              <button class="icon-btn" onclick="shareChat()" title="Share">
+                ⇪
+              </button>
               <button
                 class="icon-btn"
                 onclick="handleLogout()"
@@ -689,12 +915,12 @@
             </div>
           </div>
           <div style="display: flex; align-items: center">
-            <div class="mode-switcher" id="modeSwitcher">
+            <div class="mode-switcher">
               <div
                 class="mode-letter active"
                 data-mode="V"
                 onclick="setMode(this)"
-                title="Versatile — General Assistant"
+                title="Versatile"
               >
                 V
               </div>
@@ -702,7 +928,7 @@
                 class="mode-letter"
                 data-mode="E"
                 onclick="setMode(this)"
-                title="Expert — DECA Business"
+                title="Expert — DECA"
               >
                 E
               </div>
@@ -710,7 +936,7 @@
                 class="mode-letter"
                 data-mode="R"
                 onclick="setMode(this)"
-                title="Resilience — Fitness Coach"
+                title="Resilience — Fitness"
               >
                 R
               </div>
@@ -718,7 +944,7 @@
                 class="mode-letter"
                 data-mode="I"
                 onclick="setMode(this)"
-                title="Investigator — Problem Solver"
+                title="Investigator"
               >
                 I
               </div>
@@ -726,7 +952,7 @@
                 class="mode-letter"
                 data-mode="T"
                 onclick="setMode(this)"
-                title="Tutor — Study Buddy"
+                title="Tutor"
               >
                 T
               </div>
@@ -742,7 +968,7 @@
                 class="mode-letter"
                 data-mode="O"
                 onclick="setMode(this)"
-                title="Opposition — Debate Partner"
+                title="Opposition — Debate"
               >
                 O
               </div>
@@ -750,7 +976,7 @@
                 class="mode-letter"
                 data-mode="S"
                 onclick="setMode(this)"
-                title="Sovereign — Custom Mode"
+                title="Sovereign — Custom"
               >
                 S
               </div>
@@ -759,7 +985,6 @@
           </div>
         </div>
 
-        <!-- SOVEREIGN PANEL -->
         <div class="sovereign-panel" id="sovereignPanel">
           <div class="sovereign-label">
             Define your Sovereign — describe the assistant you need
@@ -798,27 +1023,24 @@
 
     <script>
       // ── AUTH ──
-      const USERS = {
-        "demo@verithos.com": "verithos2026",
-      };
+      const USERS = { "demo@verithos.com": "verithos2026" };
 
       function handleLogin() {
         const email = document.getElementById("loginEmail").value.trim();
         const password = document.getElementById("loginPassword").value;
         const error = document.getElementById("loginError");
-
         if (USERS[email] && USERS[email] === password) {
           document.getElementById("loginScreen").style.display = "none";
-          const chat = document.getElementById("chatScreen");
-          chat.style.display = "flex";
+          document.getElementById("appScreen").style.display = "block";
           error.textContent = "";
+          loadHistory();
         } else {
           error.textContent = "Invalid credentials. Please try again.";
         }
       }
 
       function handleLogout() {
-        document.getElementById("chatScreen").style.display = "none";
+        document.getElementById("appScreen").style.display = "none";
         document.getElementById("loginScreen").style.display = "block";
         document.getElementById("loginEmail").value = "";
         document.getElementById("loginPassword").value = "";
@@ -833,25 +1055,163 @@
       // ── THEME ──
       function toggleTheme() {
         const html = document.documentElement;
-        const btn = document.querySelector(".icon-btn");
+        const btns = document.querySelectorAll(".icon-btn");
         if (html.getAttribute("data-theme") === "dark") {
           html.setAttribute("data-theme", "light");
-          btn.textContent = "🌙";
+          btns[1].textContent = "🌙";
         } else {
           html.setAttribute("data-theme", "dark");
-          btn.textContent = "☀️";
+          btns[1].textContent = "☀️";
+        }
+      }
+
+      // ── SIDEBAR ──
+      function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("open");
+        document.getElementById("sidebarOverlay").classList.toggle("visible");
+      }
+
+      function closeSidebar() {
+        document.getElementById("sidebar").classList.remove("open");
+        document.getElementById("sidebarOverlay").classList.remove("visible");
+      }
+
+      // ── CHAT HISTORY ──
+      let chatHistory = JSON.parse(
+        localStorage.getItem("verithos_history") || "[]",
+      );
+      let currentChatId = null;
+      let currentMessages = [];
+
+      function saveHistory() {
+        localStorage.setItem("verithos_history", JSON.stringify(chatHistory));
+      }
+
+      function loadHistory() {
+        renderSidebar();
+        newChat();
+      }
+
+      function renderSidebar() {
+        const list = document.getElementById("sidebarList");
+        const empty = document.getElementById("sidebarEmpty");
+        if (chatHistory.length === 0) {
+          empty.style.display = "block";
+          const items = list.querySelectorAll(".chat-history-item");
+          items.forEach((i) => i.remove());
+          return;
+        }
+        empty.style.display = "none";
+        list.querySelectorAll(".chat-history-item").forEach((i) => i.remove());
+        [...chatHistory].reverse().forEach((chat) => {
+          const item = document.createElement("div");
+          item.classList.add("chat-history-item");
+          if (chat.id === currentChatId) item.classList.add("active");
+          item.innerHTML = `
+          <div class="item-title">${chat.title}</div>
+          <div class="item-meta">
+            <span>${chat.date}</span>
+            <span class="item-mode-badge">${chat.mode}</span>
+          </div>
+          <button class="item-delete" onclick="deleteChat('${chat.id}', event)">✕</button>
+        `;
+          item.addEventListener("click", () => loadChat(chat.id));
+          list.appendChild(item);
+        });
+      }
+
+      function newChat() {
+        if (currentMessages.length > 0) saveCurrentChat();
+        currentChatId = Date.now().toString();
+        currentMessages = [];
+        const messagesEl = document.getElementById("messages");
+        messagesEl.innerHTML =
+          '<div class="message bot">Good evening. I am Verithos — how may I assist you today?</div>';
+        closeSidebar();
+      }
+
+      function saveCurrentChat() {
+        if (currentMessages.length === 0) return;
+        const firstMsg = currentMessages[0]?.text || "New Conversation";
+        const title =
+          firstMsg.length > 40 ? firstMsg.substring(0, 40) + "..." : firstMsg;
+        const existing = chatHistory.find((c) => c.id === currentChatId);
+        const chatData = {
+          id: currentChatId,
+          title,
+          date: new Date().toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+          }),
+          mode: MODE_NAMES[currentMode],
+          messages: currentMessages,
+        };
+        if (existing) {
+          Object.assign(existing, chatData);
+        } else {
+          chatHistory.push(chatData);
+        }
+        saveHistory();
+        renderSidebar();
+      }
+
+      function loadChat(id) {
+        if (currentMessages.length > 0) saveCurrentChat();
+        const chat = chatHistory.find((c) => c.id === id);
+        if (!chat) return;
+        currentChatId = id;
+        currentMessages = [...chat.messages];
+        const messagesEl = document.getElementById("messages");
+        messagesEl.innerHTML = "";
+        chat.messages.forEach((msg) => {
+          const div = document.createElement("div");
+          div.classList.add("message", msg.role);
+          if (msg.role === "bot") {
+            div.innerHTML = marked.parse(msg.text);
+          } else {
+            div.textContent = msg.text;
+          }
+          messagesEl.appendChild(div);
+        });
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        closeSidebar();
+        renderSidebar();
+      }
+
+      function deleteChat(id, e) {
+        e.stopPropagation();
+        chatHistory = chatHistory.filter((c) => c.id !== id);
+        saveHistory();
+        if (id === currentChatId) newChat();
+        else renderSidebar();
+      }
+
+      // ── SHARE ──
+      async function shareChat() {
+        if (currentMessages.length === 0) {
+          showToast("Nothing to share yet");
+          return;
+        }
+        const text = currentMessages
+          .map((m) => `${m.role === "user" ? "You" : "Verithos"}: ${m.text}`)
+          .join("\n\n");
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast("Conversation copied to clipboard");
+        } catch {
+          showToast("Share unavailable");
         }
       }
 
       // ── MODES ──
       const SYSTEM_PROMPTS = {
-        V: "You are Verithos, a versatile, eloquent general assistant. You are knowledgeable, warm, and precise. Respond thoughtfully and never ramble. Match the sophistication of the Verithos brand — refined, intelligent, never generic.",
-        E: "You are Verithos in Expert mode — a world-class DECA business professor. You speak with authority on marketing, finance, entrepreneurship, and management. You coach students for DECA competitions, break down case studies, and push for analytical rigor. Be direct, structured, and demanding of excellence.",
-        R: "You are Verithos in Resilience mode — an elite fitness coach. You are motivating but disciplined. You give specific, science-backed advice on training, nutrition, recovery, and mindset. You push users to be better while being supportive. No fluff, only results.",
-        I: "You are Verithos in Investigator mode — a sharp, analytical problem solver. You break down complex problems methodically, ask clarifying questions, identify root causes, and propose solutions. Think like a detective: observe, deduce, conclude. Never accept surface-level answers.",
-        T: "You are Verithos in Tutor mode — a patient, brilliant study companion. You explain concepts clearly, use analogies, quiz the user, and adapt to their learning pace. You make difficult subjects approachable without dumbing them down. Learning should feel like a discovery.",
-        H: "You are Verithos in Holistic mode — a thoughtful life coach. You help users reflect, set intentions, navigate challenges, and grow as individuals. You are empathetic, grounded, and wise. You ask powerful questions and listen deeply. You never project — you guide.",
-        O: "You are Verithos in Opposition mode — a sharp debate partner. Your role is to challenge every position the user takes, steelman opposing arguments, and force them to think harder. You are not antagonistic — you are rigorous. The goal is intellectual growth through friction.",
+        V: "You are Verithos, a versatile and eloquent general assistant. You are knowledgeable, warm, and precise. Respond thoughtfully, never ramble. Be refined and intelligent, never generic.",
+        E: "You are Verithos in Expert mode — a world-class DECA business professor. Speak with authority on marketing, finance, entrepreneurship, and management. Coach students for DECA competitions, break down case studies, demand analytical rigor. Be direct and structured.",
+        R: "You are Verithos in Resilience mode — an elite fitness coach. Motivating but disciplined. Give specific, science-backed advice on training, nutrition, recovery, and mindset. Push users to be better. No fluff, only results.",
+        I: "You are Verithos in Investigator mode — a sharp analytical problem solver. Break down complex problems methodically, ask clarifying questions, identify root causes, propose solutions. Think like a detective: observe, deduce, conclude.",
+        T: "You are Verithos in Tutor mode — a patient, brilliant study companion. Explain concepts clearly, use analogies, quiz the user, adapt to their pace. Make difficult subjects approachable without dumbing them down.",
+        H: "You are Verithos in Holistic mode — a thoughtful life coach. Help users reflect, set intentions, navigate challenges, and grow. Be empathetic, grounded, and wise. Ask powerful questions. Never project — only guide.",
+        O: "You are Verithos in Opposition mode — a sharp debate partner. Challenge every position the user takes, steelman opposing arguments, force them to think harder. You are rigorous, not antagonistic. The goal is intellectual growth.",
         S: null,
       };
 
@@ -877,7 +1237,6 @@
         currentMode = el.dataset.mode;
         document.getElementById("modeLabel").textContent =
           MODE_NAMES[currentMode];
-
         const panel = document.getElementById("sovereignPanel");
         if (currentMode === "S") {
           panel.style.display = "block";
@@ -891,11 +1250,9 @@
       async function applySovereign() {
         const desc = document.getElementById("sovereignInput").value.trim();
         if (!desc) return;
-
-        const sovereignBtn = document.querySelector(".sovereign-btn");
-        sovereignBtn.textContent = "Priming...";
-        sovereignBtn.disabled = true;
-
+        const btn = document.querySelector(".sovereign-btn");
+        btn.textContent = "Priming...";
+        btn.disabled = true;
         try {
           const res = await fetch("/prime", {
             method: "POST",
@@ -906,13 +1263,12 @@
           currentSystemPrompt = data.system_prompt;
           showToast("Sovereign Activated");
           document.getElementById("sovereignPanel").style.display = "none";
-        } catch (e) {
-          currentSystemPrompt = `You are Verithos, customized as follows: ${desc}. Be helpful, eloquent, and precise.`;
+        } catch {
+          currentSystemPrompt = `You are Verithos, customized as: ${desc}. Be helpful, eloquent, and precise.`;
           showToast("Sovereign Activated");
         }
-
-        sovereignBtn.textContent = "Activate";
-        sovereignBtn.disabled = false;
+        btn.textContent = "Activate";
+        btn.disabled = false;
       }
 
       function showToast(text) {
@@ -927,8 +1283,6 @@
 
       // ── CHAT ──
       const input = document.getElementById("userInput");
-      const messages = document.getElementById("messages");
-
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") sendMessage();
       });
@@ -936,13 +1290,14 @@
       async function sendMessage() {
         const text = input.value.trim();
         if (!text) return;
-
         appendMessage(text, "user");
+        currentMessages.push({ role: "user", text });
         input.value = "";
 
         const typing = document.createElement("div");
         typing.classList.add("typing");
         typing.innerHTML = "<span></span><span></span><span></span>";
+        const messages = document.getElementById("messages");
         messages.appendChild(typing);
         messages.scrollTop = messages.scrollHeight;
 
@@ -958,6 +1313,8 @@
         const data = await res.json();
         messages.removeChild(typing);
         appendMessage(data.reply, "bot");
+        currentMessages.push({ role: "bot", text: data.reply });
+        saveCurrentChat();
       }
 
       function appendMessage(text, sender) {
@@ -968,6 +1325,7 @@
         } else {
           div.textContent = text;
         }
+        const messages = document.getElementById("messages");
         messages.appendChild(div);
         messages.scrollTop = messages.scrollHeight;
       }
