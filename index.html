@@ -30,6 +30,7 @@
         --error: #c94c4c;
         --sidebar-bg: #0d0d0b;
         --sidebar-hover: #1a1a16;
+        --sidebar-width: 280px;
       }
       :root[data-theme="light"] {
         --bg: #faf6ee;
@@ -47,6 +48,7 @@
         --error: #c94c4c;
         --sidebar-bg: #f0e8d8;
         --sidebar-hover: #e8dcc8;
+        --sidebar-width: 280px;
       }
 
       * {
@@ -54,7 +56,6 @@
         padding: 0;
         box-sizing: border-box;
       }
-
       html,
       body {
         width: 100%;
@@ -65,10 +66,6 @@
       body {
         font-family: "Raleway", sans-serif;
         background: var(--bg);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
         transition: background 0.5s ease;
         background-image:
           radial-gradient(ellipse at 20% 50%, var(--glow) 0%, transparent 60%),
@@ -93,12 +90,10 @@
         animation: riseUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         opacity: 0;
         transform: translateY(30px);
-      }
-
-      @media (max-width: 480px) {
-        .login-screen {
-          padding: 36px 24px;
-        }
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
 
       .login-brand {
@@ -214,26 +209,49 @@
         overflow: hidden;
       }
 
+      /* ── LAYOUT ── */
+      .app-layout {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
       /* ── SIDEBAR ── */
       .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 280px;
-        max-width: 80vw;
+        width: 0;
+        min-width: 0;
         height: 100%;
         background: var(--sidebar-bg);
-        border-right: 1px solid var(--border);
-        z-index: 200;
-        transform: translateX(-100%);
-        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        border-right: 1px solid transparent;
+        overflow: hidden;
+        flex-shrink: 0;
+        transition:
+          width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+          min-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+          border-color 0.35s ease;
         display: flex;
         flex-direction: column;
-        box-shadow: 4px 0 24px var(--shadow);
       }
 
       .sidebar.open {
-        transform: translateX(0);
+        width: var(--sidebar-width);
+        min-width: var(--sidebar-width);
+        border-color: var(--border);
+      }
+
+      @media (max-width: 600px) {
+        .sidebar.open {
+          width: 75vw;
+          min-width: 75vw;
+        }
+      }
+
+      .sidebar-inner {
+        width: var(--sidebar-width);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
       }
 
       .sidebar-header {
@@ -300,7 +318,6 @@
         text-align: center;
         padding: 40px 20px;
         font-size: 0.72rem;
-        letter-spacing: 0.1em;
         color: var(--text-muted);
         font-style: italic;
         font-family: "Cormorant Garamond", serif;
@@ -379,28 +396,10 @@
         flex-shrink: 0;
       }
 
-      /* ── OVERLAY ── */
-      .sidebar-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 199;
-      }
-
-      .sidebar-overlay.visible {
-        display: block;
-      }
-
       /* ── CHAT WRAP ── */
       .chat-wrap {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
+        flex: 1;
+        min-width: 0;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -408,10 +407,9 @@
         overflow: hidden;
         animation: riseUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(20px);
       }
 
-      /* ── HEADER ── */
       .chat-header {
         padding: 16px 20px 12px;
         border-bottom: 1px solid var(--border);
@@ -451,7 +449,7 @@
 
       .brand-name {
         font-family: "Cormorant Garamond", serif;
-        font-size: clamp(1.2rem, 4vw, 1.6rem);
+        font-size: clamp(1.2rem, 3vw, 1.6rem);
         font-weight: 300;
         letter-spacing: 0.12em;
         color: var(--gold);
@@ -506,7 +504,6 @@
         color: var(--gold);
       }
 
-      /* ── MODE SWITCHER ── */
       .mode-row {
         display: flex;
         align-items: center;
@@ -521,7 +518,7 @@
 
       .mode-letter {
         font-family: "Cormorant Garamond", serif;
-        font-size: clamp(0.85rem, 2.5vw, 1rem);
+        font-size: clamp(0.85rem, 2vw, 1rem);
         font-weight: 400;
         color: var(--text-muted);
         cursor: pointer;
@@ -555,7 +552,6 @@
         flex-shrink: 0;
       }
 
-      /* ── SOVEREIGN ── */
       .sovereign-panel {
         display: none;
         padding: 12px 20px;
@@ -616,7 +612,6 @@
         background: var(--glow);
       }
 
-      /* ── MESSAGES ── */
       .chat-messages {
         flex: 1;
         padding: 20px;
@@ -718,6 +713,26 @@
         border: 1px solid var(--border);
       }
 
+      .streaming-cursor {
+        display: inline-block;
+        width: 2px;
+        height: 1em;
+        background: var(--gold);
+        margin-left: 2px;
+        vertical-align: text-bottom;
+        animation: blink 0.7s infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
       .mode-toast {
         align-self: center;
         font-size: 0.6rem;
@@ -773,7 +788,6 @@
         }
       }
 
-      /* ── INPUT ── */
       .chat-input {
         padding: 14px 20px 18px;
         border-top: 1px solid var(--border);
@@ -864,7 +878,6 @@
         color: var(--text-muted);
       }
 
-      /* ── MOBILE ── */
       @media (max-width: 480px) {
         .chat-header {
           padding: 12px 14px 10px;
@@ -874,9 +887,6 @@
         }
         .chat-input {
           padding: 10px 14px 14px;
-        }
-        .brand-name {
-          font-size: 1.2rem;
         }
         .icon-btn {
           width: 28px;
@@ -913,152 +923,150 @@
 
     <!-- APP -->
     <div class="app-screen" id="appScreen">
-      <!-- SIDEBAR -->
-      <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-          <div class="sidebar-title">Conversations</div>
-          <button class="new-chat-btn" onclick="newChat()">
-            + New Conversation
-          </button>
-        </div>
-        <div class="sidebar-list" id="sidebarList">
-          <div class="sidebar-empty" id="sidebarEmpty">
-            No conversations yet.<br />Begin your first discourse.
+      <div class="app-layout">
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebar">
+          <div class="sidebar-inner">
+            <div class="sidebar-header">
+              <div class="sidebar-title">Conversations</div>
+              <button class="new-chat-btn" onclick="newChat()">
+                + New Conversation
+              </button>
+            </div>
+            <div class="sidebar-list" id="sidebarList">
+              <div class="sidebar-empty" id="sidebarEmpty">
+                No conversations yet.<br />Begin your first discourse.
+              </div>
+            </div>
+            <div class="sidebar-footer">Verithos · History</div>
           </div>
         </div>
-        <div class="sidebar-footer">Verithos · History</div>
-      </div>
 
-      <div
-        class="sidebar-overlay"
-        id="sidebarOverlay"
-        onclick="closeSidebar()"
-      ></div>
-
-      <!-- CHAT -->
-      <div class="chat-wrap">
-        <div class="chat-header">
-          <div class="header-top">
-            <div class="header-left-group">
-              <button class="icon-btn" onclick="toggleSidebar()">☰</button>
-              <div class="brand-name">Verithos</div>
+        <!-- CHAT -->
+        <div class="chat-wrap">
+          <div class="chat-header">
+            <div class="header-top">
+              <div class="header-left-group">
+                <button class="icon-btn" onclick="toggleSidebar()">☰</button>
+                <div class="brand-name">Verithos</div>
+              </div>
+              <div class="header-controls">
+                <div class="status-dot"></div>
+                <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">
+                  ☀️
+                </button>
+                <button class="icon-btn" onclick="shareChat()" title="Share">
+                  ⇪
+                </button>
+                <button
+                  class="icon-btn"
+                  onclick="handleLogout()"
+                  title="Sign out"
+                >
+                  ⇥
+                </button>
+              </div>
             </div>
-            <div class="header-controls">
-              <div class="status-dot"></div>
-              <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">
-                ☀️
-              </button>
-              <button class="icon-btn" onclick="shareChat()" title="Share">
-                ⇪
-              </button>
-              <button
-                class="icon-btn"
-                onclick="handleLogout()"
-                title="Sign out"
+            <div class="mode-row">
+              <div
+                class="mode-letter active"
+                data-mode="V"
+                onclick="setMode(this)"
+                title="Versatile"
               >
-                ⇥
+                V
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="E"
+                onclick="setMode(this)"
+                title="Expert — DECA"
+              >
+                E
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="R"
+                onclick="setMode(this)"
+                title="Resilience — Fitness"
+              >
+                R
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="I"
+                onclick="setMode(this)"
+                title="Investigator"
+              >
+                I
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="T"
+                onclick="setMode(this)"
+                title="Tutor"
+              >
+                T
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="H"
+                onclick="setMode(this)"
+                title="Holistic"
+              >
+                H
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="O"
+                onclick="setMode(this)"
+                title="Opposition"
+              >
+                O
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="S"
+                onclick="setMode(this)"
+                title="Sovereign"
+              >
+                S
+              </div>
+              <div class="mode-label" id="modeLabel">Versatile</div>
+            </div>
+          </div>
+
+          <div class="sovereign-panel" id="sovereignPanel">
+            <div class="sovereign-label">Define your Sovereign</div>
+            <div class="sovereign-input-row">
+              <input
+                type="text"
+                id="sovereignInput"
+                placeholder="e.g. A strict Stoic philosopher..."
+              />
+              <button class="sovereign-btn" onclick="applySovereign()">
+                Activate
               </button>
             </div>
           </div>
-          <div class="mode-row">
-            <div
-              class="mode-letter active"
-              data-mode="V"
-              onclick="setMode(this)"
-              title="Versatile"
-            >
-              V
-            </div>
-            <div
-              class="mode-letter"
-              data-mode="E"
-              onclick="setMode(this)"
-              title="Expert — DECA"
-            >
-              E
-            </div>
-            <div
-              class="mode-letter"
-              data-mode="R"
-              onclick="setMode(this)"
-              title="Resilience — Fitness"
-            >
-              R
-            </div>
-            <div
-              class="mode-letter"
-              data-mode="I"
-              onclick="setMode(this)"
-              title="Investigator"
-            >
-              I
-            </div>
-            <div
-              class="mode-letter"
-              data-mode="T"
-              onclick="setMode(this)"
-              title="Tutor"
-            >
-              T
-            </div>
-            <div
-              class="mode-letter"
-              data-mode="H"
-              onclick="setMode(this)"
-              title="Holistic"
-            >
-              H
-            </div>
-            <div
-              class="mode-letter"
-              data-mode="O"
-              onclick="setMode(this)"
-              title="Opposition"
-            >
-              O
-            </div>
-            <div
-              class="mode-letter"
-              data-mode="S"
-              onclick="setMode(this)"
-              title="Sovereign"
-            >
-              S
-            </div>
-            <div class="mode-label" id="modeLabel">Versatile</div>
-          </div>
-        </div>
 
-        <div class="sovereign-panel" id="sovereignPanel">
-          <div class="sovereign-label">Define your Sovereign</div>
-          <div class="sovereign-input-row">
-            <input
-              type="text"
-              id="sovereignInput"
-              placeholder="e.g. A strict Stoic philosopher..."
-            />
-            <button class="sovereign-btn" onclick="applySovereign()">
-              Activate
-            </button>
+          <div class="chat-messages" id="messages">
+            <div class="message bot">
+              Good evening. I am Verithos — how may I assist you today?
+            </div>
           </div>
-        </div>
 
-        <div class="chat-messages" id="messages">
-          <div class="message bot">
-            Good evening. I am Verithos — how may I assist you today?
+          <div class="chat-input">
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="userInput"
+                placeholder="Speak your mind..."
+              />
+              <button class="send-btn" onclick="sendMessage()">→</button>
+            </div>
+            <div class="footer-text">Verithos · Intelligent Discourse</div>
           </div>
-        </div>
-
-        <div class="chat-input">
-          <div class="input-wrapper">
-            <input
-              type="text"
-              id="userInput"
-              placeholder="Speak your mind..."
-            />
-            <button class="send-btn" onclick="sendMessage()">→</button>
-          </div>
-          <div class="footer-text">Verithos · Intelligent Discourse</div>
         </div>
       </div>
     </div>
@@ -1082,7 +1090,7 @@
 
       function handleLogout() {
         document.getElementById("appScreen").style.display = "none";
-        document.getElementById("loginScreen").style.display = "flex";
+        document.getElementById("loginScreen").style.display = "block";
         document.getElementById("loginEmail").value = "";
         document.getElementById("loginPassword").value = "";
       }
@@ -1107,12 +1115,6 @@
 
       function toggleSidebar() {
         document.getElementById("sidebar").classList.toggle("open");
-        document.getElementById("sidebarOverlay").classList.toggle("visible");
-      }
-
-      function closeSidebar() {
-        document.getElementById("sidebar").classList.remove("open");
-        document.getElementById("sidebarOverlay").classList.remove("visible");
       }
 
       let chatHistory = JSON.parse(
@@ -1161,7 +1163,6 @@
         currentMessages = [];
         document.getElementById("messages").innerHTML =
           '<div class="message bot">Good evening. I am Verithos — how may I assist you today?</div>';
-        closeSidebar();
       }
 
       function saveCurrentChat() {
@@ -1197,12 +1198,11 @@
         chat.messages.forEach((msg) => {
           const div = document.createElement("div");
           div.classList.add("message", msg.role);
-          div.innerHTML = msg.role === "bot" ? marked.parse(msg.text) : "";
-          if (msg.role !== "bot") div.textContent = msg.text;
+          if (msg.role === "bot") div.innerHTML = marked.parse(msg.text);
+          else div.textContent = msg.text;
           el.appendChild(div);
         });
         el.scrollTop = el.scrollHeight;
-        closeSidebar();
         renderSidebar();
       }
 
@@ -1310,31 +1310,71 @@
         if (e.key === "Enter") sendMessage();
       });
 
+      let isStreaming = false;
+
       async function sendMessage() {
+        if (isStreaming) return;
         const text = input.value.trim();
         if (!text) return;
         appendMessage(text, "user");
         currentMessages.push({ role: "user", text });
         input.value = "";
+        isStreaming = true;
+
+        // Create bot message div for streaming
         const msgs = document.getElementById("messages");
-        const typing = document.createElement("div");
-        typing.classList.add("typing");
-        typing.innerHTML = "<span></span><span></span><span></span>";
-        msgs.appendChild(typing);
+        const botDiv = document.createElement("div");
+        botDiv.classList.add("message", "bot");
+        botDiv.innerHTML = '<span class="streaming-cursor"></span>';
+        msgs.appendChild(botDiv);
         msgs.scrollTop = msgs.scrollHeight;
-        const res = await fetch("/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message: text,
-            system_prompt: currentSystemPrompt,
-          }),
-        });
-        const data = await res.json();
-        msgs.removeChild(typing);
-        appendMessage(data.reply, "bot");
-        currentMessages.push({ role: "bot", text: data.reply });
+
+        let fullText = "";
+
+        try {
+          const res = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message: text,
+              system_prompt: currentSystemPrompt,
+            }),
+          });
+
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            const chunk = decoder.decode(value);
+            const lines = chunk.split("\n");
+            for (const line of lines) {
+              if (line.startsWith("data: ")) {
+                const data = line.slice(6);
+                if (data === "[DONE]") break;
+                try {
+                  const parsed = JSON.parse(data);
+                  if (parsed.token) {
+                    fullText += parsed.token;
+                    botDiv.innerHTML =
+                      marked.parse(fullText) +
+                      '<span class="streaming-cursor"></span>';
+                    msgs.scrollTop = msgs.scrollHeight;
+                  }
+                } catch {}
+              }
+            }
+          }
+        } catch (err) {
+          fullText = "I encountered an issue. Please try again.";
+        }
+
+        // Remove cursor, finalize
+        botDiv.innerHTML = marked.parse(fullText);
+        currentMessages.push({ role: "bot", text: fullText });
         saveCurrentChat();
+        isStreaming = false;
       }
 
       function appendMessage(text, sender) {
