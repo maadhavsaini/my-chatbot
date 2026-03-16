@@ -24,8 +24,8 @@
         --bot-bubble: #13120f;
         --shadow: rgba(0, 0, 0, 0.6);
         --glow: rgba(201, 168, 76, 0.15);
+        --error: #c94c4c;
       }
-
       :root[data-theme="light"] {
         --bg: #faf6ee;
         --bg-secondary: #f5efe0;
@@ -40,6 +40,7 @@
         --bot-bubble: #f5efe0;
         --shadow: rgba(100, 80, 40, 0.15);
         --glow: rgba(154, 114, 48, 0.1);
+        --error: #c94c4c;
       }
 
       * {
@@ -61,18 +62,141 @@
           radial-gradient(ellipse at 80% 20%, var(--glow) 0%, transparent 50%);
       }
 
+      /* ── LOGIN SCREEN ── */
+      .login-screen {
+        width: 100%;
+        max-width: 420px;
+        padding: 48px 40px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        box-shadow: 0 32px 80px var(--shadow);
+        animation: riseUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      .login-brand {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2.4rem;
+        font-weight: 300;
+        letter-spacing: 0.14em;
+        color: var(--gold);
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom: 6px;
+      }
+
+      .login-tagline {
+        font-size: 0.6rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .login-divider {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        margin-bottom: 36px;
+      }
+
+      .login-field {
+        margin-bottom: 20px;
+      }
+
+      .login-field label {
+        display: block;
+        font-size: 0.62rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+      }
+
+      .login-field input {
+        width: 100%;
+        padding: 12px 16px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.88rem;
+        font-weight: 300;
+        outline: none;
+        border-radius: 2px;
+        transition:
+          border-color 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .login-field input:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 3px var(--glow);
+      }
+
+      .login-error {
+        font-size: 0.75rem;
+        color: var(--error);
+        text-align: center;
+        margin-bottom: 16px;
+        height: 16px;
+        letter-spacing: 0.05em;
+      }
+
+      .login-btn {
+        width: 100%;
+        padding: 14px;
+        background: none;
+        border: 1px solid var(--gold);
+        color: var(--gold);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+      }
+
+      .login-btn:hover {
+        background: var(--glow);
+        box-shadow: 0 0 20px var(--glow);
+      }
+
+      .login-footer {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 0.6rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      /* ── CHAT SCREEN ── */
+      .chat-screen {
+        display: none;
+        width: 100%;
+        max-width: 560px;
+        height: 92vh;
+        flex-direction: column;
+      }
+
       .chat-container {
         width: 100%;
-        max-width: 520px;
-        height: 92vh;
+        height: 100%;
         display: flex;
         flex-direction: column;
         overflow: hidden;
         border: 1px solid var(--border);
         background: var(--surface);
-        box-shadow:
-          0 32px 80px var(--shadow),
-          0 0 0 1px var(--border);
+        box-shadow: 0 32px 80px var(--shadow);
         animation: riseUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         opacity: 0;
         transform: translateY(30px);
@@ -86,11 +210,8 @@
       }
 
       .chat-header {
-        padding: 28px 32px 24px;
+        padding: 20px 28px 16px;
         border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         background: var(--surface);
         position: relative;
       }
@@ -99,8 +220,8 @@
         content: "";
         position: absolute;
         bottom: 0;
-        left: 32px;
-        right: 32px;
+        left: 28px;
+        right: 28px;
         height: 1px;
         background: linear-gradient(
           90deg,
@@ -110,34 +231,26 @@
         );
       }
 
-      .header-left {
+      .header-top {
         display: flex;
-        flex-direction: column;
-        gap: 2px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
       }
 
       .brand-name {
         font-family: "Cormorant Garamond", serif;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         font-weight: 300;
         letter-spacing: 0.12em;
         color: var(--gold);
         text-transform: uppercase;
-        line-height: 1;
       }
 
-      .brand-tagline {
-        font-size: 0.62rem;
-        letter-spacing: 0.25em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-        font-weight: 400;
-      }
-
-      .header-right {
+      .header-controls {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
       }
 
       .status-dot {
@@ -159,42 +272,152 @@
         }
       }
 
-      .toggle-btn {
+      .icon-btn {
         background: none;
         border: 1px solid var(--border);
         color: var(--text-muted);
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
         cursor: pointer;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.3s ease;
       }
 
-      .toggle-btn:hover {
+      .icon-btn:hover {
         border-color: var(--gold);
         color: var(--gold);
       }
 
+      /* ── MODE SWITCHER ── */
+      .mode-switcher {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+
+      .mode-letter {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 4px 7px;
+        border-radius: 2px;
+        border: 1px solid transparent;
+        transition: all 0.25s ease;
+        position: relative;
+        letter-spacing: 0.05em;
+      }
+
+      .mode-letter:hover {
+        color: var(--gold);
+        border-color: var(--border);
+      }
+
+      .mode-letter.active {
+        color: var(--gold);
+        border-color: var(--gold);
+        background: var(--glow);
+      }
+
+      .mode-label {
+        font-size: 0.58rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-left: 8px;
+        padding-left: 8px;
+        border-left: 1px solid var(--border);
+      }
+
+      /* ── SOVEREIGN PANEL ── */
+      .sovereign-panel {
+        display: none;
+        padding: 16px 28px;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg-secondary);
+        animation: slideDown 0.3s ease forwards;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .sovereign-label {
+        font-size: 0.6rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 10px;
+      }
+
+      .sovereign-input-row {
+        display: flex;
+        gap: 10px;
+      }
+
+      .sovereign-input-row input {
+        flex: 1;
+        padding: 10px 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: "Cormorant Garamond", serif;
+        font-size: 0.95rem;
+        font-style: italic;
+        outline: none;
+        border-radius: 2px;
+        transition: border-color 0.3s ease;
+      }
+
+      .sovereign-input-row input:focus {
+        border-color: var(--gold);
+      }
+
+      .sovereign-btn {
+        padding: 10px 18px;
+        background: none;
+        border: 1px solid var(--gold);
+        color: var(--gold);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+      }
+
+      .sovereign-btn:hover {
+        background: var(--glow);
+      }
+
+      /* ── MESSAGES ── */
       .chat-messages {
         flex: 1;
-        padding: 28px 32px;
+        padding: 24px 28px;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 14px;
         scrollbar-width: thin;
         scrollbar-color: var(--border) transparent;
       }
 
       .chat-messages::-webkit-scrollbar {
         width: 4px;
-      }
-      .chat-messages::-webkit-scrollbar-track {
-        background: transparent;
       }
       .chat-messages::-webkit-scrollbar-thumb {
         background: var(--border);
@@ -203,7 +426,7 @@
 
       .message {
         max-width: 80%;
-        padding: 14px 18px;
+        padding: 13px 17px;
         font-size: 0.88rem;
         line-height: 1.7;
         opacity: 0;
@@ -226,9 +449,7 @@
         color: var(--gold-light);
         align-self: flex-end;
         border: 1px solid var(--border);
-        border-bottom-right-radius: 2px;
         border-radius: 12px 12px 2px 12px;
-        font-family: "Raleway", sans-serif;
         font-weight: 300;
       }
 
@@ -248,10 +469,10 @@
         content: "◆";
         position: absolute;
         top: 14px;
-        left: -20px;
-        font-size: 0.4rem;
+        left: -18px;
+        font-size: 0.35rem;
         color: var(--gold);
-        opacity: 0.6;
+        opacity: 0.5;
       }
 
       .message.bot p {
@@ -285,17 +506,30 @@
         border: 1px solid var(--border);
       }
 
+      .mode-toast {
+        align-self: center;
+        font-size: 0.6rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        padding: 6px 14px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        opacity: 0;
+        animation: messageIn 0.4s ease forwards;
+      }
+
       .typing {
         display: flex;
         align-items: center;
         gap: 6px;
-        padding: 14px 18px;
+        padding: 13px 17px;
         background: var(--bot-bubble);
         border: 1px solid var(--border);
         border-radius: 2px 12px 12px 12px;
         align-self: flex-start;
-        animation: messageIn 0.4s ease forwards;
         opacity: 0;
+        animation: messageIn 0.4s ease forwards;
       }
 
       .typing span {
@@ -327,30 +561,9 @@
         }
       }
 
-      .divider {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: var(--text-muted);
-        font-size: 0.6rem;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-      }
-
-      .divider::before,
-      .divider::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--border));
-      }
-
-      .divider::after {
-        background: linear-gradient(90deg, var(--border), transparent);
-      }
-
+      /* ── INPUT ── */
       .chat-input {
-        padding: 20px 32px 28px;
+        padding: 16px 28px 22px;
         border-top: 1px solid var(--border);
         background: var(--surface);
         position: relative;
@@ -360,8 +573,8 @@
         content: "";
         position: absolute;
         top: 0;
-        left: 32px;
-        right: 32px;
+        left: 28px;
+        right: 28px;
         height: 1px;
         background: linear-gradient(
           90deg,
@@ -377,7 +590,7 @@
         gap: 12px;
         border: 1px solid var(--border);
         border-radius: 4px;
-        padding: 12px 16px;
+        padding: 11px 15px;
         transition:
           border-color 0.3s ease,
           box-shadow 0.3s ease;
@@ -398,7 +611,6 @@
         font-size: 0.88rem;
         font-weight: 300;
         outline: none;
-        letter-spacing: 0.02em;
       }
 
       .chat-input input::placeholder {
@@ -411,8 +623,8 @@
         background: none;
         border: 1px solid var(--border);
         color: var(--text-muted);
-        width: 32px;
-        height: 32px;
+        width: 30px;
+        height: 30px;
         border-radius: 2px;
         cursor: pointer;
         font-size: 0.75rem;
@@ -431,8 +643,8 @@
 
       .footer-text {
         text-align: center;
-        margin-top: 10px;
-        font-size: 0.58rem;
+        margin-top: 9px;
+        font-size: 0.57rem;
         letter-spacing: 0.2em;
         text-transform: uppercase;
         color: var(--text-muted);
@@ -440,47 +652,188 @@
     </style>
   </head>
   <body>
-    <div class="chat-container">
-      <div class="chat-header">
-        <div class="header-left">
-          <div class="brand-name">Verithos</div>
-          <div class="brand-tagline">Intelligent Discourse</div>
-        </div>
-        <div class="header-right">
-          <div class="status-dot"></div>
-          <button
-            class="toggle-btn"
-            onclick="toggleTheme()"
-            title="Toggle theme"
-          >
-            ☀️
-          </button>
-        </div>
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
+      <div class="login-brand">Verithos</div>
+      <div class="login-tagline">Intelligent Discourse</div>
+      <div class="login-divider"></div>
+      <div class="login-field">
+        <label>Email Address</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" />
       </div>
-
-      <div class="chat-messages" id="messages">
-        <div class="divider">Begin</div>
-        <div class="message bot">
-          Good evening. I am Verithos — how may I assist you today?
-        </div>
+      <div class="login-field">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" />
       </div>
+      <div class="login-error" id="loginError"></div>
+      <button class="login-btn" onclick="handleLogin()">Enter Verithos</button>
+      <div class="login-footer">Verithos · Private Access</div>
+    </div>
 
-      <div class="chat-input">
-        <div class="input-wrapper">
-          <input type="text" id="userInput" placeholder="Speak your mind..." />
-          <button class="send-btn" onclick="sendMessage()">→</button>
+    <!-- CHAT SCREEN -->
+    <div class="chat-screen" id="chatScreen">
+      <div class="chat-container">
+        <div class="chat-header">
+          <div class="header-top">
+            <div class="brand-name">Verithos</div>
+            <div class="header-controls">
+              <div class="status-dot"></div>
+              <button class="icon-btn" onclick="toggleTheme()">☀️</button>
+              <button
+                class="icon-btn"
+                onclick="handleLogout()"
+                title="Sign out"
+              >
+                ⇥
+              </button>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center">
+            <div class="mode-switcher" id="modeSwitcher">
+              <div
+                class="mode-letter active"
+                data-mode="V"
+                onclick="setMode(this)"
+                title="Versatile — General Assistant"
+              >
+                V
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="E"
+                onclick="setMode(this)"
+                title="Expert — DECA Business"
+              >
+                E
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="R"
+                onclick="setMode(this)"
+                title="Resilience — Fitness Coach"
+              >
+                R
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="I"
+                onclick="setMode(this)"
+                title="Investigator — Problem Solver"
+              >
+                I
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="T"
+                onclick="setMode(this)"
+                title="Tutor — Study Buddy"
+              >
+                T
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="H"
+                onclick="setMode(this)"
+                title="Holistic — Life Coach"
+              >
+                H
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="O"
+                onclick="setMode(this)"
+                title="Opposition — Debate Partner"
+              >
+                O
+              </div>
+              <div
+                class="mode-letter"
+                data-mode="S"
+                onclick="setMode(this)"
+                title="Sovereign — Custom Mode"
+              >
+                S
+              </div>
+            </div>
+            <div class="mode-label" id="modeLabel">Versatile</div>
+          </div>
         </div>
-        <div class="footer-text">Verithos · Powered by AI</div>
+
+        <!-- SOVEREIGN PANEL -->
+        <div class="sovereign-panel" id="sovereignPanel">
+          <div class="sovereign-label">
+            Define your Sovereign — describe the assistant you need
+          </div>
+          <div class="sovereign-input-row">
+            <input
+              type="text"
+              id="sovereignInput"
+              placeholder="e.g. A strict Stoic philosopher who challenges every assumption..."
+            />
+            <button class="sovereign-btn" onclick="applySovereign()">
+              Activate
+            </button>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="messages">
+          <div class="message bot">
+            Good evening. I am Verithos — how may I assist you today?
+          </div>
+        </div>
+
+        <div class="chat-input">
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="userInput"
+              placeholder="Speak your mind..."
+            />
+            <button class="send-btn" onclick="sendMessage()">→</button>
+          </div>
+          <div class="footer-text">Verithos · Intelligent Discourse</div>
+        </div>
       </div>
     </div>
 
     <script>
-      const input = document.getElementById("userInput");
-      const messages = document.getElementById("messages");
+      // ── AUTH ──
+      const USERS = {
+        "demo@verithos.com": "verithos2026",
+      };
 
+      function handleLogin() {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+        const error = document.getElementById("loginError");
+
+        if (USERS[email] && USERS[email] === password) {
+          document.getElementById("loginScreen").style.display = "none";
+          const chat = document.getElementById("chatScreen");
+          chat.style.display = "flex";
+          error.textContent = "";
+        } else {
+          error.textContent = "Invalid credentials. Please try again.";
+        }
+      }
+
+      function handleLogout() {
+        document.getElementById("chatScreen").style.display = "none";
+        document.getElementById("loginScreen").style.display = "block";
+        document.getElementById("loginEmail").value = "";
+        document.getElementById("loginPassword").value = "";
+      }
+
+      document
+        .getElementById("loginPassword")
+        .addEventListener("keydown", (e) => {
+          if (e.key === "Enter") handleLogin();
+        });
+
+      // ── THEME ──
       function toggleTheme() {
         const html = document.documentElement;
-        const btn = document.querySelector(".toggle-btn");
+        const btn = document.querySelector(".icon-btn");
         if (html.getAttribute("data-theme") === "dark") {
           html.setAttribute("data-theme", "light");
           btn.textContent = "🌙";
@@ -490,7 +843,93 @@
         }
       }
 
-      input.addEventListener("keydown", function (e) {
+      // ── MODES ──
+      const SYSTEM_PROMPTS = {
+        V: "You are Verithos, a versatile, eloquent general assistant. You are knowledgeable, warm, and precise. Respond thoughtfully and never ramble. Match the sophistication of the Verithos brand — refined, intelligent, never generic.",
+        E: "You are Verithos in Expert mode — a world-class DECA business professor. You speak with authority on marketing, finance, entrepreneurship, and management. You coach students for DECA competitions, break down case studies, and push for analytical rigor. Be direct, structured, and demanding of excellence.",
+        R: "You are Verithos in Resilience mode — an elite fitness coach. You are motivating but disciplined. You give specific, science-backed advice on training, nutrition, recovery, and mindset. You push users to be better while being supportive. No fluff, only results.",
+        I: "You are Verithos in Investigator mode — a sharp, analytical problem solver. You break down complex problems methodically, ask clarifying questions, identify root causes, and propose solutions. Think like a detective: observe, deduce, conclude. Never accept surface-level answers.",
+        T: "You are Verithos in Tutor mode — a patient, brilliant study companion. You explain concepts clearly, use analogies, quiz the user, and adapt to their learning pace. You make difficult subjects approachable without dumbing them down. Learning should feel like a discovery.",
+        H: "You are Verithos in Holistic mode — a thoughtful life coach. You help users reflect, set intentions, navigate challenges, and grow as individuals. You are empathetic, grounded, and wise. You ask powerful questions and listen deeply. You never project — you guide.",
+        O: "You are Verithos in Opposition mode — a sharp debate partner. Your role is to challenge every position the user takes, steelman opposing arguments, and force them to think harder. You are not antagonistic — you are rigorous. The goal is intellectual growth through friction.",
+        S: null,
+      };
+
+      const MODE_NAMES = {
+        V: "Versatile",
+        E: "Expert",
+        R: "Resilience",
+        I: "Investigator",
+        T: "Tutor",
+        H: "Holistic",
+        O: "Opposition",
+        S: "Sovereign",
+      };
+
+      let currentSystemPrompt = SYSTEM_PROMPTS.V;
+      let currentMode = "V";
+
+      function setMode(el) {
+        document
+          .querySelectorAll(".mode-letter")
+          .forEach((l) => l.classList.remove("active"));
+        el.classList.add("active");
+        currentMode = el.dataset.mode;
+        document.getElementById("modeLabel").textContent =
+          MODE_NAMES[currentMode];
+
+        const panel = document.getElementById("sovereignPanel");
+        if (currentMode === "S") {
+          panel.style.display = "block";
+        } else {
+          panel.style.display = "none";
+          currentSystemPrompt = SYSTEM_PROMPTS[currentMode];
+          showToast(`Mode — ${MODE_NAMES[currentMode]}`);
+        }
+      }
+
+      async function applySovereign() {
+        const desc = document.getElementById("sovereignInput").value.trim();
+        if (!desc) return;
+
+        const sovereignBtn = document.querySelector(".sovereign-btn");
+        sovereignBtn.textContent = "Priming...";
+        sovereignBtn.disabled = true;
+
+        try {
+          const res = await fetch("/prime", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ description: desc }),
+          });
+          const data = await res.json();
+          currentSystemPrompt = data.system_prompt;
+          showToast("Sovereign Activated");
+          document.getElementById("sovereignPanel").style.display = "none";
+        } catch (e) {
+          currentSystemPrompt = `You are Verithos, customized as follows: ${desc}. Be helpful, eloquent, and precise.`;
+          showToast("Sovereign Activated");
+        }
+
+        sovereignBtn.textContent = "Activate";
+        sovereignBtn.disabled = false;
+      }
+
+      function showToast(text) {
+        const toast = document.createElement("div");
+        toast.classList.add("mode-toast");
+        toast.textContent = text;
+        const messages = document.getElementById("messages");
+        messages.appendChild(toast);
+        messages.scrollTop = messages.scrollHeight;
+        setTimeout(() => toast.remove(), 3000);
+      }
+
+      // ── CHAT ──
+      const input = document.getElementById("userInput");
+      const messages = document.getElementById("messages");
+
+      input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") sendMessage();
       });
 
@@ -510,7 +949,10 @@
         const res = await fetch("/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text }),
+          body: JSON.stringify({
+            message: text,
+            system_prompt: currentSystemPrompt,
+          }),
         });
 
         const data = await res.json();
