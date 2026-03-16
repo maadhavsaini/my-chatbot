@@ -28,7 +28,7 @@ def chat():
 
     def generate():
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="llama-3.1-8b-instant",
             messages=[
                 {"role": "system", "content": full_system},
                 {"role": "user", "content": user_message}
@@ -48,7 +48,7 @@ def chat():
 def prime():
     description = request.json.get("description")
     completion = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="llama-3.1-8b-instant",
         messages=[
             {"role": "system", "content": "You are an expert at writing AI system prompts. Given a user's description, write a concise powerful system prompt in 3-5 sentences. Return ONLY the system prompt, nothing else."},
             {"role": "user", "content": f"Create a system prompt for: {description}"}
