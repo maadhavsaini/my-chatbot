@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Chatbot</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .chat-container {
+        width: 100%;
+        max-width: 480px;
+        height: 90vh;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .chat-header {
+        background: #6c63ff;
+        color: white;
+        padding: 20px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .message {
+        max-width: 75%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        opacity: 0;
+        transform: translateY(8px);
+        animation: fadeUp 0.3s ease forwards;
+      }
+
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message.user {
+        background: #6c63ff;
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+      }
+
+      .message.bot {
+        background: #f0f2f5;
+        color: #333;
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+      }
+
+      .message.bot p {
+        margin-bottom: 8px;
+      }
+      .message.bot p:last-child {
+        margin-bottom: 0;
+      }
+      .message.bot ul,
+      .message.bot ol {
+        padding-left: 20px;
+        margin-bottom: 8px;
+      }
+      .message.bot li {
+        margin-bottom: 4px;
+      }
+      .message.bot strong {
+        font-weight: 700;
+      }
+      .message.bot em {
+        font-style: italic;
+      }
+      .message.bot code {
+        background: #e0e0e0;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 0.85rem;
+      }
+
+      .typing {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 12px 16px;
+        background: #f0f2f5;
+        border-radius: 18px;
+        border-bottom-left-radius: 4px;
+        align-self: flex-start;
+        opacity: 0;
+        transform: translateY(8px);
+        animation: fadeUp 0.3s ease forwards;
+      }
+
+      .typing span {
+        width: 8px;
+        height: 8px;
+        background: #aaa;
+        border-radius: 50%;
+        animation: bounce 1.2s infinite;
+      }
+
+      .typing span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .typing span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes bounce {
+        0%,
+        60%,
+        100% {
+          transform: translateY(0);
+        }
+        30% {
+          transform: translateY(-6px);
+        }
+      }
+
+      .chat-input {
+        display: flex;
+        padding: 16px;
+        border-top: 1px solid #eee;
+        gap: 10px;
+      }
+
+      .chat-input input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 24px;
+        font-size: 0.95rem;
+        outline: none;
+      }
+
+      .chat-input input:focus {
+        border-color: #6c63ff;
+      }
+
+      .chat-input button {
+        background: #6c63ff;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .chat-input button:hover {
+        background: #574fd6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chat-container">
+      <div class="chat-header">🤖 My Chatbot</div>
+      <div class="chat-messages" id="messages">
+        <div class="message bot">Hey! How can I help you today?</div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+
+    <script>
+      const input = document.getElementById("userInput");
+      const messages = document.getElementById("messages");
+
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") sendMessage();
+      });
+
+      async function sendMessage() {
+        const text = input.value.trim();
+        if (!text) return;
+
+        appendMessage(text, "user");
+        input.value = "";
+
+        // Show typing indicator
+        const typing = document.createElement("div");
+        typing.classList.add("typing");
+        typing.innerHTML = "<span></span><span></span><span></span>";
+        messages.appendChild(typing);
+        messages.scrollTop = messages.scrollHeight;
+
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text }),
+        });
+
+        const data = await res.json();
+        messages.removeChild(typing);
+        appendMessage(data.reply, "bot");
+      }
+
+      function appendMessage(text, sender) {
+        const div = document.createElement("div");
+        div.classList.add("message", sender);
+
+        if (sender === "bot") {
+          div.innerHTML = marked.parse(text);
+        } else {
+          div.textContent = text;
+        }
+
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+      }
+    </script>
+  </body>
+</html>
