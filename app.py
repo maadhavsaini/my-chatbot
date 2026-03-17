@@ -79,13 +79,28 @@ def chat():
 
     full_system = VERITHOS_CONSTITUTION + methodology_section + "\n" + system_prompt
 
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.json
+    user_message = data.get("message")
+    system_prompt = data.get("system_prompt", "You are Verithos, a helpful and eloquent assistant.")
+    methodology = data.get("methodology", "")
+    context = data.get("context", [])
+
+    methodology_section = f"\n━━━ USER METHODOLOGY ━━━\nThis user has shared how they like to work:\n{methodology}\nHonour these preferences in every response.\n" if methodology else ""
+    full_system = VERITHOS_CONSTITUTION + methodology_section + "\n" + system_prompt
+
+    # Build messages with context
+    messages = [{"role": "system", "content": full_system}]
+    for msg in context[-8:]:  # last 8 for context window
+        messages.append({"role": msg["role"], "content": msg["content"]})
+    if not context or context[-1]["content"] != user_message:
+        messages.append({"role": "user", "content": user_message})
+
     def generate():
         completion = client.chat.completions.create(
             model="llama-3.1-8b-instant",
-            messages=[
-                {"role": "system", "content": full_system},
-                {"role": "user", "content": user_message}
-            ],
+            messages=messages,
             max_completion_tokens=1024,
             stream=True,
         )
