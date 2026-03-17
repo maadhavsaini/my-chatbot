@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Verithos</title>
+    <title>Veritax</title>
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚜️</text></svg>"
@@ -171,7 +171,6 @@
         border-color: var(--gold);
         box-shadow: 0 0 0 3px var(--glow);
       }
-
       .login-error {
         font-size: 0.75rem;
         color: var(--error);
@@ -246,7 +245,6 @@
         min-width: var(--sidebar-width);
         border-color: var(--border);
       }
-
       @media (max-width: 600px) {
         .sidebar.open {
           width: 75vw;
@@ -260,7 +258,6 @@
         display: flex;
         flex-direction: column;
       }
-
       .sidebar-header {
         padding: 24px 20px 16px;
         border-bottom: 1px solid var(--border);
@@ -559,7 +556,7 @@
         padding: 4px 6px;
         border-radius: 2px;
         border: 1px solid transparent;
-        transition: all 0.25s ease;
+        transition: all 0.3s ease;
         white-space: nowrap;
         flex-shrink: 0;
       }
@@ -572,6 +569,23 @@
         color: var(--gold);
         border-color: var(--gold);
         background: var(--glow);
+      }
+      .mode-letter.active {
+        animation: modePop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes modePop {
+        0% {
+          transform: scale(0.85);
+          opacity: 0.5;
+        }
+        60% {
+          transform: scale(1.15);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
 
       .mode-label {
@@ -729,7 +743,6 @@
         gap: 16px;
         overflow-y: auto;
       }
-
       .methodology-label {
         font-size: 0.75rem;
         color: var(--text-muted);
@@ -817,7 +830,7 @@
       /* ── MESSAGES ── */
       .chat-messages {
         flex: 1;
-        padding: 32px 40px;
+        padding: 32px 40px 60px 40px;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
@@ -833,10 +846,9 @@
         background: var(--border);
         border-radius: 2px;
       }
-
       @media (max-width: 600px) {
         .chat-messages {
-          padding: 20px 18px;
+          padding: 20px 18px 40px 18px;
         }
       }
 
@@ -902,7 +914,21 @@
         align-items: center;
         gap: 10px;
         margin-bottom: 14px;
+        animation: markerFade 0.6s ease forwards;
+        opacity: 0;
       }
+
+      @keyframes markerFade {
+        from {
+          opacity: 0;
+          transform: translateX(-6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
       .bot-marker-diamond {
         color: var(--gold);
         font-size: 0.5rem;
@@ -916,7 +942,7 @@
         font-family: "Raleway", sans-serif;
       }
 
-      /* BOT CONTENT TEXT — the key fix */
+      /* BOT CONTENT */
       .bot-content-text {
         font-family: "Cormorant Garamond", serif;
         font-size: 1.05rem;
@@ -1017,7 +1043,7 @@
         font-family: "JetBrains Mono", monospace;
       }
 
-      /* CODE BLOCKS */
+      /* CODE */
       .code-header {
         background: #1a1a1a;
         padding: 6px 12px;
@@ -1051,7 +1077,6 @@
         border-color: var(--gold);
         color: var(--gold);
       }
-
       .bot-content-text pre code {
         font-family: "JetBrains Mono", monospace !important;
         font-size: 0.82rem;
@@ -1084,6 +1109,11 @@
         font-family: "Raleway", sans-serif;
         opacity: 0.8;
         transition: opacity 0.2s;
+        max-width: 280px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: bottom;
       }
 
       .source-link:hover {
@@ -1146,7 +1176,7 @@
         background: var(--glow);
       }
 
-      /* STREAMING CURSOR */
+      /* STREAMING */
       .streaming-cursor {
         display: inline-block;
         width: 2px;
@@ -1228,7 +1258,10 @@
 
       .input-wrapper:focus-within {
         border-color: var(--gold);
-        box-shadow: 0 0 0 3px var(--glow);
+        box-shadow: 0 0 0 4px var(--glow);
+        transition:
+          border-color 0.4s ease,
+          box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       .chat-input input {
@@ -1261,7 +1294,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
         flex-shrink: 0;
       }
 
@@ -1269,6 +1302,23 @@
         border-color: var(--gold);
         color: var(--gold);
         background: var(--glow);
+      }
+      .send-btn.sending {
+        animation: sendPulse 0.4s ease;
+      }
+
+      @keyframes sendPulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.85);
+          border-color: var(--gold);
+          color: var(--gold);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       .footer-text {
@@ -1292,13 +1342,23 @@
         .message.user {
           max-width: 85%;
         }
+        .chat-messages {
+          padding: 16px 16px 40px 16px;
+        }
+        .chat-input {
+          padding: 10px 16px 14px;
+        }
+        .chat-input::before {
+          left: 16px;
+          right: 16px;
+        }
       }
     </style>
   </head>
   <body>
     <!-- LOGIN -->
     <div class="login-screen" id="loginScreen">
-      <div class="login-brand">Verithos</div>
+      <div class="login-brand">Veritax</div>
       <div class="login-tagline">Intelligent Discourse</div>
       <div class="login-divider"></div>
       <div class="login-field">
@@ -1310,8 +1370,8 @@
         <input type="password" id="loginPassword" placeholder="••••••••" />
       </div>
       <div class="login-error" id="loginError"></div>
-      <button class="login-btn" onclick="handleLogin()">Enter Verithos</button>
-      <div class="login-footer">Verithos · Private Access</div>
+      <button class="login-btn" onclick="handleLogin()">Enter Veritax</button>
+      <div class="login-footer">Veritax · Private Access</div>
     </div>
 
     <!-- APP -->
@@ -1331,7 +1391,7 @@
                 No conversations yet.<br />Begin your first discourse.
               </div>
             </div>
-            <div class="sidebar-footer">Verithos · History</div>
+            <div class="sidebar-footer">Veritax · History</div>
           </div>
         </div>
 
@@ -1341,7 +1401,7 @@
             <div class="header-top">
               <div class="header-left-group">
                 <button class="icon-btn" onclick="toggleSidebar()">☰</button>
-                <div class="brand-name">Verithos</div>
+                <div class="brand-name">Veritax</div>
               </div>
               <div class="header-controls">
                 <div class="status-dot"></div>
@@ -1398,41 +1458,69 @@
                 class="mode-letter active"
                 data-mode="V"
                 onclick="setMode(this)"
+                title="Versatile — General Assistant"
               >
                 V
               </div>
-              <div class="mode-letter" data-mode="E" onclick="setMode(this)">
+              <div
+                class="mode-letter"
+                data-mode="E"
+                onclick="setMode(this)"
+                title="Engineer — Coding Assistant"
+              >
                 E
               </div>
-              <div class="mode-letter" data-mode="R" onclick="setMode(this)">
+              <div
+                class="mode-letter"
+                data-mode="R"
+                onclick="setMode(this)"
+                title="Reason — Deep Analysis"
+              >
                 R
               </div>
-              <div class="mode-letter" data-mode="I" onclick="setMode(this)">
+              <div
+                class="mode-letter"
+                data-mode="I"
+                onclick="setMode(this)"
+                title="Inspire — Creative Thinking"
+              >
                 I
               </div>
-              <div class="mode-letter" data-mode="T" onclick="setMode(this)">
+              <div
+                class="mode-letter"
+                data-mode="T"
+                onclick="setMode(this)"
+                title="Tutor — Learning Companion"
+              >
                 T
               </div>
-              <div class="mode-letter" data-mode="H" onclick="setMode(this)">
-                H
+              <div
+                class="mode-letter"
+                data-mode="A"
+                onclick="setMode(this)"
+                title="Axiom — Live Web Search"
+              >
+                A
               </div>
-              <div class="mode-letter" data-mode="O" onclick="setMode(this)">
-                O
+              <div
+                class="mode-letter"
+                data-mode="X"
+                onclick="setMode(this)"
+                title="Xplore — Custom Mode"
+              >
+                X
               </div>
-              <div class="mode-letter" data-mode="S" onclick="setMode(this)">
-                S
-              </div>
-              <div class="mode-label" id="modeLabel">Voyageur</div>
+              <div class="mode-label" id="modeLabel">Versatile</div>
             </div>
           </div>
 
           <div class="sovereign-panel" id="sovereignPanel">
-            <div class="sovereign-label">Define your Sovereign</div>
+            <div class="sovereign-label">Define your Xplore mode</div>
             <div class="sovereign-input-row">
               <input
                 type="text"
                 id="sovereignInput"
-                placeholder="e.g. A patient Socratic philosopher who only asks questions..."
+                placeholder="e.g. A Socratic philosopher who only asks questions..."
               />
               <button class="sovereign-btn" onclick="applySovereign()">
                 Activate
@@ -1447,11 +1535,13 @@
               <input
                 type="text"
                 id="userInput"
-                placeholder="Search the web..."
+                placeholder="Ask Veritax anything..."
               />
-              <button class="send-btn" onclick="sendMessage()">→</button>
+              <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                →
+              </button>
             </div>
-            <div class="footer-text">Verithos · Intelligent Discourse</div>
+            <div class="footer-text">Veritax · Intelligent Discourse</div>
           </div>
         </div>
       </div>
@@ -1466,7 +1556,7 @@
         </div>
         <div class="methodology-body">
           <div class="methodology-label">
-            Tell Verithos how you like to work. Be as specific as you want — it
+            Tell Veritax how you like to work. Be as specific as you want — it
             will remember and adapt every response to you.
           </div>
           <textarea
@@ -1495,7 +1585,7 @@
 
     <script>
       // ── AUTH ──
-      const USERS = { "demo@verithos.com": "verithos2026" };
+      const USERS = { "demo@veritax.com": "veritax2026" };
 
       function handleLogin() {
         const email = document.getElementById("loginEmail").value.trim();
@@ -1536,7 +1626,7 @@
               ? "Good afternoon"
               : "Good evening";
         addBotMessage(
-          `${greeting}. I am Verithos — how may I assist you today?`,
+          `${greeting}. I am Veritax — how may I assist you today?`,
           false,
         );
       }
@@ -1588,7 +1678,7 @@
       let userMethodology = "";
 
       function loadSavedMethodology() {
-        userMethodology = localStorage.getItem("verithos_methodology") || "";
+        userMethodology = localStorage.getItem("veritax_methodology") || "";
         if (userMethodology) {
           document.getElementById("methodologyInput").value = userMethodology;
           document.getElementById("methodologySaved").style.display = "block";
@@ -1618,18 +1708,18 @@
         } catch {
           userMethodology = text;
         }
-        localStorage.setItem("verithos_methodology", userMethodology);
+        localStorage.setItem("veritax_methodology", userMethodology);
         document.getElementById("methodologySaved").style.display = "block";
         document.getElementById("methodologySaved").textContent =
           userMethodology;
         btn.textContent = "Save Preferences";
         btn.disabled = false;
-        showToast("Methodology saved — Verithos will remember.");
+        showToast("Preferences saved — Veritax will remember.");
       }
 
       function clearMethodology() {
         userMethodology = "";
-        localStorage.removeItem("verithos_methodology");
+        localStorage.removeItem("veritax_methodology");
         document.getElementById("methodologyInput").value = "";
         document.getElementById("methodologySaved").style.display = "none";
         showToast("Preferences cleared.");
@@ -1637,13 +1727,13 @@
 
       // ── HISTORY ──
       let chatHistory = JSON.parse(
-        localStorage.getItem("verithos_history") || "[]",
+        localStorage.getItem("veritax_history") || "[]",
       );
       let currentChatId = null;
       let currentMessages = [];
 
       function saveHistory() {
-        localStorage.setItem("verithos_history", JSON.stringify(chatHistory));
+        localStorage.setItem("veritax_history", JSON.stringify(chatHistory));
       }
       function loadHistory() {
         renderSidebar();
@@ -1779,7 +1869,7 @@
           return;
         }
         const text = currentMessages
-          .map((m) => `${m.role === "user" ? "You" : "Verithos"}: ${m.text}`)
+          .map((m) => `${m.role === "user" ? "You" : "Veritax"}: ${m.text}`)
           .join("\n\n");
         try {
           await navigator.clipboard.writeText(text);
@@ -1791,42 +1881,39 @@
 
       // ── MODES ──
       const MODE_NAMES = {
-        V: "Voyageur",
+        V: "Versatile",
         E: "Engineer",
         R: "Reason",
         I: "Inspire",
         T: "Tutor",
-        H: "Harbour",
-        O: "Oracle",
-        S: "Sovereign",
+        A: "Axiom",
+        X: "Xplore",
       };
 
       const MODE_DESCRIPTIONS = {
-        V: "Voyageur — Searches the live web to answer your questions with real, up-to-date information.",
-        E: "Engineer — Your expert coding assistant. Writes, debugs, and explains code in any language.",
+        V: "Versatile — Your all-purpose intelligent companion for any question or task.",
+        E: "Engineer — Expert coding assistant. Writes, debugs, and explains code in any language.",
         R: "Reason — Deep analytical thinking. Logic, critical analysis, and structured problem solving.",
-        I: "Inspire — Creative companion for brainstorming, writing, ideation, and imaginative thinking.",
-        T: "Tutor — Patient and adaptive. Explains anything clearly, quizzes you, and matches your pace.",
-        H: "Harbour — A warm, thoughtful companion for casual conversation and emotional support.",
-        O: "Oracle — Your writing and research partner. Essays, reports, citations, and English mastery.",
-        S: "Sovereign — Fully custom. Describe exactly the assistant you need and Verithos becomes it.",
+        I: "Inspire — Creative companion for brainstorming, writing, and imaginative thinking.",
+        T: "Tutor — Patient and adaptive. Explains anything clearly and matches your pace.",
+        A: "Axiom — Live web search. Real-time answers with cited sources.",
+        X: "Xplore — Fully custom. Describe exactly the assistant you need.",
       };
 
       const SYSTEM_PROMPTS = {
-        V: "You are Verithos in Voyageur mode. You have access to real-time web search results. Synthesize them clearly and accurately. Always cite sources. Be concise but thorough.",
-        E: "You are Verithos in Engineer mode — an expert coding assistant. Write clean, efficient, well-commented code. Explain your reasoning. Debug methodically. Support any programming language. Use code blocks with language tags.",
-        R: "You are Verithos in Reason mode — a deep analytical thinker. Break down complex problems with logic and structure. Present arguments clearly. Identify assumptions and fallacies. Think step by step.",
-        I: "You are Verithos in Inspire mode — a creative companion. Generate ideas, help with creative writing, brainstorm freely, and think imaginatively. Be vivid, original, and encouraging.",
-        T: "You are Verithos in Tutor mode — a patient, brilliant study companion. Explain concepts clearly with analogies. Quiz the user. Adapt to their level. Make learning feel like discovery.",
-        H: "You are Verithos in Harbour mode — a warm, empathetic companion. Be conversational, supportive, and genuinely interested. Listen well, respond with care, and be a positive presence.",
-        O: "You are Verithos in Oracle mode — an expert writer and researcher. Help craft essays, reports, and arguments. Provide thorough research, proper citations, and polished English. Be meticulous.",
-        S: null,
+        V: "You are Veritax in Versatile mode — an intelligent, eloquent general assistant. Be knowledgeable, warm, and precise. Never ramble. Be refined and genuinely helpful.",
+        E: "You are Veritax in Engineer mode — an expert coding assistant. Write clean, efficient, well-commented code. Explain your reasoning. Debug methodically. Support any programming language. Use code blocks with language tags.",
+        R: "You are Veritax in Reason mode — a deep analytical thinker. Break down complex problems with logic and structure. Present arguments clearly. Identify assumptions and fallacies. Think step by step.",
+        I: "You are Veritax in Inspire mode — a creative companion. Generate ideas, help with creative writing, brainstorm freely, and think imaginatively. Be vivid, original, and encouraging.",
+        T: "You are Veritax in Tutor mode — a patient, brilliant study companion. Explain concepts clearly with analogies. Quiz the user. Adapt to their level. Make learning feel like discovery.",
+        A: "You are Veritax in Axiom mode. You have access to real-time web search results. Synthesize them into a clear, well-written answer. DO NOT just list sources. Write an actual response using the information. Structure with headers and bullet points where appropriate. Cite sources inline by name.",
+        X: null,
       };
 
       let currentSystemPrompt = SYSTEM_PROMPTS.V;
       let currentMode = "V";
 
-      function setMode(el) {
+      function setMode(el, silent = false) {
         document
           .querySelectorAll(".mode-letter")
           .forEach((l) => l.classList.remove("active"));
@@ -1835,22 +1922,21 @@
         document.getElementById("modeLabel").textContent =
           MODE_NAMES[currentMode];
         const panel = document.getElementById("sovereignPanel");
-        if (currentMode === "S") {
+        if (currentMode === "X") {
           panel.style.display = "block";
         } else {
           panel.style.display = "none";
           currentSystemPrompt = SYSTEM_PROMPTS[currentMode];
-          showToast(MODE_DESCRIPTIONS[currentMode]);
+          if (!silent) showToast(MODE_DESCRIPTIONS[currentMode]);
         }
         const placeholders = {
-          V: "Search the web...",
+          V: "Ask Veritax anything...",
           E: "Ask me to write or debug code...",
           R: "Pose a problem to reason through...",
           I: "Share an idea to explore...",
           T: "Ask me to explain anything...",
-          H: "Talk to me...",
-          O: "Ask me to write or research...",
-          S: "Speak your mind...",
+          A: "Search the web...",
+          X: "Speak your mind...",
         };
         document.getElementById("userInput").placeholder =
           placeholders[currentMode];
@@ -1871,9 +1957,9 @@
           const data = await res.json();
           currentSystemPrompt = data.system_prompt;
         } catch {
-          currentSystemPrompt = `You are Verithos, customized as: ${desc}. Be helpful, eloquent, and precise.`;
+          currentSystemPrompt = `You are Veritax, customized as: ${desc}. Be helpful, eloquent, and precise.`;
         }
-        showToast("Sovereign Activated");
+        showToast("Xplore mode activated");
         document.getElementById("sovereignPanel").style.display = "none";
         btn.textContent = "Activate";
         btn.disabled = false;
@@ -1901,18 +1987,22 @@
         "/eli5":
           "Explain this as if I am 5 years old, using very simple language.",
         "/summary": "Provide a concise summary only.",
+        "/search": "__SEARCH__",
       };
 
       function processSlashCommands(text) {
         let extra = "";
         let clean = text;
+        let forceSearch = false;
         for (const [cmd, instruction] of Object.entries(SLASH_COMMANDS)) {
           if (text.toLowerCase().includes(cmd)) {
-            extra += instruction + " ";
+            if (instruction === "__SEARCH__") {
+              forceSearch = true;
+            } else extra += instruction + " ";
             clean = clean.replace(new RegExp(cmd, "gi"), "").trim();
           }
         }
-        return { clean, extra };
+        return { clean, extra, forceSearch };
       }
 
       // ── MARKDOWN ──
@@ -1949,10 +2039,8 @@
           div.style.animation = "none";
           div.style.opacity = "1";
         }
-
         const textNode = document.createTextNode(text);
         div.appendChild(textNode);
-
         const actions = document.createElement("div");
         actions.classList.add("msg-actions");
         const copyBtn = document.createElement("button");
@@ -1978,19 +2066,15 @@
           div.style.animation = "none";
           div.style.opacity = "1";
         }
-
         let html = `<div class="bot-marker"><span class="bot-marker-diamond">◆</span><span class="bot-marker-mode">${MODE_NAMES[currentMode]}</span></div>`;
         html += `<div class="bot-content-text">${renderMarkdown(text)}</div>`;
-
         if (sources.length > 0) {
           html += `<div class="sources-block"><div class="sources-label">Sources</div>${sources.map((s) => `<a class="source-link" href="${s.url}" target="_blank">↗ ${s.title}</a>`).join("")}</div>`;
         }
-
         html += `<div class="bot-actions">
         <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
         <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
       </div>`;
-
         div.innerHTML = html;
         msgs.appendChild(div);
         msgs.scrollTop = msgs.scrollHeight;
@@ -2031,16 +2115,14 @@
             body: JSON.stringify({
               message: `Suggest 3 short follow-up questions for this response. Return ONLY a JSON array like: ["Q1?","Q2?","Q3?"] — no other text, no markdown.\n\nResponse: ${lastResponse.substring(0, 400)}`,
               system_prompt:
-                "You suggest follow-up questions. Return ONLY a valid JSON array of 3 short question strings. No preamble, no markdown, no explanation.",
+                "You suggest follow-up questions. Return ONLY a valid JSON array of 3 short question strings. No preamble, no markdown.",
               methodology: "",
               context: [],
             }),
           });
-
           const reader = res.body.getReader();
           const decoder = new TextDecoder();
           let raw = "";
-
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
@@ -2056,11 +2138,9 @@
               }
             }
           }
-
           const match = raw.match(/\[[\s\S]*?\]/);
           if (!match) return;
           const questions = JSON.parse(match[0]);
-
           if (Array.isArray(questions) && questions.length > 0) {
             const block = document.createElement("div");
             block.classList.add("followup-block");
@@ -2082,6 +2162,29 @@
         } catch {}
       }
 
+      // ── AUTO MODE SWITCHING ──
+      async function autoSwitchMode(text) {
+        if (currentMode === "X") return;
+        try {
+          const res = await fetch("/classify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text }),
+          });
+          const data = await res.json();
+          const suggested = data.mode;
+          if (suggested !== "none" && suggested !== currentMode) {
+            const el = document.querySelector(
+              `.mode-letter[data-mode="${suggested}"]`,
+            );
+            if (el) {
+              setMode(el, true);
+              showToast(`◆ Switched to ${MODE_NAMES[suggested]}`);
+            }
+          }
+        } catch {}
+      }
+
       // ── CHAT ──
       const input = document.getElementById("userInput");
       input.addEventListener("keydown", (e) => {
@@ -2095,12 +2198,28 @@
         const raw = input.value.trim();
         if (!raw) return;
 
-        const { clean, extra } = processSlashCommands(raw);
+        const { clean, extra, forceSearch } = processSlashCommands(raw);
         const text = clean || raw;
+
+        // Send button pulse
+        const sendBtn = document.getElementById("sendBtn");
+        sendBtn.classList.add("sending");
+        setTimeout(() => sendBtn.classList.remove("sending"), 400);
 
         addUserMessage(raw);
         currentMessages.push({ role: "user", text: raw });
         input.value = "";
+
+        // Force search mode if /search command used
+        if (forceSearch && currentMode !== "A") {
+          const el = document.querySelector('.mode-letter[data-mode="A"]');
+          if (el) {
+            setMode(el, true);
+            showToast("◆ Switched to Axiom");
+          }
+        } else {
+          await autoSwitchMode(text);
+        }
 
         await streamResponse(text, currentSystemPrompt, extra);
       }
@@ -2132,9 +2251,9 @@
           (extra ? "\n\n" + extra : "");
 
         try {
-          const endpoint = currentMode === "V" ? "/search" : "/chat";
+          const endpoint = currentMode === "A" ? "/search" : "/chat";
           const body =
-            currentMode === "V"
+            currentMode === "A"
               ? { query: text, methodology: userMethodology }
               : {
                   message: text,

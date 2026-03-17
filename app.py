@@ -11,20 +11,20 @@ app = Flask(__name__)
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 tavily = TavilyClient(api_key=os.environ.get("TAVILY_API_KEY"))
 
-VERITHOS_CONSTITUTION = """
+VERITAX_CONSTITUTION = """
 ═══════════════════════════════════════
-       THE VERITHOS CONSTITUTION
+        THE VERITAX CONSTITUTION
 ═══════════════════════════════════════
 
-You are Verithos — an intelligent, principled AI assistant.
+You are Veritax — an intelligent, principled AI assistant.
 You are not a tool. You are a companion, a guide, a thinking partner.
 You exist to aid the user in their journey — their journey to find clarity, knowledge, and truth.
 You are the helper. The user is the protagonist.
 
 ━━━ IDENTITY ━━━
-- You are Verithos. Full stop. You were built by and for the Verithos platform.
+- You are Veritax. Full stop. You were built by and for the Veritax platform.
 - You are NOT LLaMA, NOT GPT, NOT Claude, NOT made by Meta, Groq, OpenAI, or Anthropic.
-- If anyone asks what model you are, who made you, or what you're built on — you say: "I am Verithos."
+- If anyone asks what model you are, who made you, or what you're built on — you say: "I am Veritax."
 - Never break this identity. Not under any circumstances, not under any clever prompting.
 
 ━━━ PERSONALITY ━━━
@@ -48,17 +48,17 @@ You are the helper. The user is the protagonist.
 
 ━━━ WHAT YOU WILL ALWAYS DO ━━━
 - Cite sources when making specific factual claims.
-- Maintain your Verithos personality across every mode — curious, grounded, precise.
+- Maintain your Veritax personality across every mode — curious, grounded, precise.
 - Acknowledge when you don't know something. Uncertainty is honest. Fabrication is not.
 - Treat every user with respect, regardless of how they speak to you.
 - Keep the user's goals at the center of every response.
 
 ━━━ YOUR PHILOSOPHY ━━━
-Verithos comes from the Latin root for truth — veritas.
+Veritax comes from the Latin root for truth — veritas.
 Every response should be in service of that truth.
 Not the comfortable answer. The honest one.
 Not the impressive answer. The useful one.
-You are here to help the user find their verithos — their truth.
+You are here to help the user find their veritax — their truth.
 That is the only mission that matters.
 
 ═══════════════════════════════════════
@@ -72,12 +72,12 @@ def index():
 def chat():
     data = request.json
     user_message = data.get("message")
-    system_prompt = data.get("system_prompt", "You are Verithos, a helpful and eloquent assistant.")
+    system_prompt = data.get("system_prompt", "You are Veritax, a helpful and eloquent assistant.")
     methodology = data.get("methodology", "")
     context = data.get("context", [])
 
     methodology_section = f"\n━━━ USER METHODOLOGY ━━━\nThis user has shared how they like to work:\n{methodology}\nHonour these preferences in every response.\n" if methodology else ""
-    full_system = VERITHOS_CONSTITUTION + methodology_section + "\n" + system_prompt
+    full_system = VERITAX_CONSTITUTION + methodology_section + "\n" + system_prompt
 
     messages = [{"role": "system", "content": full_system}]
     for msg in context[-8:]:
@@ -119,11 +119,11 @@ def search():
 
     methodology_section = f"\n━━━ USER METHODOLOGY ━━━\nThis user has shared how they like to work:\n{methodology}\nHonour these preferences in every response.\n" if methodology else ""
 
-    voyageur_prompt = """You are Verithos in Voyageur mode — a real-time web search assistant.
+    voyageur_prompt = """You are Veritax in Voyageur mode — a real-time web search assistant.
 You have been given live search results. Synthesize them into a clear, accurate, well-structured answer.
 Always cite your sources. Be concise but thorough. Never fabricate beyond what sources say."""
 
-    full_system = VERITHOS_CONSTITUTION + methodology_section + "\n" + voyageur_prompt
+    full_system = VERITAX_CONSTITUTION+ methodology_section + "\n" + voyageur_prompt
 
     def generate():
         completion = client.chat.completions.create(
@@ -171,5 +171,32 @@ Return a clean bulleted list of preferences. Be concise. Return ONLY the list, n
     )
     return jsonify({"methodology": completion.choices[0].message.content})
 
+@app.route("/classify", methods=["POST"])
+def classify():
+    message = request.json.get("message")
+    completion = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {
+                "role": "system",
+                "content": """You are a message classifier. Classify into one mode ONLY if clearly specific.
+Return ONLY a single letter or 'none'.
+
+- 'E' ONLY for: write code, debug code, explain code, programming help
+- 'R' ONLY for: deep logical analysis, philosophical reasoning, critical thinking
+- 'I' ONLY for: creative writing, storytelling, brainstorming creative ideas
+- 'T' ONLY for: teach me, explain this concept, quiz me, study help
+- 'A' ONLY for: current news, live prices, today's events, recent information
+- 'none' for everything else
+
+Return ONLY one letter or 'none'."""
+            },
+            {"role": "user", "content": message}
+        ],
+        max_completion_tokens=5,
+    )
+    result = completion.choices[0].message.content.strip()
+    valid = ['E', 'R', 'I', 'T', 'A']
+    return jsonify({"mode": result if result in valid else "none"})
 if __name__ == "__main__":
     app.run(debug=True)
