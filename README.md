@@ -1,4 +1,9 @@
-# Vibecoded AI Chatbot
-uses Groq API pulls to create an API. 
-## NOT GOOD
-luxury something running on a free render domain - takes hours to manual commit latest changes
+# The AI you've been waiting for....'s cheap copy!
+Introducing Verithos, an AI that speaks nothing but the Truth!*
+
+---
+Check out the next meh thing, at https://my-chatbot-1-5fr7.onrender.com !
+
+NOTE: dont judge a shitty product by its free url.
+
+*Truth, as in any statement made by the AI that may or may not be truthful. Truth isn't a word, truth is. Truth is the name for what we offer.
