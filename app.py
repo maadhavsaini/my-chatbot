@@ -371,5 +371,18 @@ def google_callback():
     </script></body></html>
     """
 
+@app.route("/save-theme", methods=["POST"])
+def save_theme():
+    data = request.json
+    user_id = data.get("user_id")
+    theme = data.get("theme")
+    if not user_id or not theme:
+        return jsonify({"error": "Missing data"}), 400
+    http_requests.patch(
+        f"{SUPABASE_URL}/rest/v1/users?id=eq.{user_id}",
+        headers={**supabase_headers(), "Prefer": "return=representation"},
+        json={"theme": theme}
+    )
+    return jsonify({"success": True})
 if __name__ == "__main__":
     app.run(debug=True)

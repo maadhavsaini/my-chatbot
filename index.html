@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="luxury-dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,11 +16,55 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"
       rel="stylesheet"
     />
     <style>
-      :root[data-theme="dark"] {
+      /* ── THEME SWITCHER ── */
+      .theme-section {
+        margin-bottom: 8px;
+      }
+
+      .theme-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .theme-swatch {
+        border: 1px solid var(--border);
+        border-radius: var(--radius, 2px);
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .theme-swatch:hover {
+        border-color: var(--gold);
+      }
+      .theme-swatch.active {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 2px var(--glow);
+      }
+
+      .swatch-preview {
+        height: 40px;
+        width: 100%;
+      }
+
+      .swatch-name {
+        display: block;
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-align: center;
+        padding: 6px;
+        font-family: "Raleway", sans-serif;
+      }
+      /* ── LUXURY DARK ── */
+      :root[data-theme="luxury-dark"] {
         --bg: #0a0a08;
         --bg-secondary: #111110;
         --surface: #161614;
@@ -37,8 +81,16 @@
         --sidebar-hover: #1a1a16;
         --sidebar-width: 280px;
         --code-bg: #1a1a1a;
+        --accent: #c9a84c;
+        --accent-light: #e8c97a;
+        --font-display: "Cormorant Garamond", serif;
+        --font-body: "Raleway", sans-serif;
+        --font-code: "JetBrains Mono", monospace;
+        --radius: 2px;
       }
-      :root[data-theme="light"] {
+
+      /* ── LUXURY LIGHT ── */
+      :root[data-theme="luxury-light"] {
         --bg: #faf6ee;
         --bg-secondary: #f5efe0;
         --surface: #ffffff;
@@ -55,6 +107,64 @@
         --sidebar-hover: #e8dcc8;
         --sidebar-width: 280px;
         --code-bg: #2a2a2a;
+        --accent: #9a7230;
+        --accent-light: #c49a3c;
+        --font-display: "Cormorant Garamond", serif;
+        --font-body: "Raleway", sans-serif;
+        --font-code: "JetBrains Mono", monospace;
+        --radius: 2px;
+      }
+
+      /* ── MINIMALIST ── */
+      :root[data-theme="minimalist"] {
+        --bg: #f8f8f6;
+        --bg-secondary: #f0f0ee;
+        --surface: #ffffff;
+        --border: #e0e0dc;
+        --gold: #1a1a1a;
+        --gold-light: #333333;
+        --text: #0a0a0a;
+        --text-muted: #888880;
+        --user-bubble: #0a0a0a;
+        --shadow: rgba(0, 0, 0, 0.08);
+        --glow: rgba(0, 0, 0, 0.04);
+        --error: #cc0000;
+        --sidebar-bg: #f0f0ee;
+        --sidebar-hover: #e8e8e4;
+        --sidebar-width: 280px;
+        --code-bg: #0a0a0a;
+        --accent: #0a0a0a;
+        --accent-light: #444444;
+        --font-display: "Raleway", sans-serif;
+        --font-body: "Raleway", sans-serif;
+        --font-code: "JetBrains Mono", monospace;
+        --radius: 0px;
+      }
+
+      /* ── CORK/LUMBER ── */
+      :root[data-theme="cork"] {
+        --bg: #2c1f0e;
+        --bg-secondary: #3a2810;
+        --surface: #4a3218;
+        --border: #6b4a28;
+        --gold: #d4a853;
+        --gold-light: #e8c47a;
+        --text: #f5e6c8;
+        --text-muted: #a88050;
+        --user-bubble: #3a2810;
+        --shadow: rgba(0, 0, 0, 0.5);
+        --glow: rgba(180, 120, 40, 0.2);
+        --error: #c94c4c;
+        --sidebar-bg: #241a0a;
+        --sidebar-hover: #3a2810;
+        --sidebar-width: 280px;
+        --code-bg: #1e1408;
+        --accent: #d4a853;
+        --accent-light: #e8c47a;
+        --font-display: "Lora", serif;
+        --font-body: "Raleway", sans-serif;
+        --font-code: "JetBrains Mono", monospace;
+        --radius: 4px;
       }
 
       * {
@@ -70,9 +180,11 @@
       }
 
       body {
-        font-family: "Raleway", sans-serif;
+        font-family: var(--font-body);
         background: var(--bg);
-        transition: background 0.5s ease;
+        transition:
+          background 0.5s ease,
+          color 0.5s ease;
         background-image:
           radial-gradient(ellipse at 20% 50%, var(--glow) 0%, transparent 60%),
           radial-gradient(ellipse at 80% 20%, var(--glow) 0%, transparent 50%);
@@ -1243,6 +1355,67 @@
           right: 16px;
         }
       }
+      /* ── MINIMALIST OVERRIDES ── */
+      :root[data-theme="minimalist"] .brand-name,
+      :root[data-theme="minimalist"] .bot-marker-diamond,
+      :root[data-theme="minimalist"] .sidebar-title,
+      :root[data-theme="minimalist"] .mode-letter.active {
+        color: var(--text) !important;
+        border-color: var(--text) !important;
+      }
+
+      :root[data-theme="minimalist"] .chat-header::after,
+      :root[data-theme="minimalist"] .chat-input::before,
+      :root[data-theme="minimalist"] .sidebar-header::after {
+        background: var(--border);
+      }
+
+      :root[data-theme="minimalist"] .status-dot {
+        background: var(--text);
+        box-shadow: none;
+      }
+
+      :root[data-theme="minimalist"] .message.user {
+        background: var(--text);
+        color: var(--bg);
+        border-color: var(--text);
+      }
+
+      :root[data-theme="minimalist"] .streaming-cursor {
+        background: var(--text);
+      }
+
+      :root[data-theme="minimalist"] .bot-content-text {
+        font-family: "Raleway", sans-serif !important;
+        font-size: 0.95rem !important;
+        letter-spacing: 0.01em;
+      }
+
+      :root[data-theme="minimalist"] .brand-name {
+        font-family: "Raleway", sans-serif !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.3em !important;
+      }
+
+      /* ── CORK OVERRIDES ── */
+      :root[data-theme="cork"] .bot-content-text {
+        font-family: "Lora", serif !important;
+      }
+
+      :root[data-theme="cork"] .brand-name {
+        font-family: "Lora", serif !important;
+      }
+
+      :root[data-theme="cork"] .message.user {
+        background: #3a2810;
+        color: #e8c47a;
+      }
+
+      :root[data-theme="cork"] body {
+        background-image:
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"),
+          radial-gradient(ellipse at 20% 50%, var(--glow) 0%, transparent 60%);
+      }
     </style>
   </head>
   <body>
@@ -1431,6 +1604,84 @@
             Tell Veritax how you like to work. Be as specific as you want — it
             will remember and adapt every response to you.
           </div>
+          <!-- THEME SWITCHER -->
+          <div class="theme-section">
+            <span class="methodology-label">Appearance</span>
+            <div class="theme-grid">
+              <div
+                class="theme-swatch active"
+                data-theme="luxury-dark"
+                onclick="setTheme('luxury-dark', this)"
+                title="Luxury Dark"
+              >
+                <div
+                  class="swatch-preview"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #0a0a08 50%,
+                      #c9a84c 50%
+                    );
+                  "
+                ></div>
+                <span class="swatch-name">Luxury Dark</span>
+              </div>
+              <div
+                class="theme-swatch"
+                data-theme="luxury-light"
+                onclick="setTheme('luxury-light', this)"
+                title="Luxury Light"
+              >
+                <div
+                  class="swatch-preview"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #faf6ee 50%,
+                      #9a7230 50%
+                    );
+                  "
+                ></div>
+                <span class="swatch-name">Luxury Light</span>
+              </div>
+              <div
+                class="theme-swatch"
+                data-theme="minimalist"
+                onclick="setTheme('minimalist', this)"
+                title="Minimalist"
+              >
+                <div
+                  class="swatch-preview"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #f8f8f6 50%,
+                      #0a0a0a 50%
+                    );
+                  "
+                ></div>
+                <span class="swatch-name">Minimalist</span>
+              </div>
+              <div
+                class="theme-swatch"
+                data-theme="cork"
+                onclick="setTheme('cork', this)"
+                title="Cork"
+              >
+                <div
+                  class="swatch-preview"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #2c1f0e 50%,
+                      #d4a853 50%
+                    );
+                  "
+                ></div>
+                <span class="swatch-name">Cork</span>
+              </div>
+            </div>
+          </div>
           <textarea
             id="methodologyInput"
             placeholder="e.g. I'm a high school student studying for DECA. I prefer concise bullet points. I'm a visual learner..."
@@ -1474,6 +1725,7 @@
           window.location.href = "/";
           return;
         }
+        loadTheme(); // ← add this
         loadHistory();
         loadSavedMethodology();
         showGreeting();
@@ -1501,15 +1753,15 @@
 
       // ── THEME ──
       function toggleTheme() {
-        const html = document.documentElement;
-        const btn = document.getElementById("themeBtn");
-        if (html.getAttribute("data-theme") === "dark") {
-          html.setAttribute("data-theme", "light");
-          btn.textContent = "🌙";
-        } else {
-          html.setAttribute("data-theme", "dark");
-          btn.textContent = "☀️";
-        }
+        const current =
+          document.documentElement.getAttribute("data-theme") || "luxury-dark";
+        const themeKeys = Object.keys(THEMES);
+        const next =
+          themeKeys[(themeKeys.indexOf(current) + 1) % themeKeys.length];
+        const swatch = document.querySelector(
+          `.theme-swatch[data-theme="${next}"]`,
+        );
+        setTheme(next, swatch);
       }
 
       // ── SIDEBAR ──
@@ -1554,7 +1806,61 @@
             userMethodology;
         }
       }
+      // ── THEMES ──
+      const THEMES = {
+        "luxury-dark": { label: "Luxury Dark", themeBtn: "☀️" },
+        "luxury-light": { label: "Luxury Light", themeBtn: "🌙" },
+        minimalist: { label: "Minimalist", themeBtn: "◐" },
+        cork: { label: "Cork", themeBtn: "🪵" },
+      };
 
+      function setTheme(theme, el) {
+        // Update CSS
+        document.documentElement.setAttribute("data-theme", theme);
+
+        // Update active swatch
+        document
+          .querySelectorAll(".theme-swatch")
+          .forEach((s) => s.classList.remove("active"));
+        if (el) el.classList.add("active");
+
+        // Update theme button icon
+        const btn = document.getElementById("themeBtn");
+        if (btn) btn.textContent = THEMES[theme]?.themeBtn || "☀️";
+
+        // Save to localStorage
+        localStorage.setItem("veritax_theme", theme);
+
+        // Save to account
+        const user = JSON.parse(
+          sessionStorage.getItem("veritax_user") || "null",
+        );
+        if (user) {
+          fetch("/save-theme", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: user.id, theme }),
+          }).catch(() => {});
+        }
+
+        showToast(`Theme — ${THEMES[theme]?.label || theme}`);
+      }
+
+      function loadTheme() {
+        const saved = localStorage.getItem("veritax_theme") || "luxury-dark";
+        document.documentElement.setAttribute("data-theme", saved);
+        const swatch = document.querySelector(
+          `.theme-swatch[data-theme="${saved}"]`,
+        );
+        if (swatch) {
+          document
+            .querySelectorAll(".theme-swatch")
+            .forEach((s) => s.classList.remove("active"));
+          swatch.classList.add("active");
+        }
+        const btn = document.getElementById("themeBtn");
+        if (btn) btn.textContent = THEMES[saved]?.themeBtn || "☀️";
+      }
       function toggleMethodology() {
         document.getElementById("methodologyPanel").classList.toggle("open");
       }
