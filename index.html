@@ -478,11 +478,11 @@
         background: none;
         border: 1px solid var(--border);
         color: var(--text-muted);
-        width: 30px;
-        height: 30px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         cursor: pointer;
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1299,6 +1299,87 @@
         transition: all 0.2s ease;
         flex-shrink: 0;
       }
+      /* ── MODEL SELECTOR ── */
+      .model-pill {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        font-family: "Raleway", sans-serif;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        flex-shrink: 0;
+        position: relative;
+        user-select: none;
+      }
+
+      .model-pill:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      .model-menu {
+        display: none;
+        position: absolute;
+        bottom: calc(100% + 8px);
+        right: 0;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        min-width: 220px;
+        box-shadow: 0 8px 32px var(--shadow);
+        z-index: 200;
+        overflow: hidden;
+      }
+
+      .model-menu.open {
+        display: block;
+      }
+
+      .model-option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .model-option:last-child {
+        border-bottom: none;
+      }
+      .model-option:hover {
+        background: var(--glow);
+      }
+      .model-option.active {
+        background: var(--glow);
+      }
+
+      .model-option-name {
+        font-size: 0.78rem;
+        color: var(--text);
+        font-family: "Raleway", sans-serif;
+        font-weight: 500;
+      }
+
+      .model-option.active .model-option-name {
+        color: var(--gold);
+      }
+
+      .model-option-desc {
+        font-size: 0.62rem;
+        color: var(--text-muted);
+        font-family: "Raleway", sans-serif;
+        letter-spacing: 0.05em;
+      }
 
       .send-btn:hover {
         border-color: var(--gold);
@@ -1484,17 +1565,57 @@
                   onclick="toggleMethodology()"
                   title="My Preferences"
                 >
-                  ⚙
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="12" cy="8" r="3" />
+                    <path
+                      d="M12 2v3M12 13v9M4.2 6l2.6 1.5M17.2 16.5l2.6 1.5M4.2 18l2.6-1.5M17.2 7.5l2.6-1.5"
+                    />
+                  </svg>
                 </button>
-                <button class="icon-btn" onclick="shareChat()" title="Share">
-                  ⇪
+                <button
+                  class="icon-btn"
+                  onclick="shareChat()"
+                  title="Share conversation"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="18" cy="5" r="3" />
+                    <circle cx="6" cy="12" r="3" />
+                    <circle cx="18" cy="19" r="3" />
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                  </svg>
                 </button>
                 <button
                   class="icon-btn"
                   onclick="handleLogout()"
                   title="Sign out"
                 >
-                  ⇥
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                  </svg>
                 </button>
               </div>
             </div>
@@ -1582,6 +1703,81 @@
                 id="userInput"
                 placeholder="Ask Veritax anything..."
               />
+              <div
+                class="model-pill"
+                onclick="toggleModelMenu()"
+                title="Select model"
+              >
+                <span id="modelPillLabel">70B</span>
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+                <div class="model-menu" id="modelMenu">
+                  <div
+                    class="model-option"
+                    data-model="llama-3.1-8b-instant"
+                    data-label="8B"
+                    onclick="selectModel(this)"
+                  >
+                    <span class="model-option-name">LLaMA 3.1 8B</span>
+                    <span class="model-option-desc">Fast · Default</span>
+                  </div>
+                  <div
+                    class="model-option active"
+                    data-model="llama-3.3-70b-versatile"
+                    data-label="70B"
+                    onclick="selectModel(this)"
+                  >
+                    <span class="model-option-name">LLaMA 3.3 70B</span>
+                    <span class="model-option-desc">Smart · Recommended</span>
+                  </div>
+                  <div
+                    class="model-option"
+                    data-model="llama-3.1-405b-reasoning"
+                    data-label="405B"
+                    onclick="selectModel(this)"
+                  >
+                    <span class="model-option-name">LLaMA 3.1 405B</span>
+                    <span class="model-option-desc">Powerful · Slower</span>
+                  </div>
+                  <div
+                    class="model-option"
+                    data-model="mixtral-8x7b-32768"
+                    data-label="Mixtral"
+                    onclick="selectModel(this)"
+                  >
+                    <span class="model-option-name">Mixtral 8x7B</span>
+                    <span class="model-option-desc">Reasoning · Sharp</span>
+                  </div>
+                  <div
+                    class="model-option"
+                    data-model="gemma2-9b-it"
+                    data-label="Gemma"
+                    onclick="selectModel(this)"
+                  >
+                    <span class="model-option-name">Gemma 2 9B</span>
+                    <span class="model-option-desc">Google · Balanced</span>
+                  </div>
+                  <div
+                    class="model-option"
+                    data-model="qwen-qwq-32b"
+                    data-label="Qwen"
+                    onclick="selectModel(this)"
+                  >
+                    <span class="model-option-name">Qwen QwQ 32B</span>
+                    <span class="model-option-desc"
+                      >Deep thinking · Thorough</span
+                    >
+                  </div>
+                </div>
+              </div>
               <button class="send-btn" id="sendBtn" onclick="sendMessage()">
                 →
               </button>
@@ -1861,6 +2057,35 @@
         const btn = document.getElementById("themeBtn");
         if (btn) btn.textContent = THEMES[saved]?.themeBtn || "☀️";
       }
+      // ── MODEL SELECTOR ──
+      let currentModel = "llama-3.3-70b-versatile";
+
+      function toggleModelMenu() {
+        document.getElementById("modelMenu").classList.toggle("open");
+      }
+
+      function selectModel(el) {
+        el.stopPropagation && el.stopPropagation();
+        document
+          .querySelectorAll(".model-option")
+          .forEach((o) => o.classList.remove("active"));
+        el.classList.add("active");
+        currentModel = el.dataset.model;
+        document.getElementById("modelPillLabel").textContent =
+          el.dataset.label;
+        document.getElementById("modelMenu").classList.remove("open");
+        showToast(
+          `Model — ${el.querySelector(".model-option-name").textContent}`,
+        );
+      }
+
+      document.addEventListener("click", (e) => {
+        const pill = document.querySelector(".model-pill");
+        const menu = document.getElementById("modelMenu");
+        if (menu && pill && !pill.contains(e.target)) {
+          menu.classList.remove("open");
+        }
+      });
       function toggleMethodology() {
         document.getElementById("methodologyPanel").classList.toggle("open");
       }
@@ -2536,12 +2761,17 @@
           const endpoint = currentMode === "A" ? "/search" : "/chat";
           const body =
             currentMode === "A"
-              ? { query: text, methodology: userMethodology }
+              ? {
+                  query: text,
+                  methodology: userMethodology,
+                  model: currentModel,
+                }
               : {
                   message: text,
                   system_prompt: fullSystem,
                   methodology: userMethodology,
                   context: contextMessages,
+                  model: currentModel,
                 };
 
           const res = await fetch(endpoint, {

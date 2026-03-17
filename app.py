@@ -165,10 +165,9 @@ def chat():
 
     def generate():
         completion = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model=data.get("model", "llama-3.3-70b-versatile"),
             messages=messages,
             max_completion_tokens=1024,
-            stream=True,
         )
         for chunk in completion:
             token = chunk.choices[0].delta.content
@@ -207,10 +206,9 @@ Cite sources inline by name only. Never fabricate beyond what sources say."""
 
     def generate():
         completion = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model=data.get("model", "llama-3.3-70b-versatile"),
             messages=[
-                {"role": "system", "content": full_system},
-                {"role": "user", "content": f"Question: {query}\n\nSearch Results:\n{search_context}"}
+    {"          role": "system", "content": full_system},
             ],
             max_completion_tokens=1024,
             stream=True,
