@@ -1,5 +1,5 @@
 # The AI you've been waiting for....'s cheap copy!
-Introducing Verithos, an AI that speaks nothing but the Truth!*
+Introducing Veritax, an AI that speaks nothing but the Truth!*
 
 ---
 Check out the next meh thing, at https://my-chatbot-1-5fr7.onrender.com !
