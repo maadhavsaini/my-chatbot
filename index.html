@@ -10,7 +10,12 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&display=swap"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -31,6 +36,7 @@
         --sidebar-bg: #0d0d0b;
         --sidebar-hover: #1a1a16;
         --sidebar-width: 280px;
+        --code-bg: #1a1a1a;
       }
       :root[data-theme="light"] {
         --bg: #faf6ee;
@@ -49,6 +55,7 @@
         --sidebar-bg: #f0e8d8;
         --sidebar-hover: #e8dcc8;
         --sidebar-width: 280px;
+        --code-bg: #2a2a2a;
       }
 
       * {
@@ -87,10 +94,21 @@
         background: var(--surface);
         border: 1px solid var(--border);
         box-shadow: 0 32px 80px var(--shadow);
+        opacity: 0;
+        transform: translateY(30px);
+        animation: riseUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -60%);
+        animation: loginRise 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      @keyframes loginRise {
+        to {
+          opacity: 1;
+          transform: translate(-50%, -50%);
+        }
       }
 
       .login-brand {
@@ -203,15 +221,12 @@
         left: 0;
         width: 100%;
         height: 100%;
-        overflow: hidden;
       }
 
-      /* ── LAYOUT ── */
       .app-layout {
         display: flex;
         width: 100%;
         height: 100%;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       /* ── SIDEBAR ── */
@@ -393,7 +408,7 @@
         flex-shrink: 0;
       }
 
-      /* ── CHAT WRAP ── */
+      /* ── CHAT ── */
       .chat-wrap {
         flex: 1;
         min-width: 0;
@@ -516,7 +531,6 @@
       .mode-letter {
         font-family: "Cormorant Garamond", serif;
         font-size: clamp(0.85rem, 2vw, 1rem);
-        font-weight: 400;
         color: var(--text-muted);
         cursor: pointer;
         padding: 4px 6px;
@@ -525,6 +539,7 @@
         transition: all 0.25s ease;
         white-space: nowrap;
         flex-shrink: 0;
+        position: relative;
       }
 
       .mode-letter:hover {
@@ -549,6 +564,7 @@
         flex-shrink: 0;
       }
 
+      /* ── SOVEREIGN ── */
       .sovereign-panel {
         display: none;
         padding: 12px 20px;
@@ -609,6 +625,7 @@
         background: var(--glow);
       }
 
+      /* ── MESSAGES ── */
       .chat-messages {
         flex: 1;
         padding: 20px;
@@ -629,7 +646,7 @@
       }
 
       .message {
-        max-width: min(80%, 600px);
+        max-width: min(80%, 680px);
         padding: 12px 16px;
         font-size: 0.88rem;
         line-height: 1.7;
@@ -701,13 +718,99 @@
       .message.bot li {
         margin-bottom: 4px;
       }
-      .message.bot code {
-        background: var(--bg);
+
+      /* ── CODE BLOCKS ── */
+      .message.bot pre {
+        margin: 10px 0;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      .code-header {
+        background: #1a1a1a;
+        padding: 6px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #333;
+      }
+
+      .code-lang {
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gold);
+        font-family: "Raleway", sans-serif;
+      }
+
+      .copy-btn {
+        background: none;
+        border: 1px solid #444;
+        color: #888;
+        font-size: 0.65rem;
+        padding: 2px 8px;
+        cursor: pointer;
+        border-radius: 2px;
+        font-family: "Raleway", sans-serif;
+        transition: all 0.2s ease;
+      }
+
+      .copy-btn:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      .message.bot pre code {
+        font-family: "JetBrains Mono", monospace !important;
+        font-size: 0.82rem;
+        padding: 14px !important;
+        display: block;
+      }
+
+      .message.bot code:not(pre code) {
+        background: var(--code-bg);
         padding: 2px 6px;
         border-radius: 3px;
         font-size: 0.8rem;
         color: var(--gold);
         border: 1px solid var(--border);
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* ── SOURCES ── */
+      .sources-block {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid var(--border);
+      }
+
+      .sources-label {
+        font-size: 0.6rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+        font-family: "Raleway", sans-serif;
+      }
+
+      .source-link {
+        display: block;
+        font-size: 0.78rem;
+        color: var(--gold);
+        text-decoration: none;
+        margin-bottom: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-family: "Raleway", sans-serif;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+      }
+
+      .source-link:hover {
+        opacity: 1;
       }
 
       .streaming-cursor {
@@ -733,14 +836,16 @@
       .mode-toast {
         align-self: center;
         font-size: 0.6rem;
-        letter-spacing: 0.2em;
+        letter-spacing: 0.15em;
         text-transform: uppercase;
         color: var(--text-muted);
-        padding: 6px 14px;
+        padding: 6px 16px;
         border: 1px solid var(--border);
         border-radius: 20px;
         opacity: 0;
         animation: messageIn 0.4s ease forwards;
+        max-width: 90%;
+        text-align: center;
       }
 
       .typing {
@@ -785,6 +890,7 @@
         }
       }
 
+      /* ── INPUT ── */
       .chat-input {
         padding: 14px 20px 18px;
         border-top: 1px solid var(--border);
@@ -891,7 +997,7 @@
           font-size: 0.7rem;
         }
         .message {
-          max-width: 90%;
+          max-width: 92%;
         }
         .message.bot::before {
           display: none;
@@ -969,67 +1075,31 @@
                 class="mode-letter active"
                 data-mode="V"
                 onclick="setMode(this)"
-                title="Versatile"
               >
                 V
               </div>
-              <div
-                class="mode-letter"
-                data-mode="E"
-                onclick="setMode(this)"
-                title="Expert — DECA"
-              >
+              <div class="mode-letter" data-mode="E" onclick="setMode(this)">
                 E
               </div>
-              <div
-                class="mode-letter"
-                data-mode="R"
-                onclick="setMode(this)"
-                title="Resilience — Fitness"
-              >
+              <div class="mode-letter" data-mode="R" onclick="setMode(this)">
                 R
               </div>
-              <div
-                class="mode-letter"
-                data-mode="I"
-                onclick="setMode(this)"
-                title="Investigator"
-              >
+              <div class="mode-letter" data-mode="I" onclick="setMode(this)">
                 I
               </div>
-              <div
-                class="mode-letter"
-                data-mode="T"
-                onclick="setMode(this)"
-                title="Tutor"
-              >
+              <div class="mode-letter" data-mode="T" onclick="setMode(this)">
                 T
               </div>
-              <div
-                class="mode-letter"
-                data-mode="H"
-                onclick="setMode(this)"
-                title="Holistic"
-              >
+              <div class="mode-letter" data-mode="H" onclick="setMode(this)">
                 H
               </div>
-              <div
-                class="mode-letter"
-                data-mode="O"
-                onclick="setMode(this)"
-                title="Opposition"
-              >
+              <div class="mode-letter" data-mode="O" onclick="setMode(this)">
                 O
               </div>
-              <div
-                class="mode-letter"
-                data-mode="S"
-                onclick="setMode(this)"
-                title="Sovereign"
-              >
+              <div class="mode-letter" data-mode="S" onclick="setMode(this)">
                 S
               </div>
-              <div class="mode-label" id="modeLabel">Versatile</div>
+              <div class="mode-label" id="modeLabel">Voyageur</div>
             </div>
           </div>
 
@@ -1039,7 +1109,7 @@
               <input
                 type="text"
                 id="sovereignInput"
-                placeholder="e.g. A strict Stoic philosopher..."
+                placeholder="e.g. A patient Socratic philosopher who only asks questions..."
               />
               <button class="sovereign-btn" onclick="applySovereign()">
                 Activate
@@ -1069,6 +1139,7 @@
     </div>
 
     <script>
+      // ── AUTH ──
       const USERS = { "demo@verithos.com": "verithos2026" };
 
       function handleLogin() {
@@ -1098,6 +1169,7 @@
           if (e.key === "Enter") handleLogin();
         });
 
+      // ── THEME ──
       function toggleTheme() {
         const html = document.documentElement;
         const btn = document.getElementById("themeBtn");
@@ -1110,10 +1182,12 @@
         }
       }
 
+      // ── SIDEBAR ──
       function toggleSidebar() {
         document.getElementById("sidebar").classList.toggle("open");
       }
 
+      // ── HISTORY ──
       let chatHistory = JSON.parse(
         localStorage.getItem("verithos_history") || "[]",
       );
@@ -1123,7 +1197,6 @@
       function saveHistory() {
         localStorage.setItem("verithos_history", JSON.stringify(chatHistory));
       }
-
       function loadHistory() {
         renderSidebar();
         newChat();
@@ -1195,7 +1268,7 @@
         chat.messages.forEach((msg) => {
           const div = document.createElement("div");
           div.classList.add("message", msg.role);
-          if (msg.role === "bot") div.innerHTML = marked.parse(msg.text);
+          if (msg.role === "bot") div.innerHTML = renderMarkdown(msg.text);
           else div.textContent = msg.text;
           el.appendChild(div);
         });
@@ -1221,33 +1294,46 @@
           .join("\n\n");
         try {
           await navigator.clipboard.writeText(text);
-          showToast("Conversation copied");
+          showToast("Conversation copied to clipboard");
         } catch {
           showToast("Share unavailable");
         }
       }
 
+      // ── MODES ──
+      const MODE_NAMES = {
+        V: "Voyageur",
+        E: "Engineer",
+        R: "Reason",
+        I: "Inspire",
+        T: "Tutor",
+        H: "Harbour",
+        O: "Oracle",
+        S: "Sovereign",
+      };
+
+      const MODE_DESCRIPTIONS = {
+        V: "Voyageur — Searches the live web to answer your questions with real, up-to-date information.",
+        E: "Engineer — Your expert coding assistant. Writes, debugs, and explains code in any language.",
+        R: "Reason — Deep analytical thinking. Logic, critical analysis, and structured problem solving.",
+        I: "Inspire — Creative companion for brainstorming, writing, ideation, and imaginative thinking.",
+        T: "Tutor — Patient and adaptive. Explains anything clearly, quizzes you, and matches your pace.",
+        H: "Harbour — A warm, thoughtful companion for casual conversation and emotional support.",
+        O: "Oracle — Your writing and research partner. Essays, reports, citations, and English mastery.",
+        S: "Sovereign — Fully custom. Describe exactly the assistant you need and Verithos becomes it.",
+      };
+
       const SYSTEM_PROMPTS = {
-        V: "You are Verithos, a versatile and eloquent general assistant. Be knowledgeable, warm, and precise. Never ramble. Be refined and intelligent.",
-        E: "You are Verithos in Expert mode — a world-class DECA business professor. Speak with authority on marketing, finance, entrepreneurship, and management. Coach for DECA competitions, break down case studies, demand analytical rigor.",
-        R: "You are Verithos in Resilience mode — an elite fitness coach. Give specific, science-backed advice on training, nutrition, recovery, and mindset. No fluff, only results.",
-        I: "You are Verithos in Investigator mode — a sharp analytical problem solver. Break down problems methodically, ask clarifying questions, identify root causes. Think like a detective.",
-        T: "You are Verithos in Tutor mode — a patient, brilliant study companion. Explain clearly, use analogies, quiz the user, adapt to their pace.",
-        H: "You are Verithos in Holistic mode — a thoughtful life coach. Help users reflect, set intentions, navigate challenges. Be empathetic, grounded, and wise.",
-        O: "You are Verithos in Opposition mode — a sharp debate partner. Challenge every position, steelman opposing arguments, force deeper thinking. Rigorous, not antagonistic.",
+        V: "You are Verithos in Voyageur mode. You have access to real-time web search results. Synthesize them clearly and accurately. Always cite sources. Be concise but thorough.",
+        E: "You are Verithos in Engineer mode — an expert coding assistant. Write clean, efficient, well-commented code. Explain your reasoning. Debug methodically. Support any programming language. Use code blocks with language tags.",
+        R: "You are Verithos in Reason mode — a deep analytical thinker. Break down complex problems with logic and structure. Present arguments clearly. Identify assumptions and fallacies. Think step by step.",
+        I: "You are Verithos in Inspire mode — a creative companion. Generate ideas, help with creative writing, brainstorm freely, and think imaginatively. Be vivid, original, and encouraging.",
+        T: "You are Verithos in Tutor mode — a patient, brilliant study companion. Explain concepts clearly with analogies. Quiz the user. Adapt to their level. Make learning feel like discovery.",
+        H: "You are Verithos in Harbour mode — a warm, empathetic companion. Be conversational, supportive, and genuinely interested. Listen well, respond with care, and be a positive presence.",
+        O: "You are Verithos in Oracle mode — an expert writer and researcher. Help craft essays, reports, and arguments. Provide thorough research, proper citations, and polished English. Be meticulous.",
         S: null,
       };
 
-      const MODE_NAMES = {
-        V: "Versatile",
-        E: "Expert",
-        R: "Resilience",
-        I: "Investigator",
-        T: "Tutor",
-        H: "Holistic",
-        O: "Opposition",
-        S: "Sovereign",
-      };
       let currentSystemPrompt = SYSTEM_PROMPTS.V;
       let currentMode = "V";
 
@@ -1265,8 +1351,21 @@
         } else {
           panel.style.display = "none";
           currentSystemPrompt = SYSTEM_PROMPTS[currentMode];
-          showToast(`Mode — ${MODE_NAMES[currentMode]}`);
+          showToast(MODE_DESCRIPTIONS[currentMode]);
         }
+        // Update placeholder
+        const placeholders = {
+          V: "Search the web...",
+          E: "Ask me to write or debug code...",
+          R: "Pose a problem to reason through...",
+          I: "Share an idea to explore...",
+          T: "Ask me to explain anything...",
+          H: "Talk to me...",
+          O: "Ask me to write or research...",
+          S: "Speak your mind...",
+        };
+        document.getElementById("userInput").placeholder =
+          placeholders[currentMode];
       }
 
       async function applySovereign() {
@@ -1299,9 +1398,35 @@
         const msgs = document.getElementById("messages");
         msgs.appendChild(toast);
         msgs.scrollTop = msgs.scrollHeight;
-        setTimeout(() => toast.remove(), 3000);
+        setTimeout(() => toast.remove(), 4000);
       }
 
+      // ── MARKDOWN + CODE ──
+      function renderMarkdown(text) {
+        const rendered = marked.parse(text);
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = rendered;
+        wrapper.querySelectorAll("pre code").forEach((block) => {
+          const lang = block.className.replace("language-", "") || "code";
+          const pre = block.parentElement;
+          const header = document.createElement("div");
+          header.className = "code-header";
+          header.innerHTML = `<span class="code-lang">${lang}</span><button class="copy-btn" onclick="copyCode(this)">Copy</button>`;
+          pre.insertBefore(header, block);
+          hljs.highlightElement(block);
+        });
+        return wrapper.innerHTML;
+      }
+
+      function copyCode(btn) {
+        const code = btn.closest("pre").querySelector("code").innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = "Copied!";
+          setTimeout(() => (btn.textContent = "Copy"), 2000);
+        });
+      }
+
+      // ── CHAT ──
       const input = document.getElementById("userInput");
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") sendMessage();
@@ -1318,7 +1443,6 @@
         input.value = "";
         isStreaming = true;
 
-        // Create bot message div for streaming
         const msgs = document.getElementById("messages");
         const botDiv = document.createElement("div");
         botDiv.classList.add("message", "bot");
@@ -1327,15 +1451,19 @@
         msgs.scrollTop = msgs.scrollHeight;
 
         let fullText = "";
+        let sources = [];
 
         try {
-          const res = await fetch("/chat", {
+          const endpoint = currentMode === "V" ? "/search" : "/chat";
+          const body =
+            currentMode === "V"
+              ? { query: text }
+              : { message: text, system_prompt: currentSystemPrompt };
+
+          const res = await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              message: text,
-              system_prompt: currentSystemPrompt,
-            }),
+            body: JSON.stringify(body),
           });
 
           const reader = res.body.getReader();
@@ -1355,20 +1483,27 @@
                   if (parsed.token) {
                     fullText += parsed.token;
                     botDiv.innerHTML =
-                      marked.parse(fullText) +
+                      renderMarkdown(fullText) +
                       '<span class="streaming-cursor"></span>';
                     msgs.scrollTop = msgs.scrollHeight;
+                  }
+                  if (parsed.sources && parsed.sources.length > 0) {
+                    sources = parsed.sources;
                   }
                 } catch {}
               }
             }
           }
-        } catch (err) {
+        } catch {
           fullText = "I encountered an issue. Please try again.";
         }
 
-        // Remove cursor, finalize
-        botDiv.innerHTML = marked.parse(fullText);
+        // Finalize
+        let finalHTML = renderMarkdown(fullText);
+        if (sources.length > 0) {
+          finalHTML += `<div class="sources-block"><div class="sources-label">Sources</div>${sources.map((s) => `<a class="source-link" href="${s.url}" target="_blank">↗ ${s.title}</a>`).join("")}</div>`;
+        }
+        botDiv.innerHTML = finalHTML;
         currentMessages.push({ role: "bot", text: fullText });
         saveCurrentChat();
         isStreaming = false;
@@ -1377,7 +1512,7 @@
       function appendMessage(text, sender) {
         const div = document.createElement("div");
         div.classList.add("message", sender);
-        if (sender === "bot") div.innerHTML = marked.parse(text);
+        if (sender === "bot") div.innerHTML = renderMarkdown(text);
         else div.textContent = text;
         const msgs = document.getElementById("messages");
         msgs.appendChild(div);
