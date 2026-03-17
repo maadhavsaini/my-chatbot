@@ -384,5 +384,77 @@ def save_theme():
         json={"theme": theme}
     )
     return jsonify({"success": True})
+
+@app.route("/upload", methods=["POST"])
+def upload():
+    import base64
+    import io
+    data = request.json
+    file_data = data.get("file_data")  # base64
+    file_type = data.get("file_type")  # mime type
+    file_name = data.get("file_name")
+    user_message = data.get("message", "Please analyze this file.")
+    methodology = data.get("methodology", "")
+    model = data.get("model", "llama-3.3-70b-versatile")
+
+    methodology_section = f"\n━━━ USER METHODOLOGY ━━━\nThis user has shared how they like to work:\n{methodology}\nHonour these preferences in every response.\n" if methodology else ""
+    full_system = VERITAX_CONSTITUTION + methodology_section
+
+    try:
+        file_bytes = base64.b64decode(file_data)
+
+        # ── PDF ──
+        if file_type == "application/pdf":
+            import PyPDF2
+            pdf_reader = PyPDF2.PdfReader(io.BytesIO(file_bytes))
+            text = ""
+            for page in pdf_reader.pages:
+                text += page.extract_text() + "\n"
+            if not text.strip():
+                return jsonify({"error": "Could not extract text from PDF"}), 400
+
+            messages = [
+                {"role": "system", "content": full_system + "\nYou have been given the contents of a file. Answer the user's question about it thoroughly."},
+                {"role": "user", "content": f"File: {file_name}\n\nContent:\n{text[:12000]}\n\nUser request: {user_message}"}
+            ]
+            use_vision = False
+
+        # ── IMAGE ──
+        elif file_type.startswith("image/"):
+            messages = [
+                {"role": "user", "content": [
+                    {"type": "text", "text": full_system + f"\n\nUser request: {user_message}"},
+                    {"type": "image_url", "image_url": {"url": f"data:{file_type};base64,{file_data}"}}
+                ]}
+            ]
+            use_vision = True
+
+        # ── TEXT ──
+        else:
+            text = file_bytes.decode("utf-8", errors="ignore")
+            messages = [
+                {"role": "system", "content": full_system + "\nYou have been given the contents of a file. Answer the user's question about it thoroughly."},
+                {"role": "user", "content": f"File: {file_name}\n\nContent:\n{text[:12000]}\n\nUser request: {user_message}"}
+            ]
+            use_vision = False
+
+    except Exception as e:
+        return jsonify({"error": f"Failed to process file: {str(e)}"}), 400
+
+    def generate():
+        completion = client.chat.completions.create(
+            model="llama-3.2-11b-vision-preview" if use_vision else model,
+            messages=messages,
+            max_completion_tokens=1024,
+            stream=True,
+        )
+        for chunk in completion:
+            token = chunk.choices[0].delta.content
+            if token:
+                yield f"data: {json.dumps({'token': token})}\n\n"
+        yield "data: [DONE]\n\n"
+
+    return Response(stream_with_context(generate()), mimetype="text/event-stream")
+
 if __name__ == "__main__":
     app.run(debug=True)

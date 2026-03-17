@@ -1299,6 +1299,61 @@
         transition: all 0.2s ease;
         flex-shrink: 0;
       }
+      /* ── FILE UPLOAD ── */
+      .attach-btn {
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        width: 30px;
+        height: 30px;
+        border-radius: 2px;
+        cursor: pointer;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+      }
+
+      .attach-btn:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+        background: var(--glow);
+      }
+
+      .file-preview {
+        padding: 8px 0 6px 0;
+      }
+
+      .file-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        background: var(--glow);
+        border: 1px solid var(--gold);
+        border-radius: 20px;
+        font-size: 0.72rem;
+        color: var(--gold);
+        font-family: "Raleway", sans-serif;
+        letter-spacing: 0.05em;
+      }
+
+      .file-remove {
+        background: none;
+        border: none;
+        color: var(--gold);
+        cursor: pointer;
+        font-size: 0.7rem;
+        padding: 0;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
+
+      .file-remove:hover {
+        opacity: 1;
+      }
       /* ── MODEL SELECTOR ── */
       .model-pill {
         display: flex;
@@ -1697,7 +1752,40 @@
           <div class="chat-messages" id="messages"></div>
 
           <div class="chat-input">
+            <!-- FILE PREVIEW -->
+            <div class="file-preview" id="filePreview" style="display: none">
+              <div class="file-pill">
+                <span id="fileIcon">📄</span>
+                <span id="fileName">file.pdf</span>
+                <button class="file-remove" onclick="removeFile()">✕</button>
+              </div>
+            </div>
             <div class="input-wrapper">
+              <button
+                class="attach-btn"
+                onclick="document.getElementById('fileInput').click()"
+                title="Attach file"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
+                  />
+                </svg>
+              </button>
+              <input
+                type="file"
+                id="fileInput"
+                accept=".pdf,.txt,.md,image/*"
+                style="display: none"
+                onchange="handleFileSelect(this)"
+              />
               <input
                 type="text"
                 id="userInput"
@@ -2086,6 +2174,57 @@
           menu.classList.remove("open");
         }
       });
+      // ── FILE UPLOAD ──
+      let attachedFile = null;
+
+      function handleFileSelect(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+          showToast("File too large — max 10MB");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const base64 = e.target.result.split(",")[1];
+          attachedFile = {
+            name: file.name,
+            type: file.type,
+            data: base64,
+          };
+
+          // Show preview
+          const icons = {
+            "application/pdf": "📄",
+            "text/plain": "📝",
+            "text/markdown": "📝",
+          };
+          const icon = file.type.startsWith("image/")
+            ? "🖼️"
+            : icons[file.type] || "📎";
+          document.getElementById("fileIcon").textContent = icon;
+          document.getElementById("fileName").textContent = file.name;
+          document.getElementById("filePreview").style.display = "block";
+
+          // Set placeholder
+          document.getElementById("userInput").placeholder =
+            `Ask about ${file.name}...`;
+          showToast(`◆ ${file.name} attached`);
+        };
+        reader.readAsDataURL(file);
+        input.value = "";
+      }
+
+      function removeFile() {
+        attachedFile = null;
+        document.getElementById("filePreview").style.display = "none";
+        document.getElementById("userInput").placeholder =
+          "Ask Veritax anything...";
+        showToast("File removed");
+      }
       function toggleMethodology() {
         document.getElementById("methodologyPanel").classList.toggle("open");
       }
@@ -2153,9 +2292,9 @@
           item.classList.add("chat-history-item");
           if (chat.id === currentChatId) item.classList.add("active");
           item.innerHTML = `
-          <div class="item-title">${chat.title}</div>
-          <div class="item-meta"><span>${chat.date}</span><span class="item-mode-badge">${chat.mode}</span></div>
-          <button class="item-delete" onclick="deleteChat('${chat.id}', event)">✕</button>`;
+                <div class="item-title">${chat.title}</div>
+                <div class="item-meta"><span>${chat.date}</span><span class="item-mode-badge">${chat.mode}</span></div>
+                <button class="item-delete" onclick="deleteChat('${chat.id}', event)">✕</button>`;
           item.addEventListener("click", () => loadChat(chat.id));
           list.appendChild(item);
         });
@@ -2579,9 +2718,9 @@
           html += `<div class="sources-block"><div class="sources-label">Sources</div>${sources.map((s) => `<a class="source-link" href="${s.url}" target="_blank">↗ ${s.title}</a>`).join("")}</div>`;
         }
         html += `<div class="bot-actions">
-        <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
-        <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
-      </div>`;
+              <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
+              <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
+            </div>`;
         div.innerHTML = html;
         msgs.appendChild(div);
         msgs.scrollTop = msgs.scrollHeight;
@@ -2728,7 +2867,15 @@
           await autoSwitchMode(text);
         }
 
-        await streamResponse(text, currentSystemPrompt, extra);
+        if (attachedFile) {
+          await streamFileResponse(text, attachedFile);
+          attachedFile = null;
+          document.getElementById("filePreview").style.display = "none";
+          document.getElementById("userInput").placeholder =
+            "Ask Veritax anything...";
+        } else {
+          await streamResponse(text, currentSystemPrompt, extra);
+        }
       }
 
       async function streamResponse(text, systemPrompt, extra = "") {
@@ -2817,13 +2964,84 @@
         }
 
         botDiv.innerHTML = `
-        <div class="bot-marker"><span class="bot-marker-diamond">◆</span><span class="bot-marker-mode">${MODE_NAMES[currentMode]}</span></div>
-        <div class="bot-content-text">${finalHTML}</div>
-        ${sourcesHTML}
-        <div class="bot-actions">
-          <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
-          <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
-        </div>`;
+              <div class="bot-marker"><span class="bot-marker-diamond">◆</span><span class="bot-marker-mode">${MODE_NAMES[currentMode]}</span></div>
+              <div class="bot-content-text">${finalHTML}</div>
+              ${sourcesHTML}
+              <div class="bot-actions">
+                <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
+                <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
+              </div>`;
+
+        currentMessages.push({ role: "bot", text: fullText });
+        saveCurrentChat();
+        isStreaming = false;
+        generateFollowUps(botDiv, fullText);
+      }
+      async function streamFileResponse(text, file) {
+        isStreaming = true;
+        const msgs = document.getElementById("messages");
+
+        const botDiv = document.createElement("div");
+        botDiv.classList.add("message", "bot");
+        botDiv.innerHTML = `<div class="bot-marker"><span class="bot-marker-diamond">◆</span><span class="bot-marker-mode">${MODE_NAMES[currentMode]}</span></div><div class="bot-content-text"><span class="streaming-cursor"></span></div>`;
+        msgs.appendChild(botDiv);
+        msgs.scrollTop = msgs.scrollHeight;
+
+        const contentEl = botDiv.querySelector(".bot-content-text");
+        let fullText = "";
+
+        try {
+          const res = await fetch("/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              file_data: file.data,
+              file_type: file.type,
+              file_name: file.name,
+              message:
+                text ||
+                "Please summarize this file and extract the key points.",
+              methodology: userMethodology,
+              model: currentModel,
+            }),
+          });
+
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            const chunk = decoder.decode(value);
+            for (const line of chunk.split("\n")) {
+              if (line.startsWith("data: ")) {
+                const d = line.slice(6);
+                if (d === "[DONE]") break;
+                try {
+                  const parsed = JSON.parse(d);
+                  if (parsed.token) {
+                    fullText += parsed.token;
+                    contentEl.innerHTML =
+                      renderMarkdown(fullText) +
+                      '<span class="streaming-cursor"></span>';
+                    msgs.scrollTop = msgs.scrollHeight;
+                  }
+                } catch {}
+              }
+            }
+          }
+        } catch {
+          fullText =
+            "I encountered an issue processing your file. Please try again.";
+        }
+
+        botDiv.innerHTML = `
+          <div class="bot-marker"><span class="bot-marker-diamond">◆</span><span class="bot-marker-mode">${MODE_NAMES[currentMode]}</span></div>
+          <div class="bot-content-text">${renderMarkdown(fullText)}</div>
+          <div class="bot-actions">
+            <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
+            <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
+          </div>`;
 
         currentMessages.push({ role: "bot", text: fullText });
         saveCurrentChat();

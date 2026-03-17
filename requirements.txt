@@ -5,3 +5,4 @@ python-dotenv
 tavily-python
 requests
 requests-oauthlib
+PyPDF2
