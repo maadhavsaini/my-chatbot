@@ -746,6 +746,30 @@
           transparent
         );
       }
+      .google-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 13px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.72rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 2px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin-bottom: 4px;
+      }
+
+      .google-btn:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
     </style>
   </head>
   <body>
@@ -998,6 +1022,28 @@
           </button>
         </div>
 
+        <!-- Add above the login button -->
+        <a href="/auth/google" class="google-btn">
+          <img
+            src="https://www.google.com/favicon.ico"
+            width="16"
+            height="16"
+            style="margin-right: 8px; vertical-align: middle"
+          />
+          Continue with Google
+        </a>
+        <div
+          style="
+            text-align: center;
+            margin: 16px 0;
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+          "
+        >
+          or
+        </div>
         <!-- LOGIN FORM -->
         <div id="loginForm">
           <div class="modal-field">

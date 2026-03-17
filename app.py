@@ -10,6 +10,7 @@ from tavily import TavilyClient
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "veritax-secret-2026")
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 tavily = TavilyClient(api_key=os.environ.get("TAVILY_API_KEY"))
 
@@ -296,6 +297,79 @@ def onboard():
 @app.route("/onboarding")
 def onboarding():
     return send_from_directory(".", "onboarding.html")
+
+from requests_oauthlib import OAuth2Session
+
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
+GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI")
+GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/auth"
+GOOGLE_TOKEN_URL = "https://accounts.google.com/o/oauth2/token"
+GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
+
+@app.route("/auth/google")
+def google_login():
+    google = OAuth2Session(GOOGLE_CLIENT_ID, redirect_uri=GOOGLE_REDIRECT_URI,
+                           scope=["openid", "email", "profile"])
+    authorization_url, state = google.authorization_url(GOOGLE_AUTH_URL,
+                                                         access_type="offline")
+    from flask import session
+    session["oauth_state"] = state
+    from flask import redirect
+    return redirect(authorization_url)
+
+@app.route("/auth/google/callback")
+def google_callback():
+    from flask import session, redirect
+    import os
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+    google = OAuth2Session(GOOGLE_CLIENT_ID, redirect_uri=GOOGLE_REDIRECT_URI,
+                           state=session.get("oauth_state"))
+    token = google.fetch_token(GOOGLE_TOKEN_URL,
+                               client_secret=GOOGLE_CLIENT_SECRET,
+                               authorization_response=request.url)
+
+    userinfo = google.get(GOOGLE_USERINFO_URL).json()
+    email = userinfo.get("email", "").lower()
+    name = userinfo.get("name", "")
+    google_id = userinfo.get("id", "")
+
+    # Check if user exists
+    check = http_requests.get(
+        f"{SUPABASE_URL}/rest/v1/users?email=eq.{email}&select=id,email,name,onboarded",
+        headers=supabase_headers()
+    )
+    users = check.json()
+
+    if users:
+        user = users[0]
+        is_new = False
+    else:
+        # Create new user
+        result = http_requests.post(
+            f"{SUPABASE_URL}/rest/v1/users",
+            headers={**supabase_headers(), "Prefer": "return=representation"},
+            json={"email": email, "name": name, "password_hash": f"google_{google_id}", "onboarded": False}
+        )
+        user = result.json()[0]
+        is_new = True
+
+    user_data = {"id": user["id"], "email": user["email"], "name": user.get("name", name)}
+    onboarded = user.get("onboarded", False)
+
+    # Redirect with user data as URL params to set sessionStorage on client
+    import json as json_lib
+    import urllib.parse
+    user_json = urllib.parse.quote(json_lib.dumps(user_data))
+    redirect_to = "/onboarding" if is_new or not onboarded else "/app"
+
+    return f"""
+    <html><body><script>
+    sessionStorage.setItem('veritax_user', decodeURIComponent('{user_json}'));
+    window.location.href = '{redirect_to}';
+    </script></body></html>
+    """
 
 if __name__ == "__main__":
     app.run(debug=True)
