@@ -1,5 +1,7 @@
 import os
 import json
+import hashlib
+import requests as http_requests
 from flask import Flask, request, jsonify, send_from_directory, Response, stream_with_context
 from groq import Groq
 from dotenv import load_dotenv
@@ -10,6 +12,19 @@ load_dotenv()
 app = Flask(__name__)
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 tavily = TavilyClient(api_key=os.environ.get("TAVILY_API_KEY"))
+
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+
+def supabase_headers():
+    return {
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}",
+        "Content-Type": "application/json"
+    }
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 
 VERITAX_CONSTITUTION = """
 ═══════════════════════════════════════
@@ -66,7 +81,69 @@ That is the only mission that matters.
 
 @app.route("/")
 def index():
+    return send_from_directory(".", "landing.html")
+
+@app.route("/app")
+def chat_app():
     return send_from_directory(".", "index.html")
+
+@app.route("/signup", methods=["POST"])
+def signup():
+    data = request.json
+    email = data.get("email", "").strip().lower()
+    password = data.get("password", "")
+
+    if not email or not password:
+        return jsonify({"error": "Email and password required"}), 400
+
+    if len(password) < 6:
+        return jsonify({"error": "Password must be at least 6 characters"}), 400
+
+    # Check if user exists
+    check = http_requests.get(
+        f"{SUPABASE_URL}/rest/v1/users?email=eq.{email}&select=id",
+        headers=supabase_headers()
+    )
+
+    if check.json():
+        return jsonify({"error": "An account with this email already exists"}), 400
+
+    # Create user
+    password_hash = hash_password(password)
+    result = http_requests.post(
+        f"{SUPABASE_URL}/rest/v1/users",
+        headers={**supabase_headers(), "Prefer": "return=representation"},
+        json={"email": email, "password_hash": password_hash}
+    )
+
+    if result.status_code in [200, 201]:
+        user = result.json()[0]
+        return jsonify({"success": True, "user": {"id": user["id"], "email": user["email"]}})
+    else:
+        return jsonify({"error": "Failed to create account"}), 500
+
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.json
+    email = data.get("email", "").strip().lower()
+    password = data.get("password", "")
+
+    if not email or not password:
+        return jsonify({"error": "Email and password required"}), 400
+
+    password_hash = hash_password(password)
+
+    result = http_requests.get(
+        f"{SUPABASE_URL}/rest/v1/users?email=eq.{email}&password_hash=eq.{password_hash}&select=id,email",
+        headers=supabase_headers()
+    )
+
+    users = result.json()
+    if not users:
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    user = users[0]
+    return jsonify({"success": True, "user": {"id": user["id"], "email": user["email"]}})
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -119,11 +196,13 @@ def search():
 
     methodology_section = f"\n━━━ USER METHODOLOGY ━━━\nThis user has shared how they like to work:\n{methodology}\nHonour these preferences in every response.\n" if methodology else ""
 
-    voyageur_prompt = """You are Veritax in Voyageur mode — a real-time web search assistant.
-You have been given live search results. Synthesize them into a clear, accurate, well-structured answer.
-Always cite your sources. Be concise but thorough. Never fabricate beyond what sources say."""
+    voyageur_prompt = """You are Veritax in Axiom mode — a real-time web search assistant.
+You have been given live search results. Synthesize them into a clear, well-written answer.
+DO NOT just list sources. Write an actual response using the information.
+Structure with headers and bullet points where appropriate.
+Cite sources inline by name only. Never fabricate beyond what sources say."""
 
-    full_system = VERITAX_CONSTITUTION+ methodology_section + "\n" + voyageur_prompt
+    full_system = VERITAX_CONSTITUTION + methodology_section + "\n" + voyageur_prompt
 
     def generate():
         completion = client.chat.completions.create(
@@ -198,5 +277,6 @@ Return ONLY one letter or 'none'."""
     result = completion.choices[0].message.content.strip()
     valid = ['E', 'R', 'I', 'T', 'A']
     return jsonify({"mode": result if result in valid else "none"})
+
 if __name__ == "__main__":
     app.run(debug=True)

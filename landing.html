@@ -1,0 +1,1189 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veritax — Intelligent Discourse</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚜️</text></svg>"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0a08;
+        --bg-secondary: #111110;
+        --surface: #161614;
+        --border: #2a2820;
+        --gold: #c9a84c;
+        --gold-light: #e8c97a;
+        --text: #e8dcc8;
+        --text-muted: #7a7060;
+        --shadow: rgba(0, 0, 0, 0.6);
+        --glow: rgba(201, 168, 76, 0.15);
+        --error: #c94c4c;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Raleway", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        overflow-x: hidden;
+      }
+
+      /* ── NAV ── */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 20px 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(10, 10, 8, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(42, 40, 32, 0.5);
+      }
+
+      .nav-brand {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.4rem;
+        font-weight: 300;
+        letter-spacing: 0.14em;
+        color: var(--gold);
+        text-transform: uppercase;
+        text-decoration: none;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 36px;
+      }
+
+      .nav-links a {
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--gold);
+      }
+
+      .nav-cta {
+        padding: 9px 22px;
+        border: 1px solid var(--gold);
+        color: var(--gold) !important;
+        border-radius: 2px;
+        transition: all 0.3s ease !important;
+      }
+
+      .nav-cta:hover {
+        background: var(--glow) !important;
+      }
+
+      @media (max-width: 640px) {
+        nav {
+          padding: 16px 20px;
+        }
+        .nav-links {
+          gap: 16px;
+        }
+        .nav-links a {
+          font-size: 0.65rem;
+        }
+      }
+
+      /* ── HERO ── */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 120px 24px 80px;
+        position: relative;
+        overflow: hidden;
+        background-image:
+          radial-gradient(ellipse at 20% 50%, var(--glow) 0%, transparent 60%),
+          radial-gradient(ellipse at 80% 20%, var(--glow) 0%, transparent 50%);
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+          ellipse at center,
+          rgba(201, 168, 76, 0.05) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .hero-eyebrow {
+        font-size: 0.62rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 24px;
+        opacity: 0;
+        animation: fadeUp 0.8s 0.2s ease forwards;
+      }
+
+      .hero-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(3.5rem, 10vw, 8rem);
+        font-weight: 300;
+        letter-spacing: 0.08em;
+        color: var(--gold);
+        text-transform: uppercase;
+        line-height: 0.95;
+        margin-bottom: 8px;
+        opacity: 0;
+        animation: fadeUp 0.8s 0.4s ease forwards;
+      }
+
+      .hero-subtitle {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(1rem, 3vw, 1.4rem);
+        font-weight: 300;
+        letter-spacing: 0.25em;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        margin-bottom: 48px;
+        opacity: 0;
+        animation: fadeUp 0.8s 0.6s ease forwards;
+      }
+
+      .hero-divider {
+        width: 120px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        margin: 0 auto 48px;
+        opacity: 0;
+        animation: fadeUp 0.8s 0.7s ease forwards;
+      }
+
+      .hero-description {
+        max-width: 560px;
+        font-size: 1rem;
+        line-height: 1.8;
+        color: var(--text-muted);
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        margin-bottom: 52px;
+        opacity: 0;
+        animation: fadeUp 0.8s 0.8s ease forwards;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+        opacity: 0;
+        animation: fadeUp 0.8s 1s ease forwards;
+      }
+
+      .btn-primary {
+        padding: 16px 40px;
+        background: var(--gold);
+        color: var(--bg);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        border: none;
+        cursor: pointer;
+        border-radius: 2px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+      }
+
+      .btn-primary:hover {
+        background: var(--gold-light);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(201, 168, 76, 0.3);
+      }
+
+      .btn-secondary {
+        padding: 16px 40px;
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 2px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+      }
+
+      .btn-secondary:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ── MODES SECTION ── */
+      .section {
+        padding: 120px 60px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      @media (max-width: 640px) {
+        .section {
+          padding: 80px 24px;
+        }
+      }
+
+      .section-eyebrow {
+        font-size: 0.6rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 16px;
+        text-align: center;
+      }
+
+      .section-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        font-weight: 300;
+        letter-spacing: 0.06em;
+        color: var(--text);
+        text-align: center;
+        margin-bottom: 16px;
+      }
+
+      .section-subtitle {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.05rem;
+        color: var(--text-muted);
+        text-align: center;
+        font-style: italic;
+        max-width: 500px;
+        margin: 0 auto 64px;
+        line-height: 1.7;
+      }
+
+      /* MODES GRID */
+      .modes-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+        margin-bottom: 48px;
+      }
+
+      @media (max-width: 840px) {
+        .modes-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .modes-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .mode-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 28px 16px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: default;
+      }
+
+      .mode-card:hover {
+        border-color: var(--gold);
+        background: var(--glow);
+        transform: translateY(-4px);
+      }
+
+      .mode-letter-large {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2.4rem;
+        font-weight: 300;
+        color: var(--gold);
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .mode-name {
+        font-size: 0.6rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .mode-desc {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        font-style: italic;
+        line-height: 1.5;
+      }
+
+      /* FEATURES */
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+
+      @media (max-width: 768px) {
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .feature-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 32px 28px;
+        transition: all 0.3s ease;
+      }
+
+      .feature-card:hover {
+        border-color: var(--gold);
+        transform: translateY(-2px);
+      }
+
+      .feature-icon {
+        font-size: 1.4rem;
+        margin-bottom: 16px;
+        display: block;
+      }
+
+      .feature-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.1rem;
+        color: var(--gold-light);
+        margin-bottom: 10px;
+        font-weight: 400;
+      }
+
+      .feature-desc {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.7;
+        font-style: italic;
+      }
+
+      /* ABOUT */
+      .about-section {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .about-inner {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 120px 24px;
+        text-align: center;
+      }
+
+      .about-quote {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        font-weight: 300;
+        line-height: 1.7;
+        color: var(--text);
+        font-style: italic;
+        margin-bottom: 32px;
+      }
+
+      .about-quote span {
+        color: var(--gold);
+      }
+
+      .about-text {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+        font-style: italic;
+      }
+
+      /* CTA SECTION */
+      .cta-section {
+        text-align: center;
+        padding: 120px 24px;
+        background-image: radial-gradient(
+          ellipse at center,
+          var(--glow) 0%,
+          transparent 70%
+        );
+      }
+
+      .cta-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 300;
+        color: var(--gold);
+        letter-spacing: 0.06em;
+        margin-bottom: 20px;
+      }
+
+      .cta-sub {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.05rem;
+        color: var(--text-muted);
+        font-style: italic;
+        margin-bottom: 40px;
+      }
+
+      /* AUTH MODAL */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(6px);
+        z-index: 500;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-overlay.open {
+        display: flex;
+      }
+
+      .modal {
+        width: 90%;
+        max-width: 420px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        box-shadow: 0 32px 80px var(--shadow);
+        animation: fadeUp 0.4s ease forwards;
+        padding: 48px 40px;
+        position: relative;
+      }
+
+      @media (max-width: 480px) {
+        .modal {
+          padding: 36px 24px;
+        }
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 0.7rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+
+      .modal-close:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      .modal-brand {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.8rem;
+        font-weight: 300;
+        letter-spacing: 0.14em;
+        color: var(--gold);
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom: 6px;
+      }
+
+      .modal-tagline {
+        font-size: 0.6rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .modal-divider {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        margin-bottom: 28px;
+      }
+
+      .modal-tabs {
+        display: flex;
+        margin-bottom: 28px;
+        border: 1px solid var(--border);
+        border-radius: 2px;
+      }
+
+      .modal-tab {
+        flex: 1;
+        padding: 10px;
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.68rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .modal-tab.active {
+        background: var(--glow);
+        color: var(--gold);
+      }
+
+      .modal-field {
+        margin-bottom: 18px;
+      }
+
+      .modal-field label {
+        display: block;
+        font-size: 0.6rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 7px;
+      }
+
+      .modal-field input {
+        width: 100%;
+        padding: 11px 14px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 300;
+        outline: none;
+        border-radius: 2px;
+        transition:
+          border-color 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .modal-field input:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 3px var(--glow);
+      }
+
+      .modal-error {
+        font-size: 0.72rem;
+        color: var(--error);
+        text-align: center;
+        margin-bottom: 14px;
+        min-height: 16px;
+      }
+
+      .modal-success {
+        font-size: 0.72rem;
+        color: #4caf50;
+        text-align: center;
+        margin-bottom: 14px;
+        min-height: 16px;
+      }
+
+      .modal-btn {
+        width: 100%;
+        padding: 13px;
+        background: none;
+        border: 1px solid var(--gold);
+        color: var(--gold);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .modal-btn:hover {
+        background: var(--glow);
+      }
+      .modal-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .modal-footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.6rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      /* FOOTER */
+      footer {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        padding: 48px 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      @media (max-width: 640px) {
+        footer {
+          padding: 32px 24px;
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+
+      .footer-brand {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.1rem;
+        font-weight: 300;
+        letter-spacing: 0.12em;
+        color: var(--gold);
+        text-transform: uppercase;
+      }
+
+      .footer-copy {
+        font-size: 0.62rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 24px;
+      }
+
+      .footer-links a {
+        font-size: 0.62rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .footer-links a:hover {
+        color: var(--gold);
+      }
+
+      /* SECTION DIVIDER */
+      .gold-divider {
+        height: 1px;
+        max-width: 200px;
+        margin: 0 auto 64px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <a href="/" class="nav-brand">Veritax</a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#modes">Modes</a>
+        <a href="#features">Features</a>
+        <a href="#contact">Contact</a>
+        <a
+          href="#"
+          class="nav-cta"
+          onclick="
+            openModal('login');
+            return false;
+          "
+          >Sign In</a
+        >
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="hero-eyebrow">Introducing</div>
+      <div class="hero-title">Veritax</div>
+      <div class="hero-subtitle">Intelligent Discourse</div>
+      <div class="hero-divider"></div>
+      <p class="hero-description">
+        An AI companion built not to impress, but to serve. Precise. Principled.
+        Relentlessly honest. This is intelligence without pretense.
+      </p>
+      <div class="hero-actions">
+        <a
+          href="#"
+          class="btn-primary"
+          onclick="
+            openModal('signup');
+            return false;
+          "
+          >Get Started — It's Free</a
+        >
+        <a href="#about" class="btn-secondary">Learn More</a>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about-section" id="about">
+      <div class="about-inner">
+        <div class="section-eyebrow">Philosophy</div>
+        <blockquote class="about-quote">
+          "Veritax comes from <span>veritas</span> — the Latin word for truth.
+          Every response is in service of that truth."
+        </blockquote>
+        <p class="about-text">
+          We built Veritax because most AI feels like a performance. Hollow
+          enthusiasm, generic answers, the illusion of intelligence. Veritax is
+          different. It remembers how you think. It adapts to how you work. It
+          tells you the truth even when it's uncomfortable. It is the helper —
+          you are the protagonist.
+        </p>
+      </div>
+    </section>
+
+    <!-- MODES -->
+    <section id="modes">
+      <div class="section">
+        <div class="section-eyebrow">Seven Disciplines</div>
+        <h2 class="section-title">V · E · R · I · T · A · X</h2>
+        <p class="section-subtitle">
+          Each letter is a mode. Each mode is a specialist. One platform, seven
+          intelligences.
+        </p>
+        <div class="gold-divider"></div>
+        <div class="modes-grid">
+          <div class="mode-card">
+            <span class="mode-letter-large">V</span>
+            <span class="mode-name">Versatile</span>
+            <span class="mode-desc"
+              >Your all-purpose intelligent companion</span
+            >
+          </div>
+          <div class="mode-card">
+            <span class="mode-letter-large">E</span>
+            <span class="mode-name">Engineer</span>
+            <span class="mode-desc"
+              >Expert coding assistant for any language</span
+            >
+          </div>
+          <div class="mode-card">
+            <span class="mode-letter-large">R</span>
+            <span class="mode-name">Reason</span>
+            <span class="mode-desc">Deep logic and analytical thinking</span>
+          </div>
+          <div class="mode-card">
+            <span class="mode-letter-large">I</span>
+            <span class="mode-name">Inspire</span>
+            <span class="mode-desc">Creative writing and brainstorming</span>
+          </div>
+          <div class="mode-card">
+            <span class="mode-letter-large">T</span>
+            <span class="mode-name">Tutor</span>
+            <span class="mode-desc">Patient, adaptive learning companion</span>
+          </div>
+          <div class="mode-card">
+            <span class="mode-letter-large">A</span>
+            <span class="mode-name">Axiom</span>
+            <span class="mode-desc">Live web search with cited sources</span>
+          </div>
+          <div class="mode-card">
+            <span class="mode-letter-large">X</span>
+            <span class="mode-name">Xplore</span>
+            <span class="mode-desc">Fully custom — define your own AI</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section
+      id="features"
+      style="
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      "
+    >
+      <div class="section">
+        <div class="section-eyebrow">Capabilities</div>
+        <h2 class="section-title">Built Different</h2>
+        <p class="section-subtitle">
+          Every feature designed with one question: does this make the
+          experience more premium?
+        </p>
+        <div class="gold-divider"></div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <span class="feature-icon">⚡</span>
+            <div class="feature-title">Streaming Responses</div>
+            <p class="feature-desc">
+              Words appear as they're generated. No waiting. No loading screens.
+              Pure flow.
+            </p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">🧠</span>
+            <div class="feature-title">Auto Mode Switching</div>
+            <p class="feature-desc">
+              Veritax reads your message and switches to the best mode
+              automatically.
+            </p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">🌐</span>
+            <div class="feature-title">Live Web Search</div>
+            <p class="feature-desc">
+              Axiom mode searches the real-time web and synthesizes answers with
+              citations.
+            </p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">📊</span>
+            <div class="feature-title">Inline Charts & Tables</div>
+            <p class="feature-desc">
+              Data renders as beautiful interactive charts and tables, not walls
+              of text.
+            </p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">🎯</span>
+            <div class="feature-title">Methodology Memory</div>
+            <p class="feature-desc">
+              Tell Veritax how you like to work. It remembers and adapts every
+              response.
+            </p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">💬</span>
+            <div class="feature-title">Conversation History</div>
+            <p class="feature-desc">
+              Every conversation saved. Auto-titled. Searchable. Always
+              accessible.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" id="contact">
+      <div class="section-eyebrow">Begin</div>
+      <h2 class="cta-title">Find Your Veritax</h2>
+      <p class="cta-sub">Free to use. No credit card. No compromise.</p>
+      <a
+        href="#"
+        class="btn-primary"
+        onclick="
+          openModal('signup');
+          return false;
+        "
+        >Create Your Account</a
+      >
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-brand">Veritax</div>
+      <div class="footer-copy">© 2026 Veritax Co. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#modes">Modes</a>
+        <a href="#features">Features</a>
+        <a
+          href="#"
+          onclick="
+            openModal('login');
+            return false;
+          "
+          >Sign In</a
+        >
+      </div>
+    </footer>
+
+    <!-- AUTH MODAL -->
+    <div
+      class="modal-overlay"
+      id="modalOverlay"
+      onclick="handleOverlayClick(event)"
+    >
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div class="modal-brand">Veritax</div>
+        <div class="modal-tagline">Intelligent Discourse</div>
+        <div class="modal-divider"></div>
+        <div class="modal-tabs">
+          <button
+            class="modal-tab active"
+            id="loginTab"
+            onclick="switchTab('login')"
+          >
+            Sign In
+          </button>
+          <button
+            class="modal-tab"
+            id="signupTab"
+            onclick="switchTab('signup')"
+          >
+            Create Account
+          </button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+          <div class="modal-field">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail" placeholder="you@example.com" />
+          </div>
+          <div class="modal-field">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" />
+          </div>
+          <div class="modal-error" id="loginError"></div>
+          <button class="modal-btn" id="loginBtn" onclick="handleLogin()">
+            Enter Veritax
+          </button>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div id="signupForm" style="display: none">
+          <div class="modal-field">
+            <label>Email Address</label>
+            <input
+              type="email"
+              id="signupEmail"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div class="modal-field">
+            <label>Password</label>
+            <input
+              type="password"
+              id="signupPassword"
+              placeholder="Min. 6 characters"
+            />
+          </div>
+          <div class="modal-field">
+            <label>Confirm Password</label>
+            <input type="password" id="signupConfirm" placeholder="••••••••" />
+          </div>
+          <div class="modal-error" id="signupError"></div>
+          <div class="modal-success" id="signupSuccess"></div>
+          <button class="modal-btn" id="signupBtn" onclick="handleSignup()">
+            Create Account
+          </button>
+        </div>
+
+        <div class="modal-footer">Veritax · Private Access</div>
+      </div>
+    </div>
+
+    <script>
+      // ── MODAL ──
+      function openModal(tab = "login") {
+        document.getElementById("modalOverlay").classList.add("open");
+        switchTab(tab);
+      }
+
+      function closeModal() {
+        document.getElementById("modalOverlay").classList.remove("open");
+      }
+
+      function handleOverlayClick(e) {
+        if (e.target === document.getElementById("modalOverlay")) closeModal();
+      }
+
+      function switchTab(tab) {
+        const loginForm = document.getElementById("loginForm");
+        const signupForm = document.getElementById("signupForm");
+        const loginTab = document.getElementById("loginTab");
+        const signupTab = document.getElementById("signupTab");
+
+        if (tab === "login") {
+          loginForm.style.display = "block";
+          signupForm.style.display = "none";
+          loginTab.classList.add("active");
+          signupTab.classList.remove("active");
+        } else {
+          loginForm.style.display = "none";
+          signupForm.style.display = "block";
+          loginTab.classList.remove("active");
+          signupTab.classList.add("active");
+        }
+      }
+
+      // Enter key support
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+
+      // ── AUTH ──
+      async function handleLogin() {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+        const error = document.getElementById("loginError");
+        const btn = document.getElementById("loginBtn");
+
+        if (!email || !password) {
+          error.textContent = "Please fill in all fields.";
+          return;
+        }
+
+        btn.textContent = "Signing in...";
+        btn.disabled = true;
+
+        try {
+          const res = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            // Store user session
+            sessionStorage.setItem("veritax_user", JSON.stringify(data.user));
+            window.location.href = "/app";
+          } else {
+            error.textContent = data.error || "Invalid credentials.";
+          }
+        } catch {
+          error.textContent = "Something went wrong. Please try again.";
+        }
+
+        btn.textContent = "Enter Veritax";
+        btn.disabled = false;
+      }
+
+      async function handleSignup() {
+        const email = document.getElementById("signupEmail").value.trim();
+        const password = document.getElementById("signupPassword").value;
+        const confirm = document.getElementById("signupConfirm").value;
+        const error = document.getElementById("signupError");
+        const success = document.getElementById("signupSuccess");
+        const btn = document.getElementById("signupBtn");
+
+        error.textContent = "";
+        success.textContent = "";
+
+        if (!email || !password) {
+          error.textContent = "Please fill in all fields.";
+          return;
+        }
+        if (password !== confirm) {
+          error.textContent = "Passwords do not match.";
+          return;
+        }
+        if (password.length < 6) {
+          error.textContent = "Password must be at least 6 characters.";
+          return;
+        }
+
+        btn.textContent = "Creating account...";
+        btn.disabled = true;
+
+        try {
+          const res = await fetch("/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            success.textContent = "Account created! Signing you in...";
+            sessionStorage.setItem("veritax_user", JSON.stringify(data.user));
+            setTimeout(() => (window.location.href = "/app"), 1000);
+          } else {
+            error.textContent = data.error || "Failed to create account.";
+          }
+        } catch {
+          error.textContent = "Something went wrong. Please try again.";
+        }
+
+        btn.textContent = "Create Account";
+        btn.disabled = false;
+      }
+
+      // Enter key on inputs
+      document
+        .getElementById("loginPassword")
+        .addEventListener("keydown", (e) => {
+          if (e.key === "Enter") handleLogin();
+        });
+
+      // Open modal if URL has #signin
+      if (window.location.hash === "#signin") openModal("login");
+      if (window.location.hash === "#signup") openModal("signup");
+    </script>
+  </body>
+</html>
