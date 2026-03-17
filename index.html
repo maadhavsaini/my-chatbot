@@ -95,8 +95,6 @@
         border: 1px solid var(--border);
         box-shadow: 0 32px 80px var(--shadow);
         opacity: 0;
-        transform: translateY(30px);
-        animation: riseUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -539,7 +537,6 @@
         transition: all 0.25s ease;
         white-space: nowrap;
         flex-shrink: 0;
-        position: relative;
       }
 
       .mode-letter:hover {
@@ -623,6 +620,174 @@
 
       .sovereign-btn:hover {
         background: var(--glow);
+      }
+
+      /* ── METHODOLOGY PANEL ── */
+      .methodology-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 360px;
+        max-width: 90vw;
+        height: 100%;
+        background: var(--sidebar-bg);
+        border-left: 1px solid var(--border);
+        z-index: 300;
+        display: flex;
+        flex-direction: column;
+        box-shadow: -4px 0 24px var(--shadow);
+        transform: translateX(100%);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .methodology-panel.open {
+        transform: translateX(0);
+      }
+
+      .methodology-header {
+        padding: 24px 20px 16px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .methodology-header::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 20px;
+        right: 20px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+      }
+
+      .methodology-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--gold);
+      }
+
+      .methodology-close {
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 0.7rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+
+      .methodology-close:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      .methodology-body {
+        flex: 1;
+        padding: 24px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        overflow-y: auto;
+      }
+
+      .methodology-label {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+      }
+
+      .methodology-body textarea {
+        min-height: 200px;
+        padding: 14px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 300;
+        outline: none;
+        border-radius: 2px;
+        resize: vertical;
+        line-height: 1.6;
+        transition: border-color 0.3s ease;
+      }
+
+      .methodology-body textarea:focus {
+        border-color: var(--gold);
+      }
+
+      .methodology-saved {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        line-height: 1.6;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 2px;
+        background: var(--glow);
+        white-space: pre-wrap;
+      }
+
+      .methodology-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .methodology-btn {
+        flex: 1;
+        padding: 11px;
+        background: none;
+        border: 1px solid var(--gold);
+        color: var(--gold);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .methodology-btn:hover {
+        background: var(--glow);
+      }
+
+      .methodology-btn-secondary {
+        padding: 11px 16px;
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .methodology-btn-secondary:hover {
+        border-color: var(--error);
+        color: var(--error);
       }
 
       /* ── MESSAGES ── */
@@ -719,13 +884,12 @@
         margin-bottom: 4px;
       }
 
-      /* ── CODE BLOCKS ── */
+      /* ── CODE ── */
       .message.bot pre {
         margin: 10px 0;
         border-radius: 6px;
         overflow: hidden;
         border: 1px solid var(--border);
-        font-family: "JetBrains Mono", monospace;
       }
 
       .code-header {
@@ -1058,6 +1222,13 @@
                 <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">
                   ☀️
                 </button>
+                <button
+                  class="icon-btn"
+                  onclick="toggleMethodology()"
+                  title="My Preferences"
+                >
+                  ⚙
+                </button>
                 <button class="icon-btn" onclick="shareChat()" title="Share">
                   ⇪
                 </button>
@@ -1128,11 +1299,47 @@
               <input
                 type="text"
                 id="userInput"
-                placeholder="Speak your mind..."
+                placeholder="Search the web..."
               />
               <button class="send-btn" onclick="sendMessage()">→</button>
             </div>
             <div class="footer-text">Verithos · Intelligent Discourse</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- METHODOLOGY PANEL -->
+      <div class="methodology-panel" id="methodologyPanel">
+        <div class="methodology-header">
+          <div class="methodology-title">My Preferences</div>
+          <button class="methodology-close" onclick="toggleMethodology()">
+            ✕
+          </button>
+        </div>
+        <div class="methodology-body">
+          <div class="methodology-label">
+            Tell Verithos how you like to work. Be as specific as you want — it
+            will remember and adapt every response to you.
+          </div>
+          <textarea
+            id="methodologyInput"
+            placeholder="e.g. I'm a high school student studying for DECA competitions. I prefer concise bullet points over long paragraphs. I'm a visual learner. Don't over-explain basics I already know..."
+          ></textarea>
+          <div
+            class="methodology-saved"
+            id="methodologySaved"
+            style="display: none"
+          ></div>
+          <div class="methodology-actions">
+            <button class="methodology-btn" onclick="saveMethodology()">
+              Save Preferences
+            </button>
+            <button
+              class="methodology-btn-secondary"
+              onclick="clearMethodology()"
+            >
+              Clear
+            </button>
           </div>
         </div>
       </div>
@@ -1151,6 +1358,7 @@
           document.getElementById("appScreen").style.display = "block";
           error.textContent = "";
           loadHistory();
+          loadSavedMethodology();
         } else {
           error.textContent = "Invalid credentials. Please try again.";
         }
@@ -1185,6 +1393,57 @@
       // ── SIDEBAR ──
       function toggleSidebar() {
         document.getElementById("sidebar").classList.toggle("open");
+      }
+
+      // ── METHODOLOGY ──
+      let userMethodology = "";
+
+      function loadSavedMethodology() {
+        userMethodology = localStorage.getItem("verithos_methodology") || "";
+        if (userMethodology) {
+          document.getElementById("methodologyInput").value = userMethodology;
+          document.getElementById("methodologySaved").style.display = "block";
+          document.getElementById("methodologySaved").textContent =
+            userMethodology;
+        }
+      }
+
+      function toggleMethodology() {
+        document.getElementById("methodologyPanel").classList.toggle("open");
+      }
+
+      async function saveMethodology() {
+        const text = document.getElementById("methodologyInput").value.trim();
+        if (!text) return;
+        const btn = document.querySelector(".methodology-btn");
+        btn.textContent = "Saving...";
+        btn.disabled = true;
+        try {
+          const res = await fetch("/extract-methodology", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text }),
+          });
+          const data = await res.json();
+          userMethodology = data.methodology;
+        } catch {
+          userMethodology = text;
+        }
+        localStorage.setItem("verithos_methodology", userMethodology);
+        document.getElementById("methodologySaved").style.display = "block";
+        document.getElementById("methodologySaved").textContent =
+          userMethodology;
+        btn.textContent = "Save Preferences";
+        btn.disabled = false;
+        showToast("Methodology saved — Verithos will remember.");
+      }
+
+      function clearMethodology() {
+        userMethodology = "";
+        localStorage.removeItem("verithos_methodology");
+        document.getElementById("methodologyInput").value = "";
+        document.getElementById("methodologySaved").style.display = "none";
+        showToast("Preferences cleared.");
       }
 
       // ── HISTORY ──
@@ -1353,7 +1612,6 @@
           currentSystemPrompt = SYSTEM_PROMPTS[currentMode];
           showToast(MODE_DESCRIPTIONS[currentMode]);
         }
-        // Update placeholder
         const placeholders = {
           V: "Search the web...",
           E: "Ask me to write or debug code...",
@@ -1457,8 +1715,12 @@
           const endpoint = currentMode === "V" ? "/search" : "/chat";
           const body =
             currentMode === "V"
-              ? { query: text }
-              : { message: text, system_prompt: currentSystemPrompt };
+              ? { query: text, methodology: userMethodology }
+              : {
+                  message: text,
+                  system_prompt: currentSystemPrompt,
+                  methodology: userMethodology,
+                };
 
           const res = await fetch(endpoint, {
             method: "POST",
@@ -1487,9 +1749,8 @@
                       '<span class="streaming-cursor"></span>';
                     msgs.scrollTop = msgs.scrollHeight;
                   }
-                  if (parsed.sources && parsed.sources.length > 0) {
+                  if (parsed.sources && parsed.sources.length > 0)
                     sources = parsed.sources;
-                  }
                 } catch {}
               }
             }
@@ -1498,7 +1759,6 @@
           fullText = "I encountered an issue. Please try again.";
         }
 
-        // Finalize
         let finalHTML = renderMarkdown(fullText);
         if (sources.length > 0) {
           finalHTML += `<div class="sources-block"><div class="sources-label">Sources</div>${sources.map((s) => `<a class="source-link" href="${s.url}" target="_blank">↗ ${s.title}</a>`).join("")}</div>`;
