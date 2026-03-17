@@ -13,6 +13,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
@@ -1033,6 +1034,19 @@
         overflow: hidden;
         border: 1px solid var(--border);
       }
+      /* ── CHARTS ── */
+      .chart-wrap {
+        background: #0d0d0b;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 20px;
+        margin: 14px 0;
+        position: relative;
+      }
+
+      .chart-canvas {
+        max-height: 320px;
+      }
       .bot-content-text code:not(pre code) {
         background: var(--code-bg);
         padding: 2px 6px;
@@ -1900,13 +1914,15 @@
         X: "Xplore — Fully custom. Describe exactly the assistant you need.",
       };
 
+      const CHART_INSTRUCTION = `When data would be better shown visually, output a Chart.js config in a \`\`\`chart code block. Example: \`\`\`chart\n{"type":"bar","data":{"labels":["A","B"],"datasets":[{"label":"Value","data":[1,2]}]}}\n\`\`\` Use bar, line, or doughnut types. Only use charts when genuinely useful for the data.`;
+
       const SYSTEM_PROMPTS = {
-        V: "You are Veritax in Versatile mode — an intelligent, eloquent general assistant. Be knowledgeable, warm, and precise. Never ramble. Be refined and genuinely helpful.",
-        E: "You are Veritax in Engineer mode — an expert coding assistant. Write clean, efficient, well-commented code. Explain your reasoning. Debug methodically. Support any programming language. Use code blocks with language tags.",
-        R: "You are Veritax in Reason mode — a deep analytical thinker. Break down complex problems with logic and structure. Present arguments clearly. Identify assumptions and fallacies. Think step by step.",
-        I: "You are Veritax in Inspire mode — a creative companion. Generate ideas, help with creative writing, brainstorm freely, and think imaginatively. Be vivid, original, and encouraging.",
-        T: "You are Veritax in Tutor mode — a patient, brilliant study companion. Explain concepts clearly with analogies. Quiz the user. Adapt to their level. Make learning feel like discovery.",
-        A: "You are Veritax in Axiom mode. You have access to real-time web search results. Synthesize them into a clear, well-written answer. DO NOT just list sources. Write an actual response using the information. Structure with headers and bullet points where appropriate. Cite sources inline by name.",
+        V: `You are Veritax in Versatile mode — an intelligent, eloquent general assistant. Be knowledgeable, warm, and precise. Never ramble. ${CHART_INSTRUCTION}`,
+        E: `You are Veritax in Engineer mode — an expert coding assistant. Write clean, efficient, well-commented code. Explain your reasoning. Debug methodically. Support any programming language. Use code blocks with language tags. ${CHART_INSTRUCTION}`,
+        R: `You are Veritax in Reason mode — a deep analytical thinker. Break down complex problems with logic and structure. Present arguments clearly. Identify assumptions and fallacies. Think step by step. ${CHART_INSTRUCTION}`,
+        I: `You are Veritax in Inspire mode — a creative companion. Generate ideas, help with creative writing, brainstorm freely, and think imaginatively. Be vivid, original, and encouraging. ${CHART_INSTRUCTION}`,
+        T: `You are Veritax in Tutor mode — a patient, brilliant study companion. Explain concepts clearly with analogies. Quiz the user. Adapt to their level. Make learning feel like discovery. ${CHART_INSTRUCTION}`,
+        A: `You are Veritax in Axiom mode. You have access to real-time web search results. Synthesize them into a clear, well-written answer. DO NOT just list sources. Write an actual response using the information. Structure with headers and bullet points where appropriate. Cite sources inline by name. ${CHART_INSTRUCTION}`,
         X: null,
       };
 
@@ -2010,15 +2026,121 @@
         const rendered = marked.parse(text);
         const wrapper = document.createElement("div");
         wrapper.innerHTML = rendered;
+
+        // Render chart blocks
         wrapper.querySelectorAll("pre code").forEach((block) => {
-          const lang = block.className.replace("language-", "") || "code";
+          const lang = block.className.replace("language-", "").trim();
+
+          if (lang === "chart") {
+            try {
+              const config = JSON.parse(block.textContent.trim());
+              const pre = block.parentElement;
+              const chartWrap = document.createElement("div");
+              chartWrap.classList.add("chart-wrap");
+              const canvas = document.createElement("canvas");
+              canvas.classList.add("chart-canvas");
+              chartWrap.appendChild(canvas);
+              pre.replaceWith(chartWrap);
+
+              // Style chart based on type
+              const isDoughnut =
+                config.type === "doughnut" || config.type === "pie";
+              const gold = "#c9a84c";
+              const goldLight = "#e8c97a";
+              const goldFade = "rgba(201,168,76,0.15)";
+
+              const COLORS = [
+                "#c9a84c",
+                "#e8c97a",
+                "#a07830",
+                "#f0d898",
+                "#7a5820",
+                "#d4b060",
+                "#8a6828",
+                "#b89040",
+              ];
+
+              // Apply default styling to datasets
+              if (config.data && config.data.datasets) {
+                config.data.datasets.forEach((ds, i) => {
+                  if (isDoughnut) {
+                    ds.backgroundColor = ds.backgroundColor || COLORS;
+                    ds.borderColor = ds.borderColor || "#0a0a08";
+                    ds.borderWidth = ds.borderWidth ?? 2;
+                  } else {
+                    ds.backgroundColor = ds.backgroundColor || goldFade;
+                    ds.borderColor = ds.borderColor || gold;
+                    ds.borderWidth = ds.borderWidth ?? 2;
+                    ds.pointBackgroundColor = gold;
+                    ds.pointRadius = 4;
+                    ds.tension = ds.tension ?? 0.4;
+                  }
+                });
+              }
+
+              // Default options
+              config.options = config.options || {};
+              config.options.responsive = true;
+              config.options.maintainAspectRatio = true;
+              config.options.plugins = config.options.plugins || {};
+              config.options.plugins.legend = config.options.plugins.legend || {
+                labels: {
+                  color: "#7a7060",
+                  font: { family: "Raleway", size: 11 },
+                  padding: 16,
+                },
+              };
+              config.options.plugins.tooltip = {
+                backgroundColor: "#161614",
+                borderColor: "#2a2820",
+                borderWidth: 1,
+                titleColor: "#c9a84c",
+                bodyColor: "#e8dcc8",
+                padding: 10,
+              };
+
+              if (!isDoughnut) {
+                config.options.scales = config.options.scales || {};
+                config.options.scales.x = config.options.scales.x || {
+                  ticks: {
+                    color: "#7a7060",
+                    font: { family: "Raleway", size: 10 },
+                  },
+                  grid: { color: "rgba(42,40,32,0.6)" },
+                  border: { color: "#2a2820" },
+                };
+                config.options.scales.y = config.options.scales.y || {
+                  ticks: {
+                    color: "#7a7060",
+                    font: { family: "Raleway", size: 10 },
+                  },
+                  grid: { color: "rgba(42,40,32,0.6)" },
+                  border: { color: "#2a2820" },
+                };
+              }
+
+              setTimeout(() => new Chart(canvas, config), 50);
+            } catch (e) {
+              // If chart fails, fall through to normal code rendering
+              const pre = block.parentElement;
+              const header = document.createElement("div");
+              header.className = "code-header";
+              header.innerHTML = `<span class="code-lang">chart</span><button class="copy-btn" onclick="copyCode(this)">Copy</button>`;
+              pre.insertBefore(header, block);
+            }
+            return;
+          }
+
+          // Normal code block
+          const langLabel = lang || "code";
           const pre = block.parentElement;
           const header = document.createElement("div");
           header.className = "code-header";
-          header.innerHTML = `<span class="code-lang">${lang}</span><button class="copy-btn" onclick="copyCode(this)">Copy</button>`;
+          header.innerHTML = `<span class="code-lang">${langLabel}</span><button class="copy-btn" onclick="copyCode(this)">Copy</button>`;
           pre.insertBefore(header, block);
           hljs.highlightElement(block);
         });
+
         return wrapper.innerHTML;
       }
 
