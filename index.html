@@ -445,7 +445,6 @@
         justify-content: space-between;
         margin-bottom: 12px;
       }
-
       .header-left-group {
         display: flex;
         align-items: center;
@@ -510,7 +509,6 @@
         color: var(--gold);
       }
 
-      /* length toggle */
       .length-toggle {
         display: flex;
         align-items: center;
@@ -536,6 +534,9 @@
 
       .length-btn.active {
         background: var(--glow);
+        color: var(--gold);
+      }
+      .length-btn:hover:not(.active) {
         color: var(--gold);
       }
 
@@ -839,7 +840,7 @@
         }
       }
 
-      /* USER MESSAGE — compact bubble */
+      /* USER MESSAGE */
       .message.user {
         align-self: flex-end;
         background: var(--user-bubble);
@@ -856,7 +857,6 @@
         position: relative;
       }
 
-      /* USER message actions */
       .message.user .msg-actions {
         position: absolute;
         bottom: -22px;
@@ -871,7 +871,7 @@
         opacity: 1;
       }
 
-      /* BOT MESSAGE — full width, document style */
+      /* BOT MESSAGE */
       .message.bot {
         width: 100%;
         padding: 0 0 32px 0;
@@ -897,20 +897,17 @@
         }
       }
 
-      /* gold marker */
       .bot-marker {
         display: flex;
         align-items: center;
         gap: 10px;
         margin-bottom: 14px;
       }
-
       .bot-marker-diamond {
         color: var(--gold);
         font-size: 0.5rem;
         flex-shrink: 0;
       }
-
       .bot-marker-mode {
         font-size: 0.58rem;
         letter-spacing: 0.2em;
@@ -919,75 +916,74 @@
         font-family: "Raleway", sans-serif;
       }
 
-      /* bot content */
-      .bot-content {
+      /* BOT CONTENT TEXT — the key fix */
+      .bot-content-text {
         font-family: "Cormorant Garamond", serif;
         font-size: 1.05rem;
         font-weight: 300;
-        color: var(--text);
+        color: var(--text) !important;
         line-height: 1.8;
       }
 
-      .bot-content p {
+      .bot-content-text p {
         margin-bottom: 12px;
+        color: var(--text);
       }
-      .bot-content p:last-child {
+      .bot-content-text p:last-child {
         margin-bottom: 0;
       }
-      .bot-content h1,
-      .bot-content h2,
-      .bot-content h3 {
+      .bot-content-text h1,
+      .bot-content-text h2,
+      .bot-content-text h3 {
         font-family: "Cormorant Garamond", serif;
-        color: var(--gold-light);
+        color: var(--gold-light) !important;
         font-weight: 400;
         margin: 20px 0 10px;
         letter-spacing: 0.04em;
       }
-      .bot-content h1 {
+      .bot-content-text h1 {
         font-size: 1.6rem;
       }
-      .bot-content h2 {
+      .bot-content-text h2 {
         font-size: 1.3rem;
       }
-      .bot-content h3 {
+      .bot-content-text h3 {
         font-size: 1.1rem;
       }
-      .bot-content strong {
-        color: var(--gold-light);
+      .bot-content-text strong {
+        color: var(--gold-light) !important;
         font-weight: 600;
       }
-      .bot-content em {
+      .bot-content-text em {
         font-style: italic;
-        color: var(--text-muted);
+        color: var(--text-muted) !important;
       }
-      .bot-content ul,
-      .bot-content ol {
+      .bot-content-text ul,
+      .bot-content-text ol {
         padding-left: 22px;
         margin-bottom: 12px;
       }
-      .bot-content li {
+      .bot-content-text li {
         margin-bottom: 6px;
+        color: var(--text);
       }
-      .bot-content blockquote {
+      .bot-content-text blockquote {
         border-left: 2px solid var(--gold);
         padding-left: 16px;
         margin: 12px 0;
-        color: var(--text-muted);
+        color: var(--text-muted) !important;
         font-style: italic;
       }
-
-      /* tables */
-      .bot-content table {
+      .bot-content-text table {
         width: 100%;
         border-collapse: collapse;
         margin: 16px 0;
         font-size: 0.9rem;
         font-family: "Raleway", sans-serif;
       }
-
-      .bot-content th {
+      .bot-content-text th {
         background: var(--glow);
-        color: var(--gold);
+        color: var(--gold) !important;
         font-weight: 500;
         padding: 10px 14px;
         text-align: left;
@@ -996,26 +992,32 @@
         letter-spacing: 0.1em;
         text-transform: uppercase;
       }
-
-      .bot-content td {
+      .bot-content-text td {
         padding: 9px 14px;
         border: 1px solid var(--border);
-        color: var(--text);
+        color: var(--text) !important;
         vertical-align: top;
       }
-
-      .bot-content tr:nth-child(even) td {
+      .bot-content-text tr:nth-child(even) td {
         background: rgba(201, 168, 76, 0.03);
       }
-
-      /* code */
-      .bot-content pre {
+      .bot-content-text pre {
         margin: 14px 0;
         border-radius: 6px;
         overflow: hidden;
         border: 1px solid var(--border);
       }
+      .bot-content-text code:not(pre code) {
+        background: var(--code-bg);
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 0.85rem;
+        color: var(--gold) !important;
+        border: 1px solid var(--border);
+        font-family: "JetBrains Mono", monospace;
+      }
 
+      /* CODE BLOCKS */
       .code-header {
         background: #1a1a1a;
         padding: 6px 12px;
@@ -1050,24 +1052,14 @@
         color: var(--gold);
       }
 
-      .bot-content pre code {
+      .bot-content-text pre code {
         font-family: "JetBrains Mono", monospace !important;
         font-size: 0.82rem;
         padding: 14px !important;
         display: block;
       }
 
-      .bot-content code:not(pre code) {
-        background: var(--code-bg);
-        padding: 2px 6px;
-        border-radius: 3px;
-        font-size: 0.85rem;
-        color: var(--gold);
-        border: 1px solid var(--border);
-        font-family: "JetBrains Mono", monospace;
-      }
-
-      /* sources */
+      /* SOURCES */
       .sources-block {
         margin-top: 14px;
         padding-top: 14px;
@@ -1098,7 +1090,7 @@
         opacity: 1;
       }
 
-      /* bot actions row */
+      /* BOT ACTIONS */
       .bot-actions {
         display: flex;
         align-items: center;
@@ -1126,7 +1118,7 @@
         color: var(--gold);
       }
 
-      /* follow-up suggestions */
+      /* FOLLOW-UPS */
       .followup-block {
         margin-top: 16px;
         display: flex;
@@ -1154,7 +1146,7 @@
         background: var(--glow);
       }
 
-      /* streaming cursor */
+      /* STREAMING CURSOR */
       .streaming-cursor {
         display: inline-block;
         width: 2px;
@@ -1353,11 +1345,12 @@
               </div>
               <div class="header-controls">
                 <div class="status-dot"></div>
-                <div class="length-toggle">
+                <div class="length-toggle" title="Response length">
                   <button
                     class="length-btn"
                     data-len="short"
                     onclick="setLength(this)"
+                    title="Short"
                   >
                     S
                   </button>
@@ -1365,6 +1358,7 @@
                     class="length-btn active"
                     data-len="normal"
                     onclick="setLength(this)"
+                    title="Normal"
                   >
                     M
                   </button>
@@ -1372,6 +1366,7 @@
                     class="length-btn"
                     data-len="detailed"
                     onclick="setLength(this)"
+                    title="Detailed"
                   >
                     L
                   </button>
@@ -1573,6 +1568,12 @@
           .forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
         responseLength = btn.dataset.len;
+        const labels = {
+          short: "Short responses",
+          normal: "Normal responses",
+          detailed: "Detailed responses",
+        };
+        showToast(labels[responseLength]);
       }
 
       const LENGTH_INSTRUCTIONS = {
@@ -1680,7 +1681,7 @@
       }
 
       async function autoTitleChat() {
-        if (currentMessages.length < 2) return;
+        if (currentMessages.length < 2) return null;
         const first = currentMessages
           .slice(0, 4)
           .map((m) => `${m.role}: ${m.text}`)
@@ -1694,9 +1695,9 @@
               system_prompt:
                 "You generate short conversation titles. Return only the title, no quotes, no punctuation at end.",
               methodology: "",
+              context: [],
             }),
           });
-          // Read full stream
           const reader = res.body.getReader();
           const decoder = new TextDecoder();
           let title = "";
@@ -1944,13 +1945,27 @@
         const msgs = document.getElementById("messages");
         const div = document.createElement("div");
         div.classList.add("message", "user");
-        if (!animate)
-          ((div.style.animation = "none"), (div.style.opacity = "1"));
-        div.innerHTML = `
-        ${text}
-        <div class="msg-actions">
-          <button class="action-btn" onclick="copyText('${text.replace(/'/g, "\\'")}')">Copy</button>
-        </div>`;
+        if (!animate) {
+          div.style.animation = "none";
+          div.style.opacity = "1";
+        }
+
+        const textNode = document.createTextNode(text);
+        div.appendChild(textNode);
+
+        const actions = document.createElement("div");
+        actions.classList.add("msg-actions");
+        const copyBtn = document.createElement("button");
+        copyBtn.classList.add("action-btn");
+        copyBtn.textContent = "Copy";
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(text).then(() => {
+            copyBtn.textContent = "Copied!";
+            setTimeout(() => (copyBtn.textContent = "Copy"), 2000);
+          });
+        };
+        actions.appendChild(copyBtn);
+        div.appendChild(actions);
         msgs.appendChild(div);
         msgs.scrollTop = msgs.scrollHeight;
       }
@@ -1959,11 +1974,10 @@
         const msgs = document.getElementById("messages");
         const div = document.createElement("div");
         div.classList.add("message", "bot");
-        if (!animate)
-          ((div.style.animation = "none"), (div.style.opacity = "1"));
-
-        const contentDiv = document.createElement("div");
-        contentDiv.classList.add("bot-content");
+        if (!animate) {
+          div.style.animation = "none";
+          div.style.opacity = "1";
+        }
 
         let html = `<div class="bot-marker"><span class="bot-marker-diamond">◆</span><span class="bot-marker-mode">${MODE_NAMES[currentMode]}</span></div>`;
         html += `<div class="bot-content-text">${renderMarkdown(text)}</div>`;
@@ -1983,10 +1997,6 @@
         return div;
       }
 
-      function copyText(text) {
-        navigator.clipboard.writeText(text).then(() => showToast("Copied!"));
-      }
-
       function copyBotMessage(btn) {
         const text = btn
           .closest(".message.bot")
@@ -2000,19 +2010,15 @@
       function retryMessage(btn) {
         if (isStreaming) return;
         if (currentMessages.length < 2) return;
-        // Remove last bot message from history and re-send last user message
         const lastUser = [...currentMessages]
           .reverse()
           .find((m) => m.role === "user");
         if (!lastUser) return;
-        // Remove last bot entry
         const lastBotIndex = currentMessages
           .map((m) => m.role)
           .lastIndexOf("bot");
         if (lastBotIndex > -1) currentMessages.splice(lastBotIndex, 1);
-        // Remove the bot message div
         btn.closest(".message.bot").remove();
-        // Re-send
         streamResponse(lastUser.text, currentSystemPrompt);
       }
 
@@ -2023,14 +2029,18 @@
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              message: `Based on this response, suggest 3 short follow-up questions the user might ask. Return ONLY a JSON array of 3 strings, nothing else. Example: ["Question 1?", "Question 2?", "Question 3?"]`,
-              system_prompt: `The previous response was: ${lastResponse.substring(0, 500)}`,
+              message: `Suggest 3 short follow-up questions for this response. Return ONLY a JSON array like: ["Q1?","Q2?","Q3?"] — no other text, no markdown.\n\nResponse: ${lastResponse.substring(0, 400)}`,
+              system_prompt:
+                "You suggest follow-up questions. Return ONLY a valid JSON array of 3 short question strings. No preamble, no markdown, no explanation.",
               methodology: "",
+              context: [],
             }),
           });
+
           const reader = res.body.getReader();
           const decoder = new TextDecoder();
           let raw = "";
+
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
@@ -2046,8 +2056,11 @@
               }
             }
           }
-          const clean = raw.replace(/```json|```/g, "").trim();
-          const questions = JSON.parse(clean);
+
+          const match = raw.match(/\[[\s\S]*?\]/);
+          if (!match) return;
+          const questions = JSON.parse(match[0]);
+
           if (Array.isArray(questions) && questions.length > 0) {
             const block = document.createElement("div");
             block.classList.add("followup-block");
@@ -2096,7 +2109,6 @@
         isStreaming = true;
         const msgs = document.getElementById("messages");
 
-        // Build bot div with streaming cursor
         const botDiv = document.createElement("div");
         botDiv.classList.add("message", "bot");
         botDiv.innerHTML = `<div class="bot-marker"><span class="bot-marker-diamond">◆</span><span class="bot-marker-mode">${MODE_NAMES[currentMode]}</span></div><div class="bot-content-text"><span class="streaming-cursor"></span></div>`;
@@ -2107,7 +2119,6 @@
         let fullText = "";
         let sources = [];
 
-        // Build conversation context (last 10 messages)
         const contextMessages = currentMessages.slice(-10).map((m) => ({
           role: m.role === "user" ? "user" : "assistant",
           content: m.text,
@@ -2168,7 +2179,6 @@
           fullText = "I encountered an issue. Please try again.";
         }
 
-        // Finalize
         let finalHTML = renderMarkdown(fullText);
         let sourcesHTML = "";
         if (sources.length > 0) {
@@ -2187,8 +2197,6 @@
         currentMessages.push({ role: "bot", text: fullText });
         saveCurrentChat();
         isStreaming = false;
-
-        // Generate follow-ups
         generateFollowUps(botDiv, fullText);
       }
     </script>
