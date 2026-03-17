@@ -277,6 +277,25 @@ Return ONLY one letter or 'none'."""
     result = completion.choices[0].message.content.strip()
     valid = ['E', 'R', 'I', 'T', 'A']
     return jsonify({"mode": result if result in valid else "none"})
+@app.route("/onboard", methods=["POST"])
+def onboard():
+    data = request.json
+    user_id = data.get("user_id")
+    name = data.get("name", "")
+    preferences = data.get("preferences", {})
+    methodology = data.get("methodology", "")
+
+    http_requests.patch(
+        f"{SUPABASE_URL}/rest/v1/users?id=eq.{user_id}",
+        headers={**supabase_headers(), "Prefer": "return=representation"},
+        json={"name": name, "preferences": preferences, "onboarded": True}
+    )
+
+    return jsonify({"success": True})
+
+@app.route("/onboarding")
+def onboarding():
+    return send_from_directory(".", "onboarding.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

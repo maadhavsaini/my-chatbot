@@ -1160,9 +1160,10 @@
           const data = await res.json();
 
           if (data.success) {
-            success.textContent = "Account created! Signing you in...";
+            success.textContent =
+              "Account created! Setting up your experience...";
             sessionStorage.setItem("veritax_user", JSON.stringify(data.user));
-            setTimeout(() => (window.location.href = "/app"), 1000);
+            setTimeout(() => (window.location.href = "/onboarding"), 1000);
           } else {
             error.textContent = data.error || "Failed to create account.";
           }

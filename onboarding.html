@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veritax — Welcome</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚜️</text></svg>"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0a08;
+        --bg-secondary: #111110;
+        --surface: #161614;
+        --border: #2a2820;
+        --gold: #c9a84c;
+        --gold-light: #e8c97a;
+        --text: #e8dcc8;
+        --text-muted: #7a7060;
+        --shadow: rgba(0, 0, 0, 0.6);
+        --glow: rgba(201, 168, 76, 0.15);
+        --error: #c94c4c;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        font-family: "Raleway", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image:
+          radial-gradient(ellipse at 20% 50%, var(--glow) 0%, transparent 60%),
+          radial-gradient(ellipse at 80% 20%, var(--glow) 0%, transparent 50%);
+      }
+
+      /* ── STEPS ── */
+      .step {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        max-width: 600px;
+        padding: 40px 24px;
+        opacity: 0;
+      }
+
+      .step.active {
+        display: flex;
+        animation: stepIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .step.exit {
+        animation: stepOut 0.3s ease forwards;
+      }
+
+      @keyframes stepIn {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes stepOut {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+      }
+
+      /* ── STEP 1 — WELCOME ── */
+      .welcome-brand {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(3rem, 10vw, 6rem);
+        font-weight: 300;
+        letter-spacing: 0.1em;
+        color: var(--gold);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      .welcome-tagline {
+        font-size: 0.65rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 48px;
+      }
+
+      .welcome-divider {
+        width: 100px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        margin: 0 auto 48px;
+      }
+
+      .welcome-text {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: var(--text-muted);
+        font-style: italic;
+        max-width: 440px;
+        margin-bottom: 52px;
+      }
+
+      /* ── STEP HEADER ── */
+      .step-number {
+        font-size: 0.6rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 16px;
+      }
+
+      .step-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(1.8rem, 5vw, 2.8rem);
+        font-weight: 300;
+        color: var(--text);
+        margin-bottom: 12px;
+        letter-spacing: 0.04em;
+      }
+
+      .step-subtitle {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1rem;
+        color: var(--text-muted);
+        font-style: italic;
+        margin-bottom: 44px;
+        line-height: 1.6;
+      }
+
+      /* ── INPUT ── */
+      .onboard-input {
+        width: 100%;
+        max-width: 400px;
+        padding: 16px 20px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.3rem;
+        font-weight: 300;
+        outline: none;
+        border-radius: 2px;
+        text-align: center;
+        letter-spacing: 0.04em;
+        transition:
+          border-color 0.3s ease,
+          box-shadow 0.3s ease;
+        margin-bottom: 36px;
+      }
+
+      .onboard-input:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 3px var(--glow);
+      }
+
+      .onboard-input::placeholder {
+        color: var(--text-muted);
+        font-style: italic;
+      }
+
+      /* ── TOGGLE CARDS ── */
+      .toggle-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 40px;
+        max-width: 520px;
+      }
+
+      .toggle-card {
+        padding: 14px 22px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 2px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        user-select: none;
+      }
+
+      .toggle-card:hover {
+        border-color: var(--gold);
+        background: var(--glow);
+      }
+
+      .toggle-card.selected {
+        border-color: var(--gold);
+        background: var(--glow);
+        box-shadow: 0 0 12px var(--glow);
+      }
+
+      .toggle-card-icon {
+        font-size: 1.2rem;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .toggle-card-label {
+        font-size: 0.68rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        transition: color 0.2s;
+      }
+
+      .toggle-card.selected .toggle-card-label {
+        color: var(--gold);
+      }
+
+      /* ── PREFERENCE ROWS ── */
+      .pref-section {
+        width: 100%;
+        max-width: 480px;
+        margin-bottom: 32px;
+        text-align: left;
+      }
+
+      .pref-label {
+        font-size: 0.62rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      .pref-options {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .pref-option {
+        padding: 9px 18px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        transition: all 0.2s ease;
+        user-select: none;
+      }
+
+      .pref-option:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+      .pref-option.selected {
+        border-color: var(--gold);
+        color: var(--gold);
+        background: var(--glow);
+      }
+
+      /* ── BUTTONS ── */
+      .btn-continue {
+        padding: 16px 48px;
+        background: var(--gold);
+        color: var(--bg);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        border: none;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-continue:hover {
+        background: var(--gold-light);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(201, 168, 76, 0.3);
+      }
+
+      .btn-continue:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .btn-skip {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        cursor: pointer;
+        margin-top: 16px;
+        padding: 8px;
+        transition: color 0.2s;
+      }
+
+      .btn-skip:hover {
+        color: var(--gold);
+      }
+
+      /* ── PROGRESS ── */
+      .progress-dots {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+      }
+
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--border);
+        transition: all 0.3s ease;
+      }
+
+      .dot.active {
+        background: var(--gold);
+        transform: scale(1.3);
+      }
+      .dot.done {
+        background: var(--text-muted);
+      }
+
+      /* ── ERROR ── */
+      .onboard-error {
+        font-size: 0.72rem;
+        color: var(--error);
+        margin-bottom: 16px;
+        min-height: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- STEP 1: WELCOME -->
+    <div class="step active" id="step1">
+      <div class="welcome-brand">Veritax</div>
+      <div class="welcome-tagline">Intelligent Discourse</div>
+      <div class="welcome-divider"></div>
+      <p class="welcome-text">
+        Before we begin, let us take a moment to understand you. Veritax works
+        best when it knows who it's speaking with.
+      </p>
+      <button class="btn-continue" onclick="goToStep(2)">Begin →</button>
+    </div>
+
+    <!-- STEP 2: NAME -->
+    <div class="step" id="step2">
+      <div class="step-number">Step 1 of 3</div>
+      <h2 class="step-title">What shall we call you?</h2>
+      <p class="step-subtitle">This is how Veritax will address you.</p>
+      <input
+        class="onboard-input"
+        type="text"
+        id="nameInput"
+        placeholder="Your name..."
+        maxlength="40"
+      />
+      <div class="onboard-error" id="nameError"></div>
+      <button class="btn-continue" onclick="handleName()">Continue →</button>
+      <button class="btn-skip" onclick="goToStep(3)">Skip for now</button>
+    </div>
+
+    <!-- STEP 3: USE CASE -->
+    <div class="step" id="step3">
+      <div class="step-number">Step 2 of 3</div>
+      <h2 class="step-title">What do you use AI for?</h2>
+      <p class="step-subtitle">
+        Select all that apply — Veritax will adapt accordingly.
+      </p>
+      <div class="toggle-grid">
+        <div
+          class="toggle-card"
+          data-value="studying"
+          onclick="toggleCard(this)"
+        >
+          <span class="toggle-card-icon">📚</span>
+          <span class="toggle-card-label">Studying</span>
+        </div>
+        <div class="toggle-card" data-value="work" onclick="toggleCard(this)">
+          <span class="toggle-card-icon">💼</span>
+          <span class="toggle-card-label">Work</span>
+        </div>
+        <div class="toggle-card" data-value="coding" onclick="toggleCard(this)">
+          <span class="toggle-card-icon">💻</span>
+          <span class="toggle-card-label">Coding</span>
+        </div>
+        <div
+          class="toggle-card"
+          data-value="creative"
+          onclick="toggleCard(this)"
+        >
+          <span class="toggle-card-icon">✨</span>
+          <span class="toggle-card-label">Creative</span>
+        </div>
+        <div
+          class="toggle-card"
+          data-value="research"
+          onclick="toggleCard(this)"
+        >
+          <span class="toggle-card-icon">🔍</span>
+          <span class="toggle-card-label">Research</span>
+        </div>
+        <div
+          class="toggle-card"
+          data-value="personal"
+          onclick="toggleCard(this)"
+        >
+          <span class="toggle-card-icon">🌱</span>
+          <span class="toggle-card-label">Personal Growth</span>
+        </div>
+      </div>
+      <button class="btn-continue" onclick="goToStep(4)">Continue →</button>
+      <button class="btn-skip" onclick="goToStep(4)">Skip for now</button>
+    </div>
+
+    <!-- STEP 4: PREFERENCES -->
+    <div class="step" id="step4">
+      <div class="step-number">Step 3 of 3</div>
+      <h2 class="step-title">How do you like to work?</h2>
+      <p class="step-subtitle">
+        Veritax will remember these and adapt every response.
+      </p>
+
+      <div class="pref-section">
+        <span class="pref-label">Response length preference</span>
+        <div class="pref-options">
+          <div
+            class="pref-option selected"
+            data-group="length"
+            data-value="concise"
+            onclick="selectPref(this)"
+          >
+            Concise
+          </div>
+          <div
+            class="pref-option"
+            data-group="length"
+            data-value="balanced"
+            onclick="selectPref(this)"
+          >
+            Balanced
+          </div>
+          <div
+            class="pref-option"
+            data-group="length"
+            data-value="detailed"
+            onclick="selectPref(this)"
+          >
+            Detailed
+          </div>
+        </div>
+      </div>
+
+      <div class="pref-section">
+        <span class="pref-label">Topics that interest you most</span>
+        <div class="pref-options">
+          <div
+            class="pref-option"
+            data-group="topics"
+            data-value="science"
+            onclick="togglePref(this)"
+          >
+            Science
+          </div>
+          <div
+            class="pref-option"
+            data-group="topics"
+            data-value="business"
+            onclick="togglePref(this)"
+          >
+            Business
+          </div>
+          <div
+            class="pref-option"
+            data-group="topics"
+            data-value="technology"
+            onclick="togglePref(this)"
+          >
+            Technology
+          </div>
+          <div
+            class="pref-option"
+            data-group="topics"
+            data-value="arts"
+            onclick="togglePref(this)"
+          >
+            Arts
+          </div>
+          <div
+            class="pref-option"
+            data-group="topics"
+            data-value="health"
+            onclick="togglePref(this)"
+          >
+            Health
+          </div>
+          <div
+            class="pref-option"
+            data-group="topics"
+            data-value="history"
+            onclick="togglePref(this)"
+          >
+            History
+          </div>
+          <div
+            class="pref-option"
+            data-group="topics"
+            data-value="philosophy"
+            onclick="togglePref(this)"
+          >
+            Philosophy
+          </div>
+          <div
+            class="pref-option"
+            data-group="topics"
+            data-value="sports"
+            onclick="togglePref(this)"
+          >
+            Sports
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-continue" onclick="handleFinish()">
+        Enter Veritax →
+      </button>
+    </div>
+
+    <!-- PROGRESS DOTS -->
+    <div class="progress-dots">
+      <div class="dot active" id="dot1"></div>
+      <div class="dot" id="dot2"></div>
+      <div class="dot" id="dot3"></div>
+      <div class="dot" id="dot4"></div>
+    </div>
+
+    <script>
+      // ── AUTH CHECK ──
+      const user = JSON.parse(sessionStorage.getItem("veritax_user") || "null");
+      if (!user) window.location.href = "/";
+
+      // ── STATE ──
+      let currentStep = 1;
+      let userName = "";
+      let useCases = [];
+      let lengthPref = "concise";
+      let topics = [];
+
+      // ── NAVIGATION ──
+      function goToStep(n) {
+        const current = document.getElementById(`step${currentStep}`);
+        const next = document.getElementById(`step${n}`);
+
+        current.classList.add("exit");
+        setTimeout(() => {
+          current.classList.remove("active", "exit");
+          next.classList.add("active");
+          currentStep = n;
+          updateDots();
+        }, 280);
+      }
+
+      function updateDots() {
+        for (let i = 1; i <= 4; i++) {
+          const dot = document.getElementById(`dot${i}`);
+          dot.classList.remove("active", "done");
+          if (i === currentStep) dot.classList.add("active");
+          else if (i < currentStep) dot.classList.add("done");
+        }
+      }
+
+      // ── STEP 2: NAME ──
+      function handleName() {
+        const val = document.getElementById("nameInput").value.trim();
+        const error = document.getElementById("nameError");
+        if (!val) {
+          error.textContent = "Please enter your name.";
+          return;
+        }
+        error.textContent = "";
+        userName = val;
+        goToStep(3);
+      }
+
+      document.getElementById("nameInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleName();
+      });
+
+      // ── STEP 3: USE CASES ──
+      function toggleCard(el) {
+        el.classList.toggle("selected");
+        const val = el.dataset.value;
+        if (el.classList.contains("selected")) {
+          useCases.push(val);
+        } else {
+          useCases = useCases.filter((v) => v !== val);
+        }
+      }
+
+      // ── STEP 4: PREFERENCES ──
+      function selectPref(el) {
+        // Single select per group
+        const group = el.dataset.group;
+        document
+          .querySelectorAll(`.pref-option[data-group="${group}"]`)
+          .forEach((o) => o.classList.remove("selected"));
+        el.classList.add("selected");
+        if (group === "length") lengthPref = el.dataset.value;
+      }
+
+      function togglePref(el) {
+        el.classList.toggle("selected");
+        const val = el.dataset.value;
+        if (el.classList.contains("selected")) {
+          topics.push(val);
+        } else {
+          topics = topics.filter((v) => v !== val);
+        }
+      }
+
+      // ── FINISH ──
+      async function handleFinish() {
+        const btn = document.querySelector("#step4 .btn-continue");
+        btn.textContent = "Setting up...";
+        btn.disabled = true;
+
+        // Build methodology from answers
+        const parts = [];
+        if (userName) parts.push(`My name is ${userName}.`);
+        if (useCases.length > 0)
+          parts.push(`I mainly use AI for: ${useCases.join(", ")}.`);
+        parts.push(`I prefer ${lengthPref} responses.`);
+        if (topics.length > 0)
+          parts.push(`My interests include: ${topics.join(", ")}.`);
+        const methodology = parts.join(" ");
+
+        try {
+          await fetch("/onboard", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              user_id: user.id,
+              name: userName,
+              preferences: { useCases, lengthPref, topics },
+              methodology,
+            }),
+          });
+        } catch {}
+
+        // Save methodology locally
+        localStorage.setItem("veritax_methodology", methodology);
+
+        // Update session with name
+        if (userName) {
+          const updated = { ...user, name: userName };
+          sessionStorage.setItem("veritax_user", JSON.stringify(updated));
+        }
+
+        window.location.href = "/app";
+      }
+    </script>
+  </body>
+</html>
