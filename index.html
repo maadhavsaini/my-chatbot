@@ -1552,6 +1552,136 @@
           url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"),
           radial-gradient(ellipse at 20% 50%, var(--glow) 0%, transparent 60%);
       }
+      /* ── MOBILE ── */
+      @media (max-width: 768px) {
+        /* Sidebar overlays instead of pushing */
+        .sidebar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100%;
+          z-index: 400;
+          width: 0 !important;
+          min-width: 0 !important;
+          transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: none;
+        }
+
+        .sidebar.open {
+          width: 80vw !important;
+          min-width: 80vw !important;
+          box-shadow: 4px 0 32px var(--shadow);
+        }
+
+        /* Sidebar overlay backdrop */
+        .sidebar-backdrop {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 399;
+          backdrop-filter: blur(2px);
+        }
+
+        .sidebar-backdrop.open {
+          display: block;
+        }
+
+        /* Close button inside sidebar */
+        .sidebar-close {
+          display: flex !important;
+        }
+
+        /* Header */
+        .chat-header {
+          padding: 10px 14px 10px;
+        }
+        .chat-header::after {
+          left: 14px;
+          right: 14px;
+        }
+        .brand-name {
+          font-size: 1.1rem;
+        }
+
+        /* Hide less important header controls on mobile */
+        .length-toggle {
+          display: none;
+        }
+
+        /* Smaller icon buttons */
+        .icon-btn {
+          width: 30px;
+          height: 30px;
+          font-size: 0.7rem;
+        }
+
+        /* Mode row */
+        .mode-row {
+          gap: 1px;
+        }
+        .mode-letter {
+          font-size: 0.85rem;
+          padding: 3px 5px;
+        }
+        .mode-label {
+          display: none;
+        }
+
+        /* Messages */
+        .chat-messages {
+          padding: 16px 16px 40px 16px;
+        }
+
+        /* Bot text smaller */
+        .bot-content-text {
+          font-size: 0.95rem !important;
+          line-height: 1.7;
+        }
+
+        /* User message full width */
+        .message.user {
+          max-width: 85%;
+          font-size: 0.82rem;
+        }
+
+        /* Input */
+        .chat-input {
+          padding: 10px 14px 14px;
+        }
+        .chat-input::before {
+          left: 14px;
+          right: 14px;
+        }
+
+        /* Model pill label hidden on very small screens */
+        #modelPillLabel {
+          display: none;
+        }
+        .model-pill {
+          padding: 4px 8px;
+        }
+
+        /* Model menu opens upward with full width */
+        .model-menu {
+          right: auto;
+          left: 0;
+          min-width: 200px;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .header-controls {
+          gap: 4px;
+        }
+        .icon-btn {
+          width: 26px;
+          height: 26px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1562,7 +1692,39 @@
         <div class="sidebar" id="sidebar">
           <div class="sidebar-inner">
             <div class="sidebar-header">
-              <div class="sidebar-title">Conversations</div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  margin-bottom: 12px;
+                "
+              >
+                <div class="sidebar-title" style="margin-bottom: 0">
+                  Conversations
+                </div>
+                <button
+                  class="sidebar-close"
+                  onclick="toggleSidebar()"
+                  style="
+                    display: none;
+                    background: none;
+                    border: 1px solid var(--border);
+                    color: var(--text-muted);
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    font-size: 0.7rem;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+                    flex-shrink: 0;
+                  "
+                >
+                  ✕
+                </button>
+              </div>
               <button class="new-chat-btn" onclick="newChat()">
                 + New Conversation
               </button>
@@ -1873,6 +2035,11 @@
             <div class="footer-text">Veritax · Intelligent Discourse</div>
           </div>
         </div>
+        <div
+          class="sidebar-backdrop"
+          id="sidebarBackdrop"
+          onclick="toggleSidebar()"
+        ></div>
       </div>
 
       <!-- METHODOLOGY PANEL -->
@@ -2050,7 +2217,10 @@
 
       // ── SIDEBAR ──
       function toggleSidebar() {
-        document.getElementById("sidebar").classList.toggle("open");
+        const sidebar = document.getElementById("sidebar");
+        const backdrop = document.getElementById("sidebarBackdrop");
+        sidebar.classList.toggle("open");
+        backdrop.classList.toggle("open");
       }
 
       // ── LENGTH ──
