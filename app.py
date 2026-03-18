@@ -456,5 +456,54 @@ def upload():
 
     return Response(stream_with_context(generate()), mimetype="text/event-stream")
 
+@app.route("/history/sync", methods=["POST"])
+def sync_history():
+    data = request.json
+    user_id = data.get("user_id")
+    conversation = data.get("conversation")
+    if not user_id or not conversation:
+        return jsonify({"error": "Missing data"}), 400
+
+    # Upsert conversation
+    result = http_requests.post(
+        f"{SUPABASE_URL}/rest/v1/conversations",
+        headers={**supabase_headers(), "Prefer": "resolution=merge-duplicates,return=representation"},
+        json={
+            "id": conversation["id"],
+            "user_id": user_id,
+            "title": conversation["title"],
+            "mode": conversation["mode"],
+            "date": conversation["date"],
+            "messages": conversation["messages"],
+            "updated_at": "now()"
+        }
+    )
+    return jsonify({"success": True})
+
+@app.route("/history/load", methods=["GET"])
+def load_history():
+    user_id = request.args.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Missing user_id"}), 400
+
+    result = http_requests.get(
+        f"{SUPABASE_URL}/rest/v1/conversations?user_id=eq.{user_id}&order=updated_at.desc&limit=50",
+        headers=supabase_headers()
+    )
+    return jsonify({"conversations": result.json()})
+
+@app.route("/history/delete", methods=["DELETE"])
+def delete_history():
+    data = request.json
+    user_id = data.get("user_id")
+    conversation_id = data.get("conversation_id")
+    if not user_id or not conversation_id:
+        return jsonify({"error": "Missing data"}), 400
+
+    http_requests.delete(
+        f"{SUPABASE_URL}/rest/v1/conversations?id=eq.{conversation_id}&user_id=eq.{user_id}",
+        headers=supabase_headers()
+    )
+    return jsonify({"success": True})
 if __name__ == "__main__":
     app.run(debug=True)

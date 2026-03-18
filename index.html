@@ -2443,9 +2443,59 @@
       function saveHistory() {
         localStorage.setItem("veritax_history", JSON.stringify(chatHistory));
       }
+
+      async function syncConversationToCloud(chatData) {
+        const user = JSON.parse(
+          sessionStorage.getItem("veritax_user") || "null",
+        );
+        if (!user) return;
+        try {
+          await fetch("/history/sync", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: user.id, conversation: chatData }),
+          });
+        } catch {}
+      }
+
+      async function deleteConversationFromCloud(id) {
+        const user = JSON.parse(
+          sessionStorage.getItem("veritax_user") || "null",
+        );
+        if (!user) return;
+        try {
+          await fetch("/history/delete", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: user.id, conversation_id: id }),
+          });
+        } catch {}
+      }
+
+      async function loadHistoryFromCloud() {
+        const user = JSON.parse(
+          sessionStorage.getItem("veritax_user") || "null",
+        );
+        if (!user) return;
+        try {
+          const res = await fetch(`/history/load?user_id=${user.id}`);
+          const data = await res.json();
+          if (data.conversations && data.conversations.length > 0) {
+            // Merge cloud with localStorage — cloud wins for conflicts
+            const cloudIds = new Set(data.conversations.map((c) => c.id));
+            const localOnly = chatHistory.filter((c) => !cloudIds.has(c.id));
+            chatHistory = [...data.conversations, ...localOnly];
+            saveHistory();
+            renderSidebar();
+          }
+        } catch {}
+      }
+
       function loadHistory() {
         renderSidebar();
         newChat(false);
+        // Load from cloud in background
+        loadHistoryFromCloud();
       }
 
       function renderSidebar() {
@@ -2462,9 +2512,9 @@
           item.classList.add("chat-history-item");
           if (chat.id === currentChatId) item.classList.add("active");
           item.innerHTML = `
-                <div class="item-title">${chat.title}</div>
-                <div class="item-meta"><span>${chat.date}</span><span class="item-mode-badge">${chat.mode}</span></div>
-                <button class="item-delete" onclick="deleteChat('${chat.id}', event)">✕</button>`;
+      <div class="item-title">${chat.title}</div>
+      <div class="item-meta"><span>${chat.date}</span><span class="item-mode-badge">${chat.mode}</span></div>
+      <button class="item-delete" onclick="deleteChat('${chat.id}', event)">✕</button>`;
           item.addEventListener("click", () => loadChat(chat.id));
           list.appendChild(item);
         });
@@ -2545,6 +2595,8 @@
         else chatHistory.push(chatData);
         saveHistory();
         renderSidebar();
+        // Sync to cloud
+        syncConversationToCloud(chatData);
       }
 
       function loadChat(id) {
@@ -2567,6 +2619,7 @@
         e.stopPropagation();
         chatHistory = chatHistory.filter((c) => c.id !== id);
         saveHistory();
+        deleteConversationFromCloud(id);
         if (id === currentChatId) newChat();
         else renderSidebar();
       }
