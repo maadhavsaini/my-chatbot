@@ -1035,6 +1035,14 @@
       .chart-canvas {
         max-height: 320px;
       }
+      .widget-wrap {
+        margin: 14px 0;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        overflow: hidden;
+        background: var(--surface);
+        padding: 20px;
+      }
       .bot-content-text code:not(pre code) {
         background: var(--code-bg);
         padding: 2px 6px;
@@ -2806,6 +2814,16 @@
                 "#8a6828",
                 "#b89040",
               ];
+              if (lang === "widget") {
+                try {
+                  const pre = block.parentElement;
+                  const widgetWrap = document.createElement("div");
+                  widgetWrap.classList.add("widget-wrap");
+                  widgetWrap.innerHTML = block.textContent.trim();
+                  pre.replaceWith(widgetWrap);
+                } catch {}
+                return;
+              }
 
               // Apply default styling to datasets
               if (config.data && config.data.datasets) {
