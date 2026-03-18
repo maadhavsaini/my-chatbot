@@ -1042,6 +1042,7 @@
         padding: 20px;
         margin: 14px 0;
         position: relative;
+        min-height: 300px;
       }
 
       .chart-canvas {
@@ -2969,6 +2970,7 @@
       }
 
       function loadChat(id) {
+        hideWelcomeScreen(); // ← add this
         if (currentMessages.length > 0) saveCurrentChat();
         const chat = chatHistory.find((c) => c.id === id);
         if (!chat) return;
@@ -3291,7 +3293,7 @@
                   border: { color: "#2a2820" },
                 };
               }
-              setTimeout(() => new Chart(canvas, config), 50);
+              setTimeout(() => new Chart(canvas, config), 200);
             } catch {}
             return;
           }
