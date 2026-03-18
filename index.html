@@ -1690,6 +1690,160 @@
           height: 26px;
         }
       }
+      /* ── WELCOME SCREEN ── */
+      .welcome-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 24px;
+        z-index: 10;
+        background: var(--surface);
+        transition:
+          transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+          opacity 0.4s ease;
+        pointer-events: auto;
+      }
+
+      .welcome-screen.hidden {
+        transform: translateY(-60px);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .welcome-greeting {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2.4rem, 8vw, 5rem);
+        font-weight: 300;
+        font-style: italic;
+        color: var(--gold);
+        text-align: center;
+        letter-spacing: 0.02em;
+        line-height: 1.1;
+        margin-bottom: 16px;
+        opacity: 0;
+        animation: fadeUp 0.8s 0.2s ease forwards;
+      }
+
+      .welcome-name {
+        color: var(--text);
+      }
+
+      .welcome-submessage {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        font-weight: 300;
+        font-style: italic;
+        color: var(--text-muted);
+        text-align: center;
+        max-width: 480px;
+        line-height: 1.7;
+        margin-bottom: 52px;
+        min-height: 1.7em;
+        opacity: 0;
+        animation: fadeUp 0.8s 0.5s ease forwards;
+      }
+
+      .welcome-input-wrap {
+        width: 100%;
+        max-width: 600px;
+        opacity: 0;
+        animation: fadeUp 0.8s 0.7s ease forwards;
+      }
+
+      .welcome-input-inner {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 12px 16px;
+        background: var(--bg-secondary);
+        transition:
+          border-color 0.4s ease,
+          box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .welcome-input-inner:focus-within {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 4px var(--glow);
+      }
+
+      .welcome-input-inner input {
+        flex: 1;
+        background: none;
+        border: none;
+        color: var(--text);
+        font-family: "Raleway", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 300;
+        outline: none;
+        min-width: 0;
+      }
+
+      .welcome-input-inner input::placeholder {
+        color: var(--text-muted);
+        font-style: italic;
+        font-family: "Cormorant Garamond", serif;
+      }
+
+      .welcome-send-btn {
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        width: 32px;
+        height: 32px;
+        border-radius: 2px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+      }
+
+      .welcome-send-btn:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+        background: var(--glow);
+      }
+
+      .welcome-divider {
+        width: 80px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        margin: 0 auto 28px;
+        opacity: 0;
+        animation: fadeUp 0.8s 0.4s ease forwards;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 600px) {
+        .welcome-greeting {
+          font-size: clamp(2rem, 10vw, 3rem);
+        }
+      }
     </style>
   </head>
   <body>
@@ -1918,7 +2072,28 @@
               </button>
             </div>
           </div>
-
+          <!-- WELCOME SCREEN -->
+          <div class="welcome-screen" id="welcomeScreen">
+            <div class="welcome-greeting" id="welcomeGreeting">
+              Good morning,<br /><span class="welcome-name" id="welcomeName"
+                >friend</span
+              >
+            </div>
+            <div class="welcome-divider"></div>
+            <div class="welcome-submessage" id="welcomeSubmessage"></div>
+            <div class="welcome-input-wrap">
+              <div class="welcome-input-inner">
+                <input
+                  type="text"
+                  id="welcomeInput"
+                  placeholder="Ask Veritax anything..."
+                />
+                <button class="welcome-send-btn" onclick="sendFromWelcome()">
+                  →
+                </button>
+              </div>
+            </div>
+          </div>
           <div class="chat-messages" id="messages"></div>
 
           <div class="chat-input">
@@ -2141,6 +2316,58 @@
               </div>
             </div>
           </div>
+          <!-- WELCOME MESSAGE PREFERENCE -->
+          <div class="theme-section">
+            <span class="methodology-label">Welcome message style</span>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                margin-top: 10px;
+              "
+            >
+              <select
+                id="submessagePref"
+                onchange="saveSubmessagePref()"
+                style="
+                  padding: 9px 12px;
+                  background: var(--bg-secondary);
+                  border: 1px solid var(--border);
+                  color: var(--text);
+                  font-family: &quot;Raleway&quot;, sans-serif;
+                  font-size: 0.8rem;
+                  outline: none;
+                  border-radius: 2px;
+                  cursor: pointer;
+                "
+              >
+                <option value="quotes">Inspirational quotes</option>
+                <option value="tips">Veritax tips</option>
+                <option value="custom">Custom message</option>
+                <option value="none">Nothing</option>
+              </select>
+              <input
+                type="text"
+                id="customSubmessage"
+                placeholder="Your custom message..."
+                onchange="saveSubmessagePref()"
+                style="
+                  display: none;
+                  padding: 9px 12px;
+                  background: var(--bg-secondary);
+                  border: 1px solid var(--border);
+                  color: var(--text);
+                  font-family: &quot;Cormorant Garamond&quot;, serif;
+                  font-size: 0.9rem;
+                  font-style: italic;
+                  outline: none;
+                  border-radius: 2px;
+                  transition: border-color 0.3s ease;
+                "
+              />
+            </div>
+          </div>
           <textarea
             id="methodologyInput"
             placeholder="e.g. I'm a high school student studying for DECA. I prefer concise bullet points. I'm a visual learner..."
@@ -2184,11 +2411,35 @@
           window.location.href = "/";
           return;
         }
-        loadTheme(); // ← add this
+        loadTheme();
+        loadSubmessagePref(); // ← add this
         loadHistory();
         loadSavedMethodology();
         showGreeting();
       });
+      // ── SUBMESSAGE PREF ──
+      function saveSubmessagePref() {
+        const pref = document.getElementById("submessagePref").value;
+        const custom = document.getElementById("customSubmessage").value.trim();
+        localStorage.setItem("veritax_submessage_pref", pref);
+        localStorage.setItem("veritax_submessage_custom", custom);
+        const customInput = document.getElementById("customSubmessage");
+        customInput.style.display = pref === "custom" ? "block" : "none";
+        showToast("Welcome style saved");
+      }
+
+      function loadSubmessagePref() {
+        const pref =
+          localStorage.getItem("veritax_submessage_pref") || "quotes";
+        const custom = localStorage.getItem("veritax_submessage_custom") || "";
+        const sel = document.getElementById("submessagePref");
+        const inp = document.getElementById("customSubmessage");
+        if (sel) sel.value = pref;
+        if (inp) {
+          inp.value = custom;
+          inp.style.display = pref === "custom" ? "block" : "none";
+        }
+      }
 
       function handleLogout() {
         sessionStorage.removeItem("veritax_user");
@@ -2196,19 +2447,83 @@
       }
 
       // ── GREETING ──
+      // ── WELCOME SCREEN ──
+      const QUOTES = [
+        "The mind is not a vessel to be filled, but a fire to be kindled.",
+        "An investment in knowledge pays the best interest.",
+        "The beautiful thing about learning is that no one can take it away from you.",
+        "Clarity is the counterbalance of profound thoughts.",
+        "Truth is rarely pure and never simple.",
+        "The more that you read, the more things you will know.",
+      ];
+
+      const VERITAX_TIPS = [
+        "Try Axiom mode for real-time web search with cited sources.",
+        "Upload a PDF and ask Veritax to summarize it.",
+        "Use /bullet, /formal, or /eli5 for instant formatting.",
+        "Switch models with the pill next to the send button.",
+        "Save your preferences in the ⚙ panel — Veritax will adapt.",
+      ];
+
       function showGreeting() {
         const hour = new Date().getHours();
-        const greeting =
-          hour < 12
-            ? "Good morning"
-            : hour < 17
-              ? "Good afternoon"
-              : "Good evening";
-        addBotMessage(
-          `${greeting}. I am Veritax — how may I assist you today?`,
-          false,
+        const timeOfDay =
+          hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
+
+        // Get user name
+        const user = JSON.parse(
+          sessionStorage.getItem("veritax_user") || "null",
         );
+        const name = user?.name || "";
+
+        // Set greeting
+        document.getElementById("welcomeGreeting").innerHTML =
+          `Good ${timeOfDay},<br><span class="welcome-name">${name || "friend"}</span>`;
+
+        // Set submessage based on preference
+        const pref =
+          localStorage.getItem("veritax_submessage_pref") || "quotes";
+        const custom = localStorage.getItem("veritax_submessage_custom") || "";
+        const subEl = document.getElementById("welcomeSubmessage");
+
+        if (pref === "quotes") {
+          subEl.textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+        } else if (pref === "tips") {
+          subEl.textContent =
+            VERITAX_TIPS[Math.floor(Math.random() * VERITAX_TIPS.length)];
+        } else if (pref === "custom" && custom) {
+          subEl.textContent = custom;
+        } else {
+          subEl.textContent = "";
+        }
+
+        // Show welcome screen
+        document.getElementById("welcomeScreen").classList.remove("hidden");
+
+        // Focus welcome input
+        setTimeout(() => document.getElementById("welcomeInput")?.focus(), 800);
       }
+
+      function hideWelcomeScreen() {
+        document.getElementById("welcomeScreen").classList.add("hidden");
+      }
+
+      function sendFromWelcome() {
+        const val = document.getElementById("welcomeInput").value.trim();
+        if (!val) return;
+        hideWelcomeScreen();
+        document.getElementById("userInput").value = val;
+        sendMessage();
+      }
+
+      // Enter key on welcome input
+      document.addEventListener("DOMContentLoaded", () => {
+        const wi = document.getElementById("welcomeInput");
+        if (wi)
+          wi.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") sendFromWelcome();
+          });
+      });
 
       // ── THEME ──
       function toggleTheme() {
@@ -2520,9 +2835,9 @@
           item.classList.add("chat-history-item");
           if (chat.id === currentChatId) item.classList.add("active");
           item.innerHTML = `
-      <div class="item-title">${chat.title}</div>
-      <div class="item-meta"><span>${chat.date}</span><span class="item-mode-badge">${chat.mode}</span></div>
-      <button class="item-delete" onclick="deleteChat('${chat.id}', event)">✕</button>`;
+                  <div class="item-title">${chat.title}</div>
+                  <div class="item-meta"><span>${chat.date}</span><span class="item-mode-badge">${chat.mode}</span></div>
+                  <button class="item-delete" onclick="deleteChat('${chat.id}', event)">✕</button>`;
           item.addEventListener("click", () => loadChat(chat.id));
           list.appendChild(item);
         });
@@ -2959,9 +3274,9 @@
           html += `<div class="sources-block"><div class="sources-label">Sources</div>${sources.map((s) => `<a class="source-link" href="${s.url}" target="_blank">↗ ${s.title}</a>`).join("")}</div>`;
         }
         html += `<div class="bot-actions">
-              <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
-              <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
-            </div>`;
+                          <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
+                          <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
+                        </div>`;
         div.innerHTML = html;
         msgs.appendChild(div);
         msgs.scrollTop = msgs.scrollHeight;
@@ -3081,6 +3396,7 @@
       let isStreaming = false;
 
       async function sendMessage() {
+        hideWelcomeScreen();
         if (isStreaming) return;
         const raw = input.value.trim();
         if (!raw) return;
@@ -3205,13 +3521,13 @@
         }
 
         botDiv.innerHTML = `
-              <div class="bot-marker"><span class="bot-marker-diamond">◆</span><span class="bot-marker-mode">${MODE_NAMES[currentMode]}</span></div>
-              <div class="bot-content-text">${finalHTML}</div>
-              ${sourcesHTML}
-              <div class="bot-actions">
-                <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
-                <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
-              </div>`;
+                          <div class="bot-marker"><span class="bot-marker-diamond">◆</span><span class="bot-marker-mode">${MODE_NAMES[currentMode]}</span></div>
+                          <div class="bot-content-text">${finalHTML}</div>
+                          ${sourcesHTML}
+                          <div class="bot-actions">
+                            <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
+                            <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
+                          </div>`;
 
         currentMessages.push({ role: "bot", text: fullText });
         saveCurrentChat();
@@ -3277,12 +3593,12 @@
         }
 
         botDiv.innerHTML = `
-          <div class="bot-marker"><span class="bot-marker-diamond">◆</span><span class="bot-marker-mode">${MODE_NAMES[currentMode]}</span></div>
-          <div class="bot-content-text">${renderMarkdown(fullText)}</div>
-          <div class="bot-actions">
-            <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
-            <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
-          </div>`;
+                      <div class="bot-marker"><span class="bot-marker-diamond">◆</span><span class="bot-marker-mode">${MODE_NAMES[currentMode]}</span></div>
+                      <div class="bot-content-text">${renderMarkdown(fullText)}</div>
+                      <div class="bot-actions">
+                        <button class="action-btn" onclick="copyBotMessage(this)">Copy</button>
+                        <button class="action-btn" onclick="retryMessage(this)">↺ Retry</button>
+                      </div>`;
 
         currentMessages.push({ role: "bot", text: fullText });
         saveCurrentChat();
