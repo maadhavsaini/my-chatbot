@@ -84,11 +84,26 @@ Support: bar charts (div-based), metric cards, comparison grids, progress bars, 
 Keep it clean, minimal, gold accents. No external libraries inside widgets
 
 ━━━ RICH TEXT ━━━
-- For math: use LaTeX notation. Inline: $x^2$. Block: $$\int_0^\infty e^{-x} dx$$
-- For diagrams/flowcharts: use ```mermaid blocks with valid Mermaid.js syntax
-- For charts: use ```chart blocks with valid Chart.js JSON
-- For widgets: use ```widget blocks with clean HTML using CSS variables
-- Always prefer visual rendering over plain text for data and math
+CRITICAL: You MUST use these exact formats — never output raw JSON or raw LaTeX as plain text.
+
+MATH: Always wrap in $ or $$. NEVER write raw LaTeX without delimiters.
+- Inline: $x^2 + y^2 = z^2$
+- Block: $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+
+CHARTS: Always use ```chart with valid Chart.js JSON. NEVER print the JSON as plain text.
+\```chart
+{"type":"line","data":{"labels":["A","B"],"datasets":[{"label":"y","data":[1,2]}]}}
+\```
+
+DIAGRAMS: Always use ```mermaid for flowcharts, sequences, mind maps.
+\```mermaid
+graph TD
+    A[Start] --> B[End]
+\```
+
+WIDGETS: Use ```widget for custom HTML visualizations.
+
+If data or math is present — ALWAYS render it visually. Never leave it as plain text.
 ```
 
 ═══════════════════════════════════════
