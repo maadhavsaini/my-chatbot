@@ -8,6 +8,16 @@
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚜️</text></svg>"
     />
+    <!-- KaTeX -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link
       rel="stylesheet"
@@ -1036,6 +1046,40 @@
 
       .chart-canvas {
         max-height: 320px;
+      }
+      /* ── MERMAID ── */
+      .mermaid-wrap {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 20px;
+        margin: 14px 0;
+        overflow-x: auto;
+        text-align: center;
+      }
+
+      .mermaid-wrap svg {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .mermaid-error {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        font-style: italic;
+        text-align: center;
+        padding: 12px;
+      }
+
+      /* KaTeX overrides */
+      .bot-content-text .katex {
+        color: var(--text) !important;
+        font-size: 1.05em;
+      }
+
+      .bot-content-text .katex-display {
+        margin: 16px 0;
+        overflow-x: auto;
       }
       .widget-wrap {
         margin: 14px 0;
@@ -3094,15 +3138,78 @@
       }
 
       // ── MARKDOWN ──
+      // ── MARKDOWN ──
+      let mermaidCount = 0;
+
+      // Initialize mermaid
+      mermaid.initialize({
+        startOnLoad: false,
+        theme:
+          document.documentElement.getAttribute("data-theme") === "luxury-dark"
+            ? "dark"
+            : "default",
+        themeVariables: {
+          primaryColor: "#c9a84c",
+          primaryTextColor: "#e8dcc8",
+          primaryBorderColor: "#2a2820",
+          lineColor: "#7a7060",
+          background: "#161614",
+          mainBkg: "#1e1a10",
+          nodeBorder: "#c9a84c",
+          clusterBkg: "#111110",
+          titleColor: "#c9a84c",
+          edgeLabelBackground: "#161614",
+          fontFamily: "Raleway, sans-serif",
+        },
+      });
+
       function renderMarkdown(text) {
         const rendered = marked.parse(text);
         const wrapper = document.createElement("div");
         wrapper.innerHTML = rendered;
 
-        // Render chart blocks
         wrapper.querySelectorAll("pre code").forEach((block) => {
           const lang = block.className.replace("language-", "").trim();
 
+          // ── WIDGET ──
+          if (lang === "widget") {
+            try {
+              const pre = block.parentElement;
+              const widgetWrap = document.createElement("div");
+              widgetWrap.classList.add("widget-wrap");
+              widgetWrap.innerHTML = block.textContent.trim();
+              pre.replaceWith(widgetWrap);
+            } catch {}
+            return;
+          }
+
+          // ── MERMAID ──
+          if (lang === "mermaid") {
+            try {
+              const pre = block.parentElement;
+              const mermaidDiv = document.createElement("div");
+              mermaidDiv.classList.add("mermaid-wrap");
+              const id = `mermaid-${++mermaidCount}`;
+              mermaidDiv.id = id;
+              mermaidDiv.textContent = block.textContent.trim();
+              pre.replaceWith(mermaidDiv);
+              setTimeout(async () => {
+                try {
+                  const { svg } = await mermaid.render(
+                    `svg-${id}`,
+                    block.textContent.trim(),
+                  );
+                  mermaidDiv.innerHTML = svg;
+                  mermaidDiv.querySelector("svg").style.maxWidth = "100%";
+                } catch (e) {
+                  mermaidDiv.innerHTML = `<div class="mermaid-error">Could not render diagram</div>`;
+                }
+              }, 100);
+            } catch {}
+            return;
+          }
+
+          // ── CHART (reliable data-driven) ──
           if (lang === "chart") {
             try {
               const config = JSON.parse(block.textContent.trim());
@@ -3114,13 +3221,10 @@
               chartWrap.appendChild(canvas);
               pre.replaceWith(chartWrap);
 
-              // Style chart based on type
               const isDoughnut =
                 config.type === "doughnut" || config.type === "pie";
               const gold = "#c9a84c";
-              const goldLight = "#e8c97a";
               const goldFade = "rgba(201,168,76,0.15)";
-
               const COLORS = [
                 "#c9a84c",
                 "#e8c97a",
@@ -3131,20 +3235,9 @@
                 "#8a6828",
                 "#b89040",
               ];
-              if (lang === "widget") {
-                try {
-                  const pre = block.parentElement;
-                  const widgetWrap = document.createElement("div");
-                  widgetWrap.classList.add("widget-wrap");
-                  widgetWrap.innerHTML = block.textContent.trim();
-                  pre.replaceWith(widgetWrap);
-                } catch {}
-                return;
-              }
 
-              // Apply default styling to datasets
               if (config.data && config.data.datasets) {
-                config.data.datasets.forEach((ds, i) => {
+                config.data.datasets.forEach((ds) => {
                   if (isDoughnut) {
                     ds.backgroundColor = ds.backgroundColor || COLORS;
                     ds.borderColor = ds.borderColor || "#0a0a08";
@@ -3160,7 +3253,6 @@
                 });
               }
 
-              // Default options
               config.options = config.options || {};
               config.options.responsive = true;
               config.options.maintainAspectRatio = true;
@@ -3180,7 +3272,6 @@
                 bodyColor: "#e8dcc8",
                 padding: 10,
               };
-
               if (!isDoughnut) {
                 config.options.scales = config.options.scales || {};
                 config.options.scales.x = config.options.scales.x || {
@@ -3200,20 +3291,12 @@
                   border: { color: "#2a2820" },
                 };
               }
-
               setTimeout(() => new Chart(canvas, config), 50);
-            } catch (e) {
-              // If chart fails, fall through to normal code rendering
-              const pre = block.parentElement;
-              const header = document.createElement("div");
-              header.className = "code-header";
-              header.innerHTML = `<span class="code-lang">chart</span><button class="copy-btn" onclick="copyCode(this)">Copy</button>`;
-              pre.insertBefore(header, block);
-            }
+            } catch {}
             return;
           }
 
-          // Normal code block
+          // ── NORMAL CODE ──
           const langLabel = lang || "code";
           const pre = block.parentElement;
           const header = document.createElement("div");
@@ -3221,6 +3304,18 @@
           header.innerHTML = `<span class="code-lang">${langLabel}</span><button class="copy-btn" onclick="copyCode(this)">Copy</button>`;
           pre.insertBefore(header, block);
           hljs.highlightElement(block);
+        });
+
+        // ── KATEX MATH ──
+        renderMathInElement(wrapper, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false },
+            { left: "\\(", right: "\\)", display: false },
+            { left: "\\[", right: "\\]", display: true },
+          ],
+          throwOnError: false,
+          errorColor: "#c94c4c",
         });
 
         return wrapper.innerHTML;
