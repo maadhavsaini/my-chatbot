@@ -4,6 +4,7 @@ import hashlib
 import requests as http_requests
 from flask import Flask, request, jsonify, send_from_directory, Response, stream_with_context
 from groq import Groq
+import google.generativeai as genai
 from dotenv import load_dotenv
 from tavily import TavilyClient
 
@@ -13,6 +14,11 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "veritax-secret-2026")
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 tavily = TavilyClient(api_key=os.environ.get("TAVILY_API_KEY"))
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+gemini_model = genai.GenerativeModel(
+    model_name="gemini-2.0-flash",
+    system_instruction=None
+)
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
@@ -193,16 +199,28 @@ def chat():
         messages.append({"role": "user", "content": user_message})
 
     def generate():
-        completion = client.chat.completions.create(
-            model=data.get("model", "llama-3.3-70b-versatile"),
-            messages=messages,
-            max_completion_tokens=1024,
-            stream=True,
-        )
-        for chunk in completion:
-            token = chunk.choices[0].delta.content
-            if token:
-                yield f"data: {json.dumps({'token': token})}\n\n"
+        try:
+            # Build Gemini message format
+            system_msg = messages[0]["content"] if messages[0]["role"] == "system" else ""
+            chat_messages = []
+            for m in messages[1:]:
+                role = "user" if m["role"] == "user" else "model"
+                chat_messages.append({"role": role, "parts": [m["content"]]})
+
+            g_model = genai.GenerativeModel(
+                model_name="gemini-2.0-flash",
+                system_instruction=system_msg
+            )
+            chat = g_model.start_chat(history=chat_messages[:-1])
+            last_msg = chat_messages[-1]["parts"][0] if chat_messages else user_message
+
+            response = chat.send_message(last_msg, stream=True)
+            for chunk in response:
+                token = chunk.text
+                if token:
+                    yield f"data: {json.dumps({'token': token})}\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'token': f'Error: {str(e)}'})}\n\n"
         yield "data: [DONE]\n\n"
 
     return Response(stream_with_context(generate()), mimetype="text/event-stream")
@@ -235,19 +253,19 @@ Cite sources inline by name only. Never fabricate beyond what sources say."""
     full_system = VERITAX_CONSTITUTION + methodology_section + "\n" + voyageur_prompt
 
     def generate():
-        completion = client.chat.completions.create(
-            model=data.get("model", "llama-3.3-70b-versatile"),
-            messages=[
-    {"role": "system", "content": full_system},
-    {"role": "user", "content": f"Question: {query}\n\nSearch Results:\n{search_context}"}
-],
-            max_completion_tokens=1024,
-            stream=True,
-        )
-        for chunk in completion:
-            token = chunk.choices[0].delta.content
-            if token:
-                yield f"data: {json.dumps({'token': token, 'sources': sources})}\n\n"
+        try:
+            g_model = genai.GenerativeModel(
+                model_name="gemini-2.0-flash",
+                system_instruction=full_system
+            )
+            prompt = f"Question: {query}\n\nSearch Results:\n{search_context}"
+            response = g_model.generate_content(prompt, stream=True)
+            for chunk in response:
+                token = chunk.text
+                if token:
+                    yield f"data: {json.dumps({'token': token, 'sources': sources})}\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'token': f'Error: {str(e)}', 'sources': sources})}\n\n"
         yield f"data: {json.dumps({'done': True, 'sources': sources})}\n\n"
 
     return Response(stream_with_context(generate()), mimetype="text/event-stream")
