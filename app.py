@@ -4,7 +4,7 @@ import hashlib
 import requests as http_requests
 from flask import Flask, request, jsonify, send_from_directory, Response, stream_with_context
 from groq import Groq
-import google.generativeai as genai
+import openai
 from dotenv import load_dotenv
 from tavily import TavilyClient
 
@@ -14,10 +14,9 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "veritax-secret-2026")
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 tavily = TavilyClient(api_key=os.environ.get("TAVILY_API_KEY"))
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-gemini_model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash",
-    system_instruction=None
+openrouter_client = openai.OpenAI(
+    api_key=os.environ.get("OPENROUTER_API_KEY"),
+    base_url="https://openrouter.ai/api/v1"
 )
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
@@ -200,30 +199,21 @@ def chat():
 
     def generate():
         try:
-            # Build Gemini message format
-            system_msg = messages[0]["content"] if messages[0]["role"] == "system" else ""
-            chat_messages = []
-            for m in messages[1:]:
-                role = "user" if m["role"] == "user" else "model"
-                chat_messages.append({"role": role, "parts": [m["content"]]})
-
-            g_model = genai.GenerativeModel(
-                model_name="gemini-1.5-flash",
-                system_instruction=system_msg
+            response = openrouter_client.chat.completions.create(
+                model="meta-llama/llama-3.3-70b-instruct:free",
+                messages=messages,
+                max_tokens=1024,
+                stream=True
             )
-            chat = g_model.start_chat(history=chat_messages[:-1])
-            last_msg = chat_messages[-1]["parts"][0] if chat_messages else user_message
-
-            response = chat.send_message(last_msg, stream=True)
             for chunk in response:
-                token = chunk.text
+                token = chunk.choices[0].delta.content
                 if token:
                     yield f"data: {json.dumps({'token': token})}\n\n"
         except Exception as e:
             yield f"data: {json.dumps({'token': f'Error: {str(e)}'})}\n\n"
         yield "data: [DONE]\n\n"
 
-    return Response(stream_with_context(generate()), mimetype="text/event-stream")
+        return Response(stream_with_context(generate()), mimetype="text/event-stream")
 
 @app.route("/search", methods=["POST"])
 def search():
@@ -254,21 +244,23 @@ Cite sources inline by name only. Never fabricate beyond what sources say."""
 
     def generate():
         try:
-            g_model = genai.GenerativeModel(
-                model_name="gemini-1.5-flash",
-                system_instruction=full_system
+            search_messages = [
+                {"role": "system", "content": full_system},
+                {"role": "user", "content": f"Question: {query}\n\nSearch Results:\n{search_context}"}
+            ]
+            response = openrouter_client.chat.completions.create(
+                model="meta-llama/llama-3.3-70b-instruct:free",
+                messages=search_messages,
+                max_tokens=1024,
+                stream=True
             )
-            prompt = f"Question: {query}\n\nSearch Results:\n{search_context}"
-            response = g_model.generate_content(prompt, stream=True)
             for chunk in response:
-                token = chunk.text
+                token = chunk.choices[0].delta.content
                 if token:
                     yield f"data: {json.dumps({'token': token, 'sources': sources})}\n\n"
         except Exception as e:
             yield f"data: {json.dumps({'token': f'Error: {str(e)}', 'sources': sources})}\n\n"
         yield f"data: {json.dumps({'done': True, 'sources': sources})}\n\n"
-
-    return Response(stream_with_context(generate()), mimetype="text/event-stream")
 
 @app.route("/prime", methods=["POST"])
 def prime():
