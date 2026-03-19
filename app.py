@@ -16,7 +16,7 @@ client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 tavily = TavilyClient(api_key=os.environ.get("TAVILY_API_KEY"))
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 gemini_model = genai.GenerativeModel(
-    model_name="gemini-2.0-flash",
+    model_name="gemini-1.5-flash",
     system_instruction=None
 )
 
@@ -208,7 +208,7 @@ def chat():
                 chat_messages.append({"role": role, "parts": [m["content"]]})
 
             g_model = genai.GenerativeModel(
-                model_name="gemini-2.0-flash",
+                model_name="gemini-1.5-flash",
                 system_instruction=system_msg
             )
             chat = g_model.start_chat(history=chat_messages[:-1])
@@ -255,7 +255,7 @@ Cite sources inline by name only. Never fabricate beyond what sources say."""
     def generate():
         try:
             g_model = genai.GenerativeModel(
-                model_name="gemini-2.0-flash",
+                model_name="gemini-1.5-flash",
                 system_instruction=full_system
             )
             prompt = f"Question: {query}\n\nSearch Results:\n{search_context}"
