@@ -6,7 +6,7 @@
     <title>Veritax</title>
     <link
       rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚜️</text></svg>"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>"
     />
     <!-- KaTeX -->
     <link
@@ -26,7 +26,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -71,110 +71,33 @@
         color: var(--text-muted);
         text-align: center;
         padding: 6px;
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
       }
       /* ── LUXURY DARK ── */
+      /* ── ESPRESSO (default) ── */
       :root[data-theme="luxury-dark"] {
-        --bg: #0a0a08;
-        --bg-secondary: #111110;
-        --surface: #161614;
-        --border: #2a2820;
-        --gold: #c9a84c;
-        --gold-light: #e8c97a;
-        --text: #e8dcc8;
-        --text-muted: #7a7060;
-        --user-bubble: #1e1a10;
-        --shadow: rgba(0, 0, 0, 0.6);
-        --glow: rgba(201, 168, 76, 0.15);
-        --error: #c94c4c;
-        --sidebar-bg: #0d0d0b;
-        --sidebar-hover: #1a1a16;
-        --sidebar-width: 280px;
-        --code-bg: #1a1a1a;
-        --accent: #c9a84c;
-        --accent-light: #e8c97a;
-        --font-display: "Cormorant Garamond", serif;
-        --font-body: "Raleway", sans-serif;
-        --font-code: "JetBrains Mono", monospace;
-        --radius: 2px;
-      }
-
-      /* ── LUXURY LIGHT ── */
-      :root[data-theme="luxury-light"] {
-        --bg: #faf6ee;
-        --bg-secondary: #f5efe0;
+        --bg: #faf8f5;
+        --bg-secondary: #f2ede6;
         --surface: #ffffff;
-        --border: #e8dcc8;
-        --gold: #9a7230;
-        --gold-light: #c49a3c;
-        --text: #2a2010;
-        --text-muted: #9a8a6a;
-        --user-bubble: #2a2010;
-        --shadow: rgba(100, 80, 40, 0.15);
-        --glow: rgba(154, 114, 48, 0.1);
+        --border: #e4ddd4;
+        --gold: #3b2314;
+        --gold-light: #5c3820;
+        --text: #1e1208;
+        --text-muted: #9c8272;
+        --user-bubble: #3b2314;
+        --shadow: rgba(59, 35, 20, 0.1);
+        --glow: rgba(59, 35, 20, 0.06);
         --error: #c94c4c;
-        --sidebar-bg: #f0e8d8;
-        --sidebar-hover: #e8dcc8;
+        --sidebar-bg: #f2ede6;
+        --sidebar-hover: #e4ddd4;
         --sidebar-width: 280px;
-        --code-bg: #2a2a2a;
-        --accent: #9a7230;
-        --accent-light: #c49a3c;
-        --font-display: "Cormorant Garamond", serif;
-        --font-body: "Raleway", sans-serif;
+        --code-bg: #1e1208;
+        --accent: #3b2314;
+        --font-body: "DM Sans", sans-serif;
         --font-code: "JetBrains Mono", monospace;
-        --radius: 2px;
-      }
-
-      /* ── MINIMALIST ── */
-      :root[data-theme="minimalist"] {
-        --bg: #f8f8f6;
-        --bg-secondary: #f0f0ee;
-        --surface: #ffffff;
-        --border: #e0e0dc;
-        --gold: #1a1a1a;
-        --gold-light: #333333;
-        --text: #0a0a0a;
-        --text-muted: #888880;
-        --user-bubble: #0a0a0a;
-        --shadow: rgba(0, 0, 0, 0.08);
-        --glow: rgba(0, 0, 0, 0.04);
-        --error: #cc0000;
-        --sidebar-bg: #f0f0ee;
-        --sidebar-hover: #e8e8e4;
-        --sidebar-width: 280px;
-        --code-bg: #0a0a0a;
-        --accent: #0a0a0a;
-        --accent-light: #444444;
-        --font-display: "Raleway", sans-serif;
-        --font-body: "Raleway", sans-serif;
-        --font-code: "JetBrains Mono", monospace;
-        --radius: 0px;
-      }
-
-      /* ── CORK/LUMBER ── */
-      :root[data-theme="cork"] {
-        --bg: #2c1f0e;
-        --bg-secondary: #3a2810;
-        --surface: #4a3218;
-        --border: #6b4a28;
-        --gold: #d4a853;
-        --gold-light: #e8c47a;
-        --text: #f5e6c8;
-        --text-muted: #a88050;
-        --user-bubble: #3a2810;
-        --shadow: rgba(0, 0, 0, 0.5);
-        --glow: rgba(180, 120, 40, 0.2);
-        --error: #c94c4c;
-        --sidebar-bg: #241a0a;
-        --sidebar-hover: #3a2810;
-        --sidebar-width: 280px;
-        --code-bg: #1e1408;
-        --accent: #d4a853;
-        --accent-light: #e8c47a;
-        --font-display: "Lora", serif;
-        --font-body: "Raleway", sans-serif;
-        --font-code: "JetBrains Mono", monospace;
-        --radius: 4px;
+        --radius: 12px;
+        --radius-sm: 8px;
+        --radius-full: 999px;
       }
 
       * {
@@ -280,7 +203,7 @@
       }
 
       .sidebar-title {
-        font-family: "Cormorant Garamond", serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.9rem;
         letter-spacing: 0.2em;
         text-transform: uppercase;
@@ -294,7 +217,7 @@
         background: none;
         border: 1px solid var(--border);
         color: var(--text-muted);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.7rem;
         letter-spacing: 0.15em;
         text-transform: uppercase;
@@ -322,8 +245,7 @@
         padding: 40px 20px;
         font-size: 0.72rem;
         color: var(--text-muted);
-        font-style: italic;
-        font-family: "Cormorant Garamond", serif;
+        font-family: "DM Sans", sans-serif;
       }
 
       .chat-history-item {
@@ -451,12 +373,11 @@
       }
 
       .brand-name {
-        font-family: "Cormorant Garamond", serif;
-        font-size: clamp(1.2rem, 3vw, 1.6rem);
-        font-weight: 300;
-        letter-spacing: 0.12em;
+        font-family: "DM Sans", sans-serif;
+        font-size: clamp(1.1rem, 3vw, 1.4rem);
+        font-weight: 600;
+        letter-spacing: -0.01em;
         color: var(--gold);
-        text-transform: uppercase;
         white-space: nowrap;
       }
 
@@ -487,8 +408,8 @@
       }
 
       .icon-btn {
-        background: none;
-        border: 1px solid var(--border);
+        background: var(--bg-secondary);
+        border: none;
         color: var(--text-muted);
         width: 36px;
         height: 36px;
@@ -498,7 +419,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
         flex-shrink: 0;
       }
 
@@ -520,7 +441,7 @@
         background: none;
         border: none;
         color: var(--text-muted);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.58rem;
         letter-spacing: 0.1em;
         text-transform: uppercase;
@@ -550,7 +471,7 @@
       }
 
       .mode-letter {
-        font-family: "Cormorant Garamond", serif;
+        font-family: "DM Sans", sans-serif;
         font-size: clamp(0.85rem, 2vw, 1rem);
         color: var(--text-muted);
         cursor: pointer;
@@ -628,9 +549,8 @@
         background: var(--surface);
         border: 1px solid var(--border);
         color: var(--text);
-        font-family: "Cormorant Garamond", serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.9rem;
-        font-style: italic;
         outline: none;
         border-radius: 2px;
         min-width: 0;
@@ -646,7 +566,7 @@
         background: none;
         border: 1px solid var(--gold);
         color: var(--gold);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.65rem;
         letter-spacing: 0.15em;
         text-transform: uppercase;
@@ -709,7 +629,7 @@
       }
 
       .methodology-title {
-        font-family: "Cormorant Garamond", serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 1rem;
         letter-spacing: 0.15em;
         text-transform: uppercase;
@@ -748,8 +668,7 @@
         font-size: 0.75rem;
         color: var(--text-muted);
         line-height: 1.6;
-        font-family: "Cormorant Garamond", serif;
-        font-style: italic;
+        font-family: "DM Sans", sans-serif;
       }
 
       .methodology-body textarea {
@@ -758,7 +677,7 @@
         background: var(--bg-secondary);
         border: 1px solid var(--border);
         color: var(--text);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.85rem;
         font-weight: 300;
         outline: none;
@@ -775,8 +694,7 @@
       .methodology-saved {
         font-size: 0.75rem;
         color: var(--text-muted);
-        font-family: "Cormorant Garamond", serif;
-        font-style: italic;
+        font-family: "DM Sans", sans-serif;
         line-height: 1.6;
         padding: 12px;
         border: 1px solid var(--border);
@@ -796,7 +714,7 @@
         background: none;
         border: 1px solid var(--gold);
         color: var(--gold);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.7rem;
         letter-spacing: 0.15em;
         text-transform: uppercase;
@@ -814,7 +732,7 @@
         background: none;
         border: 1px solid var(--border);
         color: var(--text-muted);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.7rem;
         letter-spacing: 0.15em;
         text-transform: uppercase;
@@ -940,14 +858,14 @@
         letter-spacing: 0.2em;
         text-transform: uppercase;
         color: var(--text-muted);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
       }
 
       /* BOT CONTENT */
       .bot-content-text {
-        font-family: "Cormorant Garamond", serif;
-        font-size: 1.05rem;
-        font-weight: 300;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 400;
         color: var(--text) !important;
         line-height: 1.8;
       }
@@ -1006,7 +924,7 @@
         border-collapse: collapse;
         margin: 16px 0;
         font-size: 0.9rem;
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
       }
       .bot-content-text th {
         background: var(--glow);
@@ -1115,7 +1033,7 @@
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: var(--gold);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
       }
 
       .copy-btn {
@@ -1126,7 +1044,7 @@
         padding: 2px 8px;
         cursor: pointer;
         border-radius: 2px;
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         transition: all 0.2s ease;
       }
 
@@ -1153,7 +1071,7 @@
         text-transform: uppercase;
         color: var(--text-muted);
         margin-bottom: 6px;
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
       }
 
       .source-link {
@@ -1163,7 +1081,7 @@
         text-decoration: none;
         margin-right: 12px;
         margin-bottom: 4px;
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         opacity: 0.8;
         transition: opacity 0.2s;
         max-width: 280px;
@@ -1190,7 +1108,7 @@
         background: none;
         border: 1px solid var(--border);
         color: var(--text-muted);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.6rem;
         letter-spacing: 0.12em;
         text-transform: uppercase;
@@ -1217,9 +1135,8 @@
         background: none;
         border: 1px solid var(--border);
         color: var(--text-muted);
-        font-family: "Cormorant Garamond", serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.85rem;
-        font-style: italic;
         padding: 6px 14px;
         border-radius: 20px;
         cursor: pointer;
@@ -1305,7 +1222,7 @@
         align-items: center;
         gap: 10px;
         border: 1px solid var(--border);
-        border-radius: 4px;
+        border-radius: 24px;
         padding: 10px 14px;
         transition:
           border-color 0.3s ease,
@@ -1326,7 +1243,7 @@
         background: none;
         border: none;
         color: var(--text);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.88rem;
         font-weight: 300;
         outline: none;
@@ -1336,18 +1253,18 @@
       .chat-input input::placeholder {
         color: var(--text-muted);
         font-style: italic;
-        font-family: "Cormorant Garamond", serif;
+        font-family: "DM Sans", sans-serif;
       }
 
       .send-btn {
-        background: none;
-        border: 1px solid var(--border);
-        color: var(--text-muted);
-        width: 30px;
-        height: 30px;
-        border-radius: 2px;
+        background: var(--gold);
+        border: none;
+        color: #faf8f5;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
         cursor: pointer;
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1356,12 +1273,12 @@
       }
       /* ── FILE UPLOAD ── */
       .attach-btn {
-        background: none;
-        border: 1px solid var(--border);
+        background: var(--bg-secondary);
+        border: none;
         color: var(--text-muted);
-        width: 30px;
-        height: 30px;
-        border-radius: 2px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
         cursor: pointer;
         font-size: 0.75rem;
         display: flex;
@@ -1391,7 +1308,7 @@
         border-radius: 20px;
         font-size: 0.72rem;
         color: var(--gold);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         letter-spacing: 0.05em;
       }
 
@@ -1422,7 +1339,7 @@
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: var(--text-muted);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         transition: all 0.2s ease;
         white-space: nowrap;
         flex-shrink: 0;
@@ -1476,7 +1393,7 @@
       .model-option-name {
         font-size: 0.78rem;
         color: var(--text);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         font-weight: 500;
       }
 
@@ -1487,7 +1404,7 @@
       .model-option-desc {
         font-size: 0.62rem;
         color: var(--text-muted);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         letter-spacing: 0.05em;
       }
 
@@ -1546,6 +1463,485 @@
           right: 16px;
         }
       }
+      /* ── ESPRESSO OVERRIDES ── */
+      :root[data-theme="luxury-dark"] body {
+        background-image: none;
+        background: var(--bg);
+      }
+
+      /* Rounded everything */
+      :root[data-theme="luxury-dark"] .chat-wrap {
+        background: var(--bg);
+      }
+
+      :root[data-theme="luxury-dark"] .chat-header {
+        background: var(--surface);
+        border-radius: 0;
+        border-bottom: 1px solid var(--border);
+        padding: 16px 24px 14px;
+      }
+
+      :root[data-theme="luxury-dark"] .chat-header::after {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        opacity: 0.4;
+      }
+
+      :root[data-theme="luxury-dark"] .brand-name {
+        font-family: "DM Sans", sans-serif !important;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        color: var(--text);
+      }
+
+      /* Icon buttons — all same size, fully round */
+      :root[data-theme="luxury-dark"] .icon-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        background: var(--bg-secondary);
+        color: var(--text-muted);
+        transition: all 0.2s ease;
+      }
+
+      :root[data-theme="luxury-dark"] .icon-btn:hover {
+        background: var(--border);
+        color: var(--text);
+        border: none;
+      }
+
+      /* Status dot */
+      :root[data-theme="luxury-dark"] .status-dot {
+        background: var(--gold);
+        box-shadow: 0 0 6px var(--gold);
+      }
+
+      /* Length toggle */
+      :root[data-theme="luxury-dark"] .length-toggle {
+        background: var(--bg-secondary);
+        border: none;
+        border-radius: var(--radius-full);
+        padding: 4px 6px;
+      }
+
+      :root[data-theme="luxury-dark"] .length-btn.active {
+        background: var(--gold);
+        color: white;
+        border-radius: var(--radius-full);
+      }
+
+      :root[data-theme="luxury-dark"] .length-btn:hover:not(.active) {
+        color: var(--gold);
+      }
+
+      /* Mode letters */
+      :root[data-theme="luxury-dark"] .mode-letter {
+        border-radius: var(--radius-sm);
+        font-family: "DM Sans", sans-serif;
+        font-weight: 500;
+        font-size: 0.85rem;
+        letter-spacing: 0;
+      }
+
+      :root[data-theme="luxury-dark"] .mode-letter.active {
+        background: var(--gold);
+        color: white;
+        border-color: var(--gold);
+      }
+
+      :root[data-theme="luxury-dark"] .mode-letter:hover {
+        background: var(--glow);
+        color: var(--gold);
+        border-color: transparent;
+      }
+
+      :root[data-theme="luxury-dark"] .mode-label {
+        color: var(--text-muted);
+        border-left: 1px solid var(--border);
+        font-family: "DM Sans", sans-serif;
+      }
+
+      /* Sidebar */
+      :root[data-theme="luxury-dark"] .sidebar {
+        background: var(--sidebar-bg);
+        border-right: 1px solid var(--border);
+      }
+
+      :root[data-theme="luxury-dark"] .sidebar-title {
+        font-family: "DM Sans", sans-serif;
+        font-weight: 500;
+        color: var(--text);
+        letter-spacing: 0;
+        font-size: 0.85rem;
+      }
+
+      :root[data-theme="luxury-dark"] .sidebar-header::after {
+        background: var(--border);
+      }
+
+      :root[data-theme="luxury-dark"] .new-chat-btn {
+        border-radius: var(--radius-full);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0;
+      }
+
+      :root[data-theme="luxury-dark"] .new-chat-btn:hover {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: white;
+      }
+
+      :root[data-theme="luxury-dark"] .chat-history-item {
+        border-radius: var(--radius-sm);
+        border: none;
+        margin-bottom: 2px;
+      }
+
+      :root[data-theme="luxury-dark"] .chat-history-item:hover {
+        background: var(--sidebar-hover);
+      }
+
+      :root[data-theme="luxury-dark"] .chat-history-item.active {
+        background: var(--glow);
+        border: 1px solid rgba(200, 118, 42, 0.2);
+      }
+
+      :root[data-theme="luxury-dark"] .item-title {
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 400;
+      }
+
+      :root[data-theme="luxury-dark"] .item-mode-badge {
+        color: var(--gold);
+      }
+
+      :root[data-theme="luxury-dark"] .sidebar-footer {
+        font-family: "DM Sans", sans-serif;
+        border-top: 1px solid var(--border);
+        color: var(--text-muted);
+      }
+
+      /* Messages */
+      :root[data-theme="luxury-dark"] .chat-messages {
+        background: var(--bg);
+      }
+
+      :root[data-theme="luxury-dark"] .message.user {
+        background: var(--user-bubble);
+        color: #f5f0e8;
+        border: none;
+        border-radius: 18px 18px 4px 18px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 8px var(--shadow);
+      }
+
+      :root[data-theme="luxury-dark"] .bot-marker-diamond {
+        color: var(--gold);
+      }
+
+      :root[data-theme="luxury-dark"] .bot-marker-mode {
+        font-family: "DM Sans", sans-serif;
+        color: var(--text-muted);
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+      }
+
+      :root[data-theme="luxury-dark"] .bot-content-text {
+        font-family: "DM Sans", sans-serif !important;
+        color: var(--text) !important;
+        font-size: 1.05rem;
+      }
+
+      :root[data-theme="luxury-dark"] .bot-content-text h1,
+      :root[data-theme="luxury-dark"] .bot-content-text h2,
+      :root[data-theme="luxury-dark"] .bot-content-text h3 {
+        font-family: "DM Sans", sans-serif !important;
+        color: var(--text) !important;
+        font-weight: 500;
+      }
+
+      :root[data-theme="luxury-dark"] .bot-content-text strong {
+        color: var(--text) !important;
+        font-weight: 600;
+      }
+
+      :root[data-theme="luxury-dark"] .message.bot {
+        border-bottom: 1px solid var(--border);
+      }
+
+      :root[data-theme="luxury-dark"] .streaming-cursor {
+        background: var(--gold);
+      }
+
+      /* Action buttons */
+      :root[data-theme="luxury-dark"] .action-btn {
+        border-radius: var(--radius-full);
+        border: 1px solid var(--border);
+        font-family: "DM Sans", sans-serif;
+        background: var(--surface);
+      }
+
+      :root[data-theme="luxury-dark"] .action-btn:hover {
+        background: var(--glow);
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      /* Follow-up buttons */
+      :root[data-theme="luxury-dark"] .followup-btn {
+        border-radius: var(--radius-full);
+        border: 1px solid var(--border);
+        font-family: "DM Sans", sans-serif;
+        font-style: normal;
+        font-size: 0.8rem;
+        background: var(--surface);
+        color: var(--text-muted);
+      }
+
+      :root[data-theme="luxury-dark"] .followup-btn:hover {
+        background: var(--glow);
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      /* Toast */
+      :root[data-theme="luxury-dark"] .mode-toast {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-full);
+        color: var(--text-muted);
+        font-family: "DM Sans", sans-serif;
+        box-shadow: 0 4px 16px var(--shadow);
+      }
+
+      /* Input area */
+      :root[data-theme="luxury-dark"] .chat-input {
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        padding: 16px 24px 20px;
+      }
+
+      :root[data-theme="luxury-dark"] .chat-input::before {
+        display: none;
+      }
+
+      :root[data-theme="luxury-dark"] .input-wrapper {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 24px;
+        padding: 10px 14px;
+        box-shadow: 0 2px 8px var(--shadow);
+        align-items: flex-end;
+      }
+
+      :root[data-theme="luxury-dark"] .input-wrapper:focus-within {
+        border-color: var(--gold);
+        box-shadow:
+          0 0 0 4px var(--glow),
+          0 2px 8px var(--shadow);
+      }
+
+      :root[data-theme="luxury-dark"] .footer-text {
+        font-family: "DM Sans", sans-serif;
+        color: var(--text-muted);
+      }
+
+      /* Send button */
+      :root[data-theme="luxury-dark"] .send-btn {
+        border-radius: 50%;
+        border: none;
+        background: var(--gold);
+        color: white;
+        width: 32px;
+        height: 32px;
+        box-shadow: 0 2px 6px rgba(200, 118, 42, 0.3);
+      }
+
+      :root[data-theme="luxury-dark"] .send-btn:hover {
+        background: var(--gold-light);
+        transform: scale(1.05);
+      }
+
+      /* Attach button */
+      :root[data-theme="luxury-dark"] .attach-btn {
+        border-radius: 50%;
+        border: none;
+        background: var(--bg-secondary);
+        color: var(--text-muted);
+        width: 32px;
+        height: 32px;
+      }
+
+      :root[data-theme="luxury-dark"] .attach-btn:hover {
+        background: var(--border);
+        color: var(--text);
+      }
+
+      /* Model pill */
+      :root[data-theme="luxury-dark"] .model-pill {
+        border-radius: var(--radius-full);
+        border: 1px solid var(--border);
+        background: var(--bg-secondary);
+        color: var(--text-muted);
+        font-family: "DM Sans", sans-serif;
+      }
+
+      :root[data-theme="luxury-dark"] .model-pill:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      :root[data-theme="luxury-dark"] .model-menu {
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: 0 8px 32px var(--shadow);
+      }
+
+      :root[data-theme="luxury-dark"] .model-option-name {
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.82rem;
+      }
+
+      :root[data-theme="luxury-dark"] .model-option-desc {
+        font-family: "DM Sans", sans-serif;
+      }
+
+      /* Methodology panel */
+      :root[data-theme="luxury-dark"] .methodology-panel {
+        background: var(--surface);
+        border-left: 1px solid var(--border);
+      }
+
+      :root[data-theme="luxury-dark"] .methodology-title {
+        font-family: "DM Sans", sans-serif;
+        font-weight: 500;
+        color: var(--text);
+        letter-spacing: 0;
+      }
+
+      :root[data-theme="luxury-dark"] .methodology-header::after {
+        background: var(--border);
+      }
+
+      :root[data-theme="luxury-dark"] .methodology-btn {
+        border-radius: var(--radius-full);
+        font-family: "DM Sans", sans-serif;
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      :root[data-theme="luxury-dark"] .methodology-btn:hover {
+        background: var(--glow);
+      }
+
+      :root[data-theme="luxury-dark"] .methodology-btn-secondary {
+        border-radius: var(--radius-full);
+        font-family: "DM Sans", sans-serif;
+      }
+
+      /* Welcome screen */
+      :root[data-theme="luxury-dark"] .welcome-screen {
+        background: var(--bg);
+      }
+
+      :root[data-theme="luxury-dark"] .welcome-greeting {
+        color: var(--text);
+        font-style: normal;
+        font-weight: 300;
+      }
+
+      :root[data-theme="luxury-dark"] .welcome-name {
+        color: var(--gold);
+      }
+
+      :root[data-theme="luxury-dark"] .welcome-submessage {
+        font-family: "DM Sans", sans-serif;
+        font-style: normal;
+        font-size: 0.95rem;
+      }
+
+      :root[data-theme="luxury-dark"] .welcome-divider {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        opacity: 0.4;
+      }
+
+      :root[data-theme="luxury-dark"] .welcome-input-inner {
+        border-radius: 24px;
+        border: 1.5px solid var(--border);
+        background: var(--surface);
+        box-shadow: 0 2px 8px var(--shadow);
+      }
+
+      :root[data-theme="luxury-dark"] .welcome-input-inner:focus-within {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 4px var(--glow);
+      }
+
+      :root[data-theme="luxury-dark"] .welcome-send-btn {
+        border-radius: 50%;
+        border: none;
+        background: var(--gold);
+        color: white;
+        width: 32px;
+        height: 32px;
+      }
+
+      :root[data-theme="luxury-dark"] .welcome-send-btn:hover {
+        background: var(--gold-light);
+      }
+
+      /* Sovereign panel */
+      :root[data-theme="luxury-dark"] .sovereign-panel {
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border);
+      }
+
+      :root[data-theme="luxury-dark"] .sovereign-btn {
+        border-radius: var(--radius-full);
+        font-family: "DM Sans", sans-serif;
+      }
+
+      /* Tables */
+      :root[data-theme="luxury-dark"] .bot-content-text th {
+        background: var(--glow);
+        color: var(--gold) !important;
+        border-color: var(--border);
+        font-family: "DM Sans", sans-serif;
+      }
+
+      :root[data-theme="luxury-dark"] .bot-content-text td {
+        border-color: var(--border);
+        color: var(--text) !important;
+      }
+
+      :root[data-theme="luxury-dark"] .bot-content-text blockquote {
+        border-left-color: var(--gold);
+      }
+
+      /* Code */
+      :root[data-theme="luxury-dark"] .bot-content-text code:not(pre code) {
+        background: var(--bg-secondary);
+        color: var(--gold) !important;
+        border-color: var(--border);
+      }
       /* ── MINIMALIST OVERRIDES ── */
       :root[data-theme="minimalist"] .brand-name,
       :root[data-theme="minimalist"] .bot-marker-diamond,
@@ -1577,24 +1973,24 @@
       }
 
       :root[data-theme="minimalist"] .bot-content-text {
-        font-family: "Raleway", sans-serif !important;
+        font-family: "DM Sans", sans-serif !important;
         font-size: 0.95rem !important;
         letter-spacing: 0.01em;
       }
 
       :root[data-theme="minimalist"] .brand-name {
-        font-family: "Raleway", sans-serif !important;
+        font-family: "DM Sans", sans-serif !important;
         font-weight: 600 !important;
         letter-spacing: 0.3em !important;
       }
 
       /* ── CORK OVERRIDES ── */
       :root[data-theme="cork"] .bot-content-text {
-        font-family: "Lora", serif !important;
+        font-family: "DM Sans", sans-serif !important;
       }
 
       :root[data-theme="cork"] .brand-name {
-        font-family: "Lora", serif !important;
+        font-family: "DM Sans", sans-serif !important;
       }
 
       :root[data-theme="cork"] .message.user {
@@ -1764,7 +2160,7 @@
       }
 
       .welcome-greeting {
-        font-family: "Cormorant Garamond", serif;
+        font-family: "DM Sans", sans-serif;
         font-size: clamp(2.4rem, 8vw, 5rem);
         font-weight: 300;
         font-style: italic;
@@ -1782,7 +2178,7 @@
       }
 
       .welcome-submessage {
-        font-family: "Cormorant Garamond", serif;
+        font-family: "DM Sans", sans-serif;
         font-size: clamp(0.9rem, 2vw, 1.1rem);
         font-weight: 300;
         font-style: italic;
@@ -1826,7 +2222,7 @@
         background: none;
         border: none;
         color: var(--text);
-        font-family: "Raleway", sans-serif;
+        font-family: "DM Sans", sans-serif;
         font-size: 0.95rem;
         font-weight: 300;
         outline: none;
@@ -1836,7 +2232,7 @@
       .welcome-input-inner input::placeholder {
         color: var(--text-muted);
         font-style: italic;
-        font-family: "Cormorant Garamond", serif;
+        font-family: "DM Sans", sans-serif;
       }
 
       .welcome-send-btn {
@@ -2293,73 +2689,19 @@
                 class="theme-swatch active"
                 data-theme="luxury-dark"
                 onclick="setTheme('luxury-dark', this)"
-                title="Luxury Dark"
+                title="Espresso"
               >
                 <div
                   class="swatch-preview"
                   style="
                     background: linear-gradient(
                       135deg,
-                      #0a0a08 50%,
-                      #c9a84c 50%
+                      #faf8f5 50%,
+                      #3b2314 50%
                     );
                   "
                 ></div>
-                <span class="swatch-name">Luxury Dark</span>
-              </div>
-              <div
-                class="theme-swatch"
-                data-theme="luxury-light"
-                onclick="setTheme('luxury-light', this)"
-                title="Luxury Light"
-              >
-                <div
-                  class="swatch-preview"
-                  style="
-                    background: linear-gradient(
-                      135deg,
-                      #faf6ee 50%,
-                      #9a7230 50%
-                    );
-                  "
-                ></div>
-                <span class="swatch-name">Luxury Light</span>
-              </div>
-              <div
-                class="theme-swatch"
-                data-theme="minimalist"
-                onclick="setTheme('minimalist', this)"
-                title="Minimalist"
-              >
-                <div
-                  class="swatch-preview"
-                  style="
-                    background: linear-gradient(
-                      135deg,
-                      #f8f8f6 50%,
-                      #0a0a0a 50%
-                    );
-                  "
-                ></div>
-                <span class="swatch-name">Minimalist</span>
-              </div>
-              <div
-                class="theme-swatch"
-                data-theme="cork"
-                onclick="setTheme('cork', this)"
-                title="Cork"
-              >
-                <div
-                  class="swatch-preview"
-                  style="
-                    background: linear-gradient(
-                      135deg,
-                      #2c1f0e 50%,
-                      #d4a853 50%
-                    );
-                  "
-                ></div>
-                <span class="swatch-name">Cork</span>
+                <span class="swatch-name">Espresso</span>
               </div>
             </div>
           </div>
@@ -2560,6 +2902,7 @@
         if (!val) return;
         hideWelcomeScreen();
         document.getElementById("userInput").value = val;
+        document.getElementById("userInput").style.height = "auto";
         sendMessage();
       }
 
@@ -2632,10 +2975,7 @@
       }
       // ── THEMES ──
       const THEMES = {
-        "luxury-dark": { label: "Luxury Dark", themeBtn: "☀️" },
-        "luxury-light": { label: "Luxury Light", themeBtn: "🌙" },
-        minimalist: { label: "Minimalist", themeBtn: "◐" },
-        cork: { label: "Cork", themeBtn: "🪵" },
+        "luxury-dark": { label: "Espresso", themeBtn: "☕" },
       };
 
       function setTheme(theme, el) {
@@ -3493,7 +3833,25 @@
       });
 
       let isStreaming = false;
+      // ── AUTO RESIZE TEXTAREA ──
+      function autoResize(el) {
+        el.style.height = "auto";
+        el.style.height = Math.min(el.scrollHeight, 160) + "px";
+      }
 
+      function handleInputKey(e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      }
+
+      function handleWelcomeKey(e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendFromWelcome();
+        }
+      }
       async function sendMessage() {
         hideWelcomeScreen();
         if (isStreaming) return;
@@ -3511,6 +3869,7 @@
         addUserMessage(raw);
         currentMessages.push({ role: "user", text: raw });
         input.value = "";
+        input.style.height = "auto"; // ← add this line after clearing
 
         // Force search mode if /search command used
         if (forceSearch && currentMode !== "A") {
